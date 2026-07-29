@@ -9,3 +9,4 @@
 ## [2026-07-29] ingest | oac-standards harness batch — agent-frontmatter, subagent-structure, consolidated permission-model (D2)
 ## [2026-07-29] ingest | wiki meta aggregation — index.md (navigation routing folded per D4), log.md, TODO.md
 ## [2026-07-29] init | EDAC ↔ OAC relationship note added to SCHEMA.md — EDAC inspired by OAC, no obligation to follow OAC specifics; OAC ≈ src/; src/ is focused derivation + enhancement
+## [2026-07-29] lint | OAC path corrections — `.opencode/config/agent-metadata.json` → `src/metadata.json`; `src/registry.json` → `registry.json` (repo root); added `framework/src-structure.md` as the source-of-truth layout page

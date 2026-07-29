@@ -161,7 +161,7 @@ Context files can be outdated. Never apply recommendations blindly; verify again
 
 **Permission block**
 - [ ] Only valid OpenCode permission keys used (`read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `skill`, `lsp`, `question`, `webfetch`, `websearch`, `todowrite`, `doom_loop`). Note: `external_directory` is a valid OpenCode key but EDAC agents do not use it (they rely on default behaviour).
-- [ ] No deprecated frontmatter fields (`id`, `category`, `type`, `version`, `author` belong in `agent-metadata.json`)
+- [ ] No deprecated frontmatter fields (`id`, `category`, `type`, `version`, `author` belong in `src/metadata.json`)
 - [ ] Sensitive files denied for both `read` and `edit`
 - [ ] Destructive commands denied
 

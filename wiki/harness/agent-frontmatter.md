@@ -18,7 +18,7 @@ status: stable
 
 ## Core Principle
 
-Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata (`id`, `category`, `type`, `version`, `tags`, `dependencies`) belongs in `.opencode/config/agent-metadata.json`, not in the agent's frontmatter.
+Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata (`id`, `category`, `type`, `version`, `tags`, `dependencies`) belongs in `src/metadata.json`, not in the agent's frontmatter.
 
 **Why**: OpenCode silently ignores unknown frontmatter fields. They cause no errors but add noise and clutter, and they break the clean separation between harness configuration and OAC's component registry. Keeping frontmatter clean ensures agents behave consistently across OpenCode versions.
 
@@ -186,7 +186,7 @@ name: MyAgent
 
 Fields like `id`, `category`, `type`, `version`, `tags`, `dependencies` are NOT valid OpenCode frontmatter fields.
 
-**Fix**: Move them to `.opencode/config/agent-metadata.json`.
+**Fix**: Move them to `src/metadata.json`.
 
 ---
 

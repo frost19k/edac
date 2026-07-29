@@ -10,7 +10,7 @@ status: stable
 
 # Versioning Model
 
-**Finding:** EDAC (inheriting OpenAgentsControl) maintains three *independent* version numbers that must not be conflated: the **Repo version** (semver, in `VERSION` + `package.json`), the **Registry schema version** (in `registry.json` → `schema_version`), and **Component versions** (per-agent `version` in `agent-metadata.json`). Bumping one never requires bumping the others.
+**Finding:** EDAC (inheriting OpenAgentsControl) maintains three *independent* version numbers that must not be conflated: the **Repo version** (semver, in `VERSION` + `package.json`), the **Registry schema version** (in `registry.json` → `schema_version`), and **Component versions** (per-agent `version` in `src/metadata.json`). Bumping one never requires bumping the others.
 
 ## The Three Coexisting Versions
 
@@ -18,7 +18,7 @@ status: stable
 |---------|----------|-------------|
 | **Repo** | `VERSION` + `package.json` | Agent behavior changes |
 | **Registry schema** | `registry.json` → `schema_version` | Registry JSON structure changes |
-| **Component** | `agent-metadata.json` → per-agent `version` | Individual agent changes |
+| **Component** | `src/metadata.json` → per-agent `version` | Individual agent changes |
 
 These are independent: a patch to one agent does not affect the repo version, and adding/removing component entries is a content change, not a schema change.
 
@@ -28,7 +28,7 @@ These are independent: a patch to one agent does not affect the repo version, an
 
 - **MAJOR** — breaking agent behavior: renaming an agent (display name or file path), removing an agent/subagent, changing agent frontmatter structure, restructuring the context tree (`core/`, `repo/`, etc.), changing permission rules that alter allowed/blocked actions, or modifying delegation chains.
 - **MINOR** — new agents or features: adding a new agent/subagent, adding new context files, adding slash commands or skills, new eval test categories, or enhancing existing agent prompts without breaking behavior.
-- **PATCH** — fixes and docs: fixing typos in agent prompts, updating documentation, fixing eval tests, updating `registry.json` component entries, or updating `agent-metadata.json` (tags, descriptions).
+- **PATCH** — fixes and docs: fixing typos in agent prompts, updating documentation, fixing eval tests, updating `registry.json` component entries, or updating `src/metadata.json` (tags, descriptions).
 
 ## Registry Schema Version
 
@@ -38,7 +38,7 @@ Bump only when the **JSON structure** of `registry.json` changes — adding/remo
 
 ## Component Versions
 
-**Source:** `agent-metadata.json` → per-agent `"version"`.
+**Source:** `src/metadata.json` → per-agent `"version"`.
 
 Each agent carries its own version, bumped when its prompt changes (behavioral), its permissions change, its dependencies change, or its description changes. Independent of the repo version — a change to one agent does not affect others.
 
@@ -62,7 +62,7 @@ Did one agent change?
 
 - `VERSION` and `package.json` → **must match** (update both together).
 - `registry.json` → independent; bump only on schema changes.
-- `agent-metadata.json` → independent per-agent.
+- `src/metadata.json` → independent per-agent.
 
 ## Cross-links
 
@@ -71,5 +71,5 @@ Did one agent change?
 
 ## Contradictions / Flags
 
-- **OAC conventions, not yet verified for EDAC.** The source describes OAC's file layout (`VERSION`, `package.json`, `.opencode/config/agent-metadata.json`). EDAC's actual version-bearing files (e.g. `manifest.json`, `registry.json` under `src/`) should be verified against the repo before treating these paths as authoritative. The `agent-metadata.json` path in the source (` .opencode/config/agent-metadata.json`) does not obviously match EDAC's known structure (`src/registry.json` + `src/manifest.json`); confirm before relying on it.
+- **Verified against EDAC (2026-07-29).** Repo version lives in `VERSION` + `package.json`; registry schema version in `registry.json` (repo root, not `src/`); per-agent version in `src/metadata.json`. OAC's agent-metadata location is OAC lineage only — EDAC stores agent metadata in `src/metadata.json`.
 - The source's "Related" links (`../core-concepts/registry.md`, etc.) point to OAC's wiki tree and do not exist in EDAC's wiki; they are intentionally omitted here in favor of EDAC sibling pages.

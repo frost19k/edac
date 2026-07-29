@@ -10,7 +10,7 @@ and the ResearchAgent / WikiJanitor / WikiLibrarian subagents.
 > - For the purposes of EDAC: **OAC ≈ `src/`**.
 > - `src/` is a **focused derivation and enhancement** of OAC, not a mirror.
 >
-> Consequence for the wiki: pages derived from OAC sources describe OAC *lineage* and are generalized, not authoritative EDAC layout. Treat `src/` as the source of truth for EDAC structure. Do **not** assume OAC directory layouts, file names, or metadata locations apply to EDAC's `.opencode/`.
+> Consequence for the wiki: pages derived from OAC sources describe OAC *lineage* and are generalized, not authoritative EDAC layout. Treat `src/` as the source of truth for EDAC structure (see [framework/src-structure.md](framework/src-structure.md)). Do **not** assume OAC directory layouts, file names, or metadata locations apply to EDAC's `.opencode/`.
 
 ## Purpose
 The wiki is a persistent, compounding knowledge base used while developing `src/`.
