@@ -4,7 +4,7 @@ type: concept
 tags: [opencode, frontmatter, agent-schema, harness, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/agent-frontmatter.md]
+sources: ["(removed) oac-standards/agent-frontmatter.md"]
 status: stable
 ---
 
@@ -78,14 +78,32 @@ permission:                          # Permission rules (replaces deprecated too
   "*": "ask"                         # Catch-all (last-match-wins)
   read:
     "*": "allow"
+    "**/*.env": "deny"               # Sensitive files denied under read
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   bash:
     "*": "deny"
     "git status *": "allow"
   edit:
     "**/*.env": "deny"
+  grep:
+    "*": "allow"
+    "**/*.env": "deny"               # grep is a leak vector — deny sensitive files
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   task:                              # Subagent delegation control (v1.17.x)
+    "*": "deny"                      # Catch-all first (last-match-wins)
     ContextScout: "allow"            # Uses Display Name (frontmatter name field)
-    "*": "deny"
   skill:                             # Skill access control (v1.17.x)
     "*": "allow"
     "internal-*": "deny"
@@ -117,6 +135,7 @@ todowrite, webfetch, websearch, lsp, skill, question, doom_loop
 - **Actions**: `allow` | `ask` | `deny`.
 - **Evaluation order**: last-match-wins. Declare the catch-all `"*"` first; specific overrides follow.
 - `external_directory` is a valid OpenCode key but EDAC agents rely on its default behaviour and do not set it explicitly.
+- **`grep` is a secret-leak vector.** Because `grep` returns matching lines, grepping a file that contains a secret surfaces that secret in the output — just like `read`. Sensitive files must be denied under `grep` as well as `read` and `edit` (see the consolidated [Permission Model](../harness/permission-model.md)).
 
 > **Correction vs source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete. The 15-key list above is authoritative. Additionally, `question`, `list`, and `todowrite` are valid keys; `todoread` is **not** a standalone key (it is gated by `todowrite`); `codesearch` is **not** valid.
 
@@ -133,17 +152,35 @@ temperature: 0.2
 permission:
   read:
     "*": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit:
     "*": "allow"
     "**/*.env": "deny"
+  grep:
+    "*": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   bash:
+    "*": "deny"                      # Catch-all first (last-match-wins)
     "npx vitest *": "allow"
     "pytest *": "allow"
     "sudo *": "deny"
-    "*": "deny"
   task:
+    "*": "deny"                      # Catch-all first (last-match-wins)
     ContextScout: "allow"
-    "*": "deny"
 ---
 ```
 
@@ -198,6 +235,7 @@ Fields like `id`, `category`, `type`, `version`, `tags`, `dependencies` are NOT 
 - [ ] No duplicate keys?
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?
+- [ ] Sensitive files denied under `read`, `edit`, AND `grep` (not just `edit`)?
 - [ ] Only one `---` delimiter at top?
 - [ ] Valid YAML syntax?
 

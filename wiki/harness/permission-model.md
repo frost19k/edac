@@ -4,7 +4,7 @@ type: reference
 tags: [opencode, permissions, security, harness, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/permission-keys.md, sources/oac-standards/permission-agent-patterns.md, sources/oac-standards/permission-security.md]
+sources: ["(removed) oac-standards/permission-keys.md", "(removed) oac-standards/permission-agent-patterns.md", "(removed) oac-standards/permission-security.md"]
 status: stable
 ---
 
@@ -55,7 +55,7 @@ Use the 15-key list above; do not reintroduce `todoread` or `codesearch`.
 
 The four posture archetypes below are adapted from the OAC sources. All example frontmatter uses `temperature: 0.2` (EDAC convention, Decision D3) and only verified keys.
 
-> **CRITICAL — read and edit are independent.** Blocking sensitive files (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`) only under `edit` does **not** prevent them from being *read*. Always declare explicit `read:` denies for sensitive files as well as `edit:` denies. A secret that cannot be edited but can be read is still leaked.
+> **CRITICAL — read, edit, and grep are independent.** Blocking sensitive files (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`, `.api`, `creds*`) only under `edit` does **not** prevent them from being *read* — and `grep` returns matching lines, so it can *leak* secrets just as readily as `read`. Always declare explicit `read:`, `edit:`, **and `grep:`** denies for sensitive files. A secret that cannot be edited but can be read (or grepped) is still leaked.
 
 ### Read-Only Agents (Reviewers, Analyzers)
 
@@ -70,7 +70,7 @@ temperature: 0.2
 permission:
   bash: { "*": "deny" }
   edit: { "**/*": "deny" }
-  task: { ContextScout: "allow", "*": "deny" }
+  task: { "*": "deny", ContextScout: "allow" }
 ---
 ```
 
@@ -99,6 +99,8 @@ permission:
     "**/*.pem": "deny"
     "**/*.crt": "deny"
     "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit:
     "**/*.env": "deny"
     "**/*.key": "deny"
@@ -106,9 +108,20 @@ permission:
     "**/*.pem": "deny"
     "**/*.crt": "deny"
     "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
     "node_modules/**": "deny"
     ".git/**": "deny"
-  task: { ContextScout: "allow", "*": "deny" }
+  grep:
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
+  task: { "*": "deny", ContextScout: "allow" }
 ---
 ```
 
@@ -124,6 +137,16 @@ mode: primary
 temperature: 0.2
 permission:
   bash: { "*": "ask", "sudo *": "deny" }
+  read:
+    "*": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit:
     "**/*.env": "deny"
     "**/*.key": "deny"
@@ -131,8 +154,20 @@ permission:
     "**/*.pem": "deny"
     "**/*.crt": "deny"
     "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
     "node_modules/**": "deny"
     ".git/**": "deny"
+  grep:
+    "*": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   task: { "*": "allow" }
 ---
 ```
@@ -151,8 +186,17 @@ permission:
     "**/*.env": "deny"
     "**/*.key": "deny"
     "**/*.secret": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit: { "**/*.env": "deny" }
-  task: { ContextScout: "allow", "*": "deny" }
+  grep:
+    "*": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
+  task: { "*": "deny", ContextScout: "allow" }
 ```
 
 Examples: ExternalScout, ContextScout.
@@ -161,7 +205,7 @@ Examples: ExternalScout, ContextScout.
 
 ### Always Deny Sensitive Files
 
-Deny under **both** `read` and `edit` (see CRITICAL note in section (c)):
+Deny under **`read`, `edit`, AND `grep`** (see CRITICAL note in section (c)). `grep` is a leak vector because it returns matching lines — a secret inside a grepped file is surfaced in the output, so it needs the same sensitive-file denies as `read`:
 
 ```yaml
 permission:
@@ -172,6 +216,8 @@ permission:
     "**/*.pem": "deny"
     "**/*.crt": "deny"
     "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit:
     "**/*.env": "deny"
     "**/*.key": "deny"
@@ -179,6 +225,17 @@ permission:
     "**/*.pem": "deny"
     "**/*.crt": "deny"
     "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
+  grep:
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
 ```
 
 ### Always Deny Dangerous Commands
@@ -213,9 +270,9 @@ The `task:` key controls which subagents an agent may spawn. **`task:` uses Disp
 ```yaml
 permission:
   task:
+    "*": "deny"
     ContextScout: "allow"
     ExternalScout: "allow"
-    "*": "deny"
 ```
 
 ### Allow All Except Specific
@@ -232,10 +289,10 @@ permission:
 ```yaml
 permission:
   task:
+    "*": "deny"
     ContextScout: "allow"   # Always allow context discovery
     "CoderAgent": "ask"     # Ask before code generation
     "BuildAgent": "ask"     # Ask before builds
-    "*": "deny"
 ```
 
 ## (f) Validation Checklist
@@ -243,7 +300,7 @@ permission:
 - [ ] Using `permission:` (singular, not `permissions:`).
 - [ ] Catch-all rules (`"*"`) come **first**; specific overrides come **after** (last-match-wins).
 - [ ] Only verified keys used — no `todoread`, no `codesearch`, no `write`.
-- [ ] Sensitive files denied under **both** `read` AND `edit` (`**/*.env`, `**/*.key`, `**/*.secret`, `**/*.pem`, `**/*.crt`, `**/credentials*`, `**/*.api`, `**/creds*`).
+- [ ] Sensitive files denied under **`read`, `edit`, AND `grep`** (`**/*.env`, `**/*.key`, `**/*.secret`, `**/*.pem`, `**/*.crt`, `**/credentials*`, `**/*.api`, `**/creds*`).
 - [ ] Dangerous commands denied (`sudo *`, `rm -rf /*`, `chmod 777 *`, `curl * | bash`, `wget * | sh`).
 - [ ] Destructive operations set to `ask` (`rm -rf *`, `git push --force*`, `docker system prune*`, `npm publish*`).
 - [ ] Write-enabled agents declare explicit `read`, `grep`, `glob`, `list` permissions rather than relying on defaults.
