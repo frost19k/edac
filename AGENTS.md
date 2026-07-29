@@ -21,7 +21,7 @@ Compact guidance for OpenCode agents working in EDAC. Every line is something a 
   - `EDAC_INSTALL_DIR=<dir> ./install.sh` for a custom target.
 
 ## Structure & ownership
-- `src/` — the install package: component library (`agents/core`, `agents/subagents`, `commands`, `context`, `skills`, `tools`), `registry.json` (component registry with deps + profiles), `manifest.json` (Developer profile). Mirrored by `install.sh`.
+- `src/` — the install package: component library (`agents/core`, `agents/subagents`, `commands`, `context`, `skills`, `tools`), `registry.json` (component registry: deps + the installable `profiles.developer` seed), and `manifest.json` (Developer profile descriptor — badge/name/description + a 35-component list; `install.sh` does **not** read it). Mirrored by `install.sh`.
 - `.opencode/` — SystemBuilder's home: agent + subagent definitions (`.opencode/agents/`), and context (currently points to `wiki/`).
 - `wiki/` — SystemBuilder's research/verification knowledge base (see Agent architecture). `sources/` holds raw cited research; `framework/`, `harness/`, `research/` hold generated pages; `llm-wiki.md` is the pattern doc. Conventions live in `wiki/SCHEMA.md`.
 - `scripts/` — bun validation + dependency resolution (`registry/`, `validation/`).
@@ -33,12 +33,12 @@ Compact guidance for OpenCode agents working in EDAC. Every line is something a 
 
 ## Agent architecture (repo-wide convention)
 - SystemBuilder is the **sole primary agent**. The user interacts only with SystemBuilder.
-- ResearchAgent, WikiJanitor, and WikiLibrarian are SystemBuilder's subagents; only SystemBuilder spawns them — never invoke them directly.
+- The research subagents — ResearchAgent, WikiJanitor, WikiLibrarian — are specified in `wiki/SCHEMA.md` (not yet instantiated as files; see `wiki/TODO.md`). Only SystemBuilder spawns them; never invoke them directly.
 - Boundary: `src/` is what SystemBuilder *develops*; `.opencode/` is where SystemBuilder *lives* (agents, context, subagents). Do not conflate the two.
 - `wiki/` is SystemBuilder's research apparatus, not a user-facing browse tool. The research loop is **branching**, not a fixed sequence: SystemBuilder may fan out multiple subagents in parallel and may even spawn itself (configured `mode: all`).
 - SystemBuilder's constitution: `.opencode/agents/primary/system-builder.md`.
 
 ## Git
-- Repo is git-initialized on branch `master` with **no commits yet**; all files are currently untracked.
+- Repo is on branch `master` with an initial commit already made; do not assume the working tree is clean.
 - `wiki/` is part of this repo (not a separate repository).
 - Commit only when explicitly requested.
