@@ -71,7 +71,7 @@ Given a source, create/update relevant pages across `framework/` `harness/` `res
 Read `index.md` to locate relevant pages, read them, synthesize an answer with citations. Good answers may be filed back as new pages.
 
 ### Lint (WikiJanitor)
-Run after every ingest and on demand. Scope: only generated pages under `framework/`, `harness/`, `research/`.
+Run after every ingest and on demand. Scope: only generated pages under `framework/`, `harness/`, `research/`. WikiJanitor may use **read-only** git (`git status`, `git log`, `git diff`, `git show`, `git ls-files`, `git rev-parse`) to inspect repo state for verification, but never commits, pushes, or modifies the working tree.
 
 > **`sources/` is immutable OAC raw documentation — never lint it for OAC paths; those are upstream documents, not EDAC assertions.** Correction/explanation contexts (`wiki/TODO.md`, `wiki/log.md`, `wiki/framework/src-structure.md`) are exempt from the OAC-path checks below because they deliberately quote the wrong forms to explain the fix.
 
