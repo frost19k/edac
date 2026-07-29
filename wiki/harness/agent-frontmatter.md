@@ -18,7 +18,7 @@ status: stable
 
 ## Core Principle
 
-Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata (`id`, `category`, `type`, `version`, `tags`, `dependencies`) belongs in `src/metadata.json`, not in the agent's frontmatter.
+Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata belongs in `src/metadata.json` (see the field list in [../framework/src-structure.md](../framework/src-structure.md)) — it must not appear in the agent's frontmatter.
 
 **Why**: OpenCode silently ignores unknown frontmatter fields. They cause no errors but add noise and clutter, and they break the clean separation between harness configuration and OAC's component registry. Keeping frontmatter clean ensures agents behave consistently across OpenCode versions.
 
@@ -125,19 +125,11 @@ skills:          # ❌ Not a frontmatter field — skills auto-discovered from .
 
 The complete permission-key reference, evaluation order, and pattern syntax live in the consolidated page [../harness/permission-model.md](../harness/permission-model.md). Do **not** create separate `permission-keys`, `permission-agent-patterns`, or `permission-security` pages (decision D2).
 
-**Verified canonical key list (15 keys)** — resolved by a research pass against opencode.ai/docs and recorded authoritatively in [../research/opencode-permission-model.md](../research/opencode-permission-model.md):
-
-```
-read, edit, glob, grep, list, bash, task, external_directory,
-todowrite, webfetch, websearch, lsp, skill, question, doom_loop
-```
-
 - **Actions**: `allow` | `ask` | `deny`.
-- **Evaluation order**: last-match-wins. Declare the catch-all `"*"` first; specific overrides follow.
+- **Evaluation order**: last-match-wins (catch-all `"*"` first, specific overrides after) — full rules in the consolidated [Permission Model](../harness/permission-model.md).
 - `external_directory` is a valid OpenCode key but EDAC agents rely on its default behaviour and do not set it explicitly.
-- **`grep` is a secret-leak vector.** Because `grep` returns matching lines, grepping a file that contains a secret surfaces that secret in the output — just like `read`. Sensitive files must be denied under `grep` as well as `read` and `edit` (see the consolidated [Permission Model](../harness/permission-model.md)).
-
-> **Correction vs source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete. The 15-key list above is authoritative. Additionally, `question`, `list`, and `todowrite` are valid keys; `todoread` is **not** a standalone key (it is gated by `todowrite`); `codesearch` is **not** valid.
+- **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical sensitive-file deny block") for the rationale and the deny block.
+- **Correction vs OAC source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete; `question`, `list`, and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` is **not** valid. The authoritative 15-key list is in the consolidated [Permission Model](../harness/permission-model.md).
 
 ---
 
@@ -221,7 +213,7 @@ name: MyAgent
 
 ### 4. OAC Metadata in Frontmatter ❌
 
-Fields like `id`, `category`, `type`, `version`, `tags`, `dependencies` are NOT valid OpenCode frontmatter fields.
+The OAC metadata fields (see the canonical field list in [src/ Package Structure](../framework/src-structure.md)) are NOT valid OpenCode frontmatter fields.
 
 **Fix**: Move them to `src/metadata.json`.
 
@@ -231,7 +223,7 @@ Fields like `id`, `category`, `type`, `version`, `tags`, `dependencies` are NOT 
 
 - [ ] All required fields present (`name`, `description`, `mode`)?
 - [ ] No deprecated fields (`maxSteps`, `tools:`, `skills:`)?
-- [ ] No OAC metadata fields in frontmatter (`id`, `category`, `type`, `version`, `tags`, `dependencies`)?
+- [ ] No OAC metadata fields in frontmatter (`id`, `category`, `type`, `version`, `author`, `tags`, `dependencies`)?
 - [ ] No duplicate keys?
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?

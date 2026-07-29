@@ -110,7 +110,7 @@ Refer to [Permission Model](../harness/permission-model.md) for complete agent-t
 
 ## File Organization (FLAG)
 
-> **⚠ Verification item — NOT asserted as EDAC fact.** The tree below is OAC's layout as written in the source. EDAC's actual subagent directory structure may differ (e.g. EDAC's `.opencode/agents/` organization per `AGENTS.md`). Treat this as a research note to confirm against EDAC's real tree before adopting.
+> **⚠ Verification item — NOT asserted as EDAC fact.** The tree below is OAC's layout as written in the source. EDAC's actual subagent directory structure may differ (EDAC uses `src/agents/subagents/<tier>/` — `core/`, `code/`, `development/` — per `src-structure.md`, not OAC's `.opencode/agents/`). Treat this as a research note to confirm against EDAC's real tree before adopting.
 
 ```
 .opencode/agents/subagents/
@@ -165,10 +165,10 @@ permission:
 
 ## Examples
 
-**See existing subagents** (OAC paths — verify against EDAC layout per the [flag above](#file-organization-flag)):
-- `.opencode/agents/subagents/code/test-engineer.md` - Write-enabled with tests
-- `.opencode/agents/subagents/code/code-reviewer.md` - Read-only reviewer
-- `.opencode/agents/subagents/core/task-manager.md` - Restricted bash
+**See existing subagents** (EDAC paths per `src-structure.md`; verify against the live `src/agents/subagents/` tree):
+- `src/agents/subagents/code/test-engineer.md` - Write-enabled with tests
+- `src/agents/subagents/code/code-reviewer.md` - Read-only reviewer
+- `src/agents/subagents/core/task-manager.md` - Restricted bash
 
 ---
 

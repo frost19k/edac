@@ -1,6 +1,6 @@
 ---
 title: EDAC `src/` Package Structure
-type: reference
+type: concept
 tags: [edac, packaging, structure, src, layout]
 created: 2026-07-29
 updated: 2026-07-29

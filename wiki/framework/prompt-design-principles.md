@@ -139,15 +139,7 @@ Context files can be outdated. Never apply recommendations blindly; verify again
 
 ## Validation Checklist
 
-**Epistemic standards**
-- [ ] Identity establishes "understand before acting"
-- [ ] Distinguishes observation from inference from assumption
-- [ ] Contradiction protocol present
-- [ ] Sensitive-output handling rule present
-- [ ] Pre-conclusion checkpoint present
-- [ ] Execution path defaults to analysis when uncertain
-- [ ] Anti-pattern guidance with reasons (not just prohibitions)
-- [ ] Project-surface interrogation stage present
+**Epistemic standards** — the 8-point epistemic gate every agent must pass is owned by [Epistemic Standards](../framework/epistemic-standards.md) (its Validation Checklist); do not duplicate it here.
 
 **Structural coherence**
 - [ ] Identity is first substantive content after frontmatter
@@ -160,8 +152,8 @@ Context files can be outdated. Never apply recommendations blindly; verify again
 - [ ] Approval caching explicitly addressed
 
 **Permission block**
-- [ ] Only valid OpenCode permission keys used (`read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `skill`, `lsp`, `question`, `webfetch`, `websearch`, `todowrite`, `doom_loop`). Note: `external_directory` is a valid OpenCode key but EDAC agents do not use it (they rely on default behaviour).
-- [ ] No deprecated frontmatter fields (`id`, `category`, `type`, `version`, `author` belong in `src/metadata.json`)
+- [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
+- [ ] No OAC metadata fields in frontmatter (belong in `src/metadata.json` — see [Agent Frontmatter](../harness/agent-frontmatter.md) and [src/ Package Structure](./src-structure.md))
 - [ ] Sensitive files denied for both `read` and `edit`
 - [ ] Destructive commands denied
 

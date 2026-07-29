@@ -1,6 +1,6 @@
 ---
 title: OpenCode Permission Model (Consolidated)
-type: reference
+type: concept
 tags: [opencode, permissions, security, harness, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
@@ -55,7 +55,7 @@ Use the 15-key list above; do not reintroduce `todoread` or `codesearch`.
 
 The four posture archetypes below are adapted from the OAC sources. All example frontmatter uses `temperature: 0.2` (EDAC convention, Decision D3) and only verified keys.
 
-> **CRITICAL — read, edit, and grep are independent.** Blocking sensitive files (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`, `.api`, `creds*`) only under `edit` does **not** prevent them from being *read* — and `grep` returns matching lines, so it can *leak* secrets just as readily as `read`. Always declare explicit `read:`, `edit:`, **and `grep:`** denies for sensitive files. A secret that cannot be edited but can be read (or grepped) is still leaked.
+> **CRITICAL — read, edit, and grep are independent.** Blocking sensitive files (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`, `.api`, `creds*`) only under `edit` does **not** prevent them from being *read*. Always declare explicit `read:`, `edit:`, **and `grep:`** denies for sensitive files — `grep` is a leak vector; the full deny block and rationale are in §d "Canonical sensitive-file deny block". A secret that cannot be edited but can be read (or grepped) is still leaked.
 
 ### Read-Only Agents (Reviewers, Analyzers)
 
@@ -93,34 +93,13 @@ permission:
     "sudo *": "deny"
   read:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   edit:
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
     "node_modules/**": "deny"
     ".git/**": "deny"
   grep:
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   task: { "*": "deny", ContextScout: "allow" }
 ---
 ```
@@ -139,35 +118,14 @@ permission:
   bash: { "*": "ask", "sudo *": "deny" }
   read:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   edit:
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
     "node_modules/**": "deny"
     ".git/**": "deny"
   grep:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   task: { "*": "allow" }
 ---
 ```
@@ -183,19 +141,11 @@ permission:
   bash: { "*": "deny", "git status *": "allow", "git diff *": "allow", "git log *": "allow", "ls *": "allow", "cat *": "allow" }
   read:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
-  edit: { "**/*.env": "deny" }
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
+  edit: {}  # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   grep:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # apply the canonical sensitive-file deny block here (see §d "Canonical sensitive-file deny block")
   task: { "*": "deny", ContextScout: "allow" }
 ```
 
@@ -203,9 +153,9 @@ Examples: ExternalScout, ContextScout.
 
 ## (d) Security Patterns
 
-### Always Deny Sensitive Files
+### Canonical sensitive-file deny block (Always Deny Sensitive Files)
 
-Deny under **`read`, `edit`, AND `grep`** (see CRITICAL note in section (c)). `grep` is a leak vector because it returns matching lines — a secret inside a grepped file is surfaced in the output, so it needs the same sensitive-file denies as `read`:
+Deny under **`read`, `edit`, AND `grep`**. `grep` is a leak vector because it returns matching lines — a secret inside a grepped file is surfaced in the output, so it needs the same sensitive-file denies as `read`:
 
 ```yaml
 permission:

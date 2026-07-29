@@ -26,7 +26,7 @@ These are independent: a patch to one agent does not affect the repo version, an
 
 **Source:** `VERSION` file + `package.json` → `"version"` — **keep these two in sync** (update both on every bump).
 
-- **MAJOR** — breaking agent behavior: renaming an agent (display name or file path), removing an agent/subagent, changing agent frontmatter structure, restructuring the context tree (`core/`, `repo/`, etc.), changing permission rules that alter allowed/blocked actions, or modifying delegation chains.
+- **MAJOR** — breaking agent behavior: renaming an agent (display name or file path), removing an agent/subagent, changing agent frontmatter structure, restructuring the context tree (`core/`, `dev/`, etc.), changing permission rules that alter allowed/blocked actions, or modifying delegation chains.
 - **MINOR** — new agents or features: adding a new agent/subagent, adding new context files, adding slash commands or skills, new eval test categories, or enhancing existing agent prompts without breaking behavior.
 - **PATCH** — fixes and docs: fixing typos in agent prompts, updating documentation, fixing eval tests, updating `registry.json` component entries, or updating `src/metadata.json` (tags, descriptions).
 
@@ -64,7 +64,7 @@ Did one agent change?
 - `registry.json` → independent; bump only on schema changes.
 - `src/metadata.json` → independent per-agent.
 
-## Cross-links
+## Related
 
 - Agent prompt/behavior changes are the trigger for repo MAJOR/MINOR and for component version bumps — see [Prompt Design Principles](../framework/prompt-design-principles.md).
 - Related harness pages: [Agent Frontmatter](../harness/agent-frontmatter.md), [Subagent Structure](../harness/subagent-structure.md), [Permission Model](../harness/permission-model.md).
