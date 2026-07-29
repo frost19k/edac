@@ -4,7 +4,7 @@ type: concept
 tags: [epistemic, reasoning, evidence, agent-design, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/epistemic-standards.md]
+sources: ["(removed) oac-standards/epistemic-standards.md"]
 status: stable
 ---
 
@@ -72,4 +72,4 @@ Before deploying an agent, verify it has:
 ## Related
 
 - [Prompt Design Principles](../framework/prompt-design-principles.md) — the design moves that embed this framework into agent prompts.
-- Source: [OAC Epistemic Standards](sources/oac-standards/epistemic-standards.md) — canonical OAC v1.0.0 standard this page distills.
+- Source: OAC Epistemic Standards (source `oac-standards/epistemic-standards.md` removed) — canonical OAC v1.0.0 standard this page distills.

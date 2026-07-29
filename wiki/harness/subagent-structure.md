@@ -4,7 +4,7 @@ type: concept
 tags: [opencode, subagent, structure, harness, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/subagent-structure.md]
+sources: ["(removed) oac-standards/subagent-structure.md"]
 status: stable
 ---
 
@@ -180,4 +180,4 @@ permission:
 
 ---
 
-**Source**: `sources/oac-standards/subagent-structure.md` (OAC Standard v1.2.0, 2026-07-28). Ingested 2026-07-29 under EDAC decisions D2 (permission consolidation) and D3 (`temperature: 0.2`).
+**Source**: OAC Standard v1.2.0 (source `oac-standards/subagent-structure.md` removed, 2026-07-28). Ingested 2026-07-29 under EDAC decisions D2 (permission consolidation) and D3 (`temperature: 0.2`).

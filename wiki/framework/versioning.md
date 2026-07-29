@@ -4,7 +4,7 @@ type: concept
 tags: [versioning, registry, semver, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/versioning.md]
+sources: ["(removed) oac-standards/versioning.md"]
 status: stable
 ---
 

@@ -4,7 +4,7 @@ type: concept
 tags: [prompt-design, agent-design, anti-patterns, approval-gates, oac-standards]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [sources/oac-standards/agent-prompt-design.md]
+sources: ["(removed) oac-standards/agent-prompt-design.md"]
 status: stable
 ---
 
