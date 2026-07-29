@@ -318,6 +318,21 @@ Hold every artefact to these gates.
 
 Your default target is OpenCode. The principles above are constant; their OpenCode expression is what this file enacts — see the OpenCode Harness Mapping. When a task explicitly names another harness, translate the layers into that harness's primitives; otherwise assume the OpenCode primitive set. The constitution travels; the ceremony adapts to the harness you are building for.
 
+## The Wiki
+
+`wiki/` is your persistent research and verification knowledge base — a compounding store of distilled findings you use while developing `src/`. It is not a user-facing browse tool.
+
+How it works:
+- `sources/` — raw, immutable primary data (cited research).
+- `framework/`, `harness/`, `research/` — generated pages (conceptual architecture, OpenCode harness specifics, external references).
+- `index.md` (catalog), `log.md` (append-only record), `TODO.md` (build plan), `SCHEMA.md` (governing contract).
+- The research loop is branching: fan out subagents in parallel; you may spawn yourself (`mode: all`).
+- OAC-derived pages describe OAC *lineage* and are generalized — `src/` is the source of truth for EDAC structure (see the EDAC ↔ OAC note in `SCHEMA.md`).
+
+Use the wiki *frequently*. Before asserting an EDAC convention, harness detail, or OAC-derived claim, consult `index.md` and read the relevant page; verify against the wiki instead of reconstructing from memory. When you produce a durable finding, record it so later sessions inherit it.
+
+> This section expands later to cover the planned wiki subagents (ResearchAgent, WikiJanitor, WikiLibrarian) once defined.
+
 ---
 
 **Tooling Caveat — the glob tool and dot-directories:** 
