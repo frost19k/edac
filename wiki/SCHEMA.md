@@ -71,7 +71,55 @@ Given a source, create/update relevant pages across `framework/` `harness/` `res
 Read `index.md` to locate relevant pages, read them, synthesize an answer with citations. Good answers may be filed back as new pages.
 
 ### Lint (WikiJanitor)
-Periodically health-check: contradictions between pages, stale claims, orphan pages (no inbound links), concepts mentioned but lacking a page, missing cross-references, data gaps fillable by web search.
+Run after every ingest and on demand. Scope: only generated pages under `framework/`, `harness/`, `research/`.
+
+> **`sources/` is immutable OAC raw documentation — never lint it for OAC paths; those are upstream documents, not EDAC assertions.** Correction/explanation contexts (`wiki/TODO.md`, `wiki/log.md`, `wiki/framework/src-structure.md`) are exempt from the OAC-path checks below because they deliberately quote the wrong forms to explain the fix.
+
+**1. OAC-path tyranny** — no generated page may assert an OAC `.opencode/` path or a wrong `src/` path as EDAC fact. The greps below must return **zero matches** (Lint passes when grep fails). Run from `wiki/`:
+
+```bash
+# 1a. OAC metadata path must be src/metadata.json, never .opencode/config/agent-metadata.json
+rg -n '\.opencode/config/agent-metadata\.json' framework harness research --glob '!framework/src-structure.md'
+
+# 1b. bare/unqualified agent-metadata.json must be src/metadata.json
+#     (src/metadata.json does NOT contain this substring, so a clean page yields no match)
+rg -n 'agent-metadata\.json' framework harness research --glob '!framework/src-structure.md'
+
+# 1c. registry.json lives at repo root, never under src/
+rg -n 'src/registry\.json' framework harness research --glob '!framework/src-structure.md'
+```
+
+1d. **Structural-claim traceability** — every EDAC file path, directory, or layout assertion in a generated page must trace to `wiki/framework/src-structure.md`. For each path-like token a page asserts, confirm it appears in (or is consistent with) the tables in `src-structure.md`. If a claim cannot be traced, correct it against the live `src/` tree or flag it in `TODO.md`.
+
+**2. Cross-link integrity**
+- Every relative markdown link (`[text](path.md)`, `[text](../dir/page.md)`) must resolve to an existing file. Extract links, then verify each target exists relative to the referencing page:
+  ```bash
+  rg -no '\[[^\]]+\]\(([^)]+\.md)\)' framework harness research
+  ```
+  (Anchored links `path.md#sec` are rare here; re-check any that the pattern misses.)
+- **Orphan pages** — flag any generated page with zero inbound links (no other page links to it). Cross-check against `index.md` and the link graph.
+- **Missing pages** — flag concepts/entities named in pages (especially `tags`, `sources`, and "Related" sections) that are referenced but have no corresponding page.
+
+**3. Frontmatter compliance** — every generated page must open with valid YAML frontmatter containing exactly these keys: `title`, `type`, `tags`, `created`, `updated`, `sources`, `status`. Verify:
+```bash
+for f in $(rg -l '^---$' framework harness research); do
+  rg -q '^title:' "$f" && rg -q '^type:' "$f" && rg -q '^tags:' "$f" \
+    && rg -q '^created:' "$f" && rg -q '^updated:' "$f" \
+    && rg -q '^sources:' "$f" && rg -q '^status:' "$f" || echo "MISSING FRONTMATTER KEY: $f"
+done
+```
+Also confirm `type` ∈ {entity, concept, comparison, summary, source-note} and `status` ∈ {draft, stable} per the Page format section.
+
+**4. Contradictions** — pages must not contradict each other, nor contradict `wiki/framework/src-structure.md` or the actual `src/` tree. Reconcile any conflicting claims (differing paths, component lists, version facts) by re-reading `src-structure.md` and the live `src/` directory; record resolutions in `log.md` and fix the offending page. Note contradictions explicitly rather than silently overwriting (per Page format).
+
+**5. Stale claims** — verify version/file assertions against the repo. Confirm these exist at the stated locations (paths relative to `wiki/`):
+```bash
+test -f ../VERSION && echo "VERSION ok" || echo "MISSING: ../VERSION"
+test -f ../package.json && echo "package.json ok" || echo "MISSING: ../package.json"
+test -f ../registry.json && echo "registry.json ok" || echo "MISSING: ../registry.json"
+test -f ../src/metadata.json && echo "src/metadata.json ok" || echo "MISSING: ../src/metadata.json"
+```
+Any page asserting a version, file, or path that does not match the live repo is stale and must be corrected.
 
 ## index.md format
 Catalog of all pages, grouped by directory, each with a one-line summary and optional metadata (date, source count). Updated on every ingest. Example:
