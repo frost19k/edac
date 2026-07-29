@@ -4,6 +4,14 @@ Conventions for maintaining EDAC's wiki — SystemBuilder's research/verificatio
 knowledge base. This file is the contract every wiki actor follows: SystemBuilder
 and the ResearchAgent / WikiJanitor / WikiLibrarian subagents.
 
+> ## EDAC ↔ OAC relationship (read first)
+> EDAC is **inspired by** OpenAgentsControl (OAC) but has **no obligation to follow OAC specifics** — especially the structure of the local `.opencode/`.
+> - OAC patterns, where they exist, live **exclusively in `src/`**.
+> - For the purposes of EDAC: **OAC ≈ `src/`**.
+> - `src/` is a **focused derivation and enhancement** of OAC, not a mirror.
+>
+> Consequence for the wiki: pages derived from OAC sources describe OAC *lineage* and are generalized, not authoritative EDAC layout. Treat `src/` as the source of truth for EDAC structure. Do **not** assume OAC directory layouts, file names, or metadata locations apply to EDAC's `.opencode/`.
+
 ## Purpose
 The wiki is a persistent, compounding knowledge base used while developing `src/`.
 It is not a user-facing browse tool. The user interacts only with SystemBuilder;
