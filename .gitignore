@@ -1,0 +1,34 @@
+# ── Dependencies ───────────────────────────────────────────────
+node_modules/
+
+# ── Build / output artifacts ──────────────────────────────────
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.turbo/
+
+# ── Local agent / tooling working directory (sessions, task files) ──
+.tmp/
+
+# ── Editor ────────────────────────────────────────────────────
+.vscode/
+
+# ── Environment ───────────────────────────────────────────────
+.env
+.env.local
+
+# ── OS / junk ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+
+# ── Temp backups (e.g. install.sh `sed -i.bak`) ───────────────
+*.bak
+
+# NOTE: bun.lock is the Bun lockfile and is intentionally committed (not ignored).
+# NOTE: src/, registry.json, scripts/, docs/, wiki/ are project source and are tracked.

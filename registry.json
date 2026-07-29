@@ -1,0 +1,2639 @@
+{
+  "version": "1.0.0",
+  "schema_version": "1.0.0",
+  "repository": "https://github.com/frost19k/edac.git",
+  "categories": {
+    "essential": "Minimal components for basic functionality",
+    "standard": "Standard components for typical use",
+    "extended": "Extended components for advanced features",
+    "meta": "Meta-level components for system generation"
+  },
+  "components": {
+    "agents": [
+      {
+        "id": "open-coder",
+        "name": "OpenCoder",
+        "type": "agent",
+        "path": "agents/core/open-coder.md",
+        "description": "Orchestration agent for complex coding, architecture, and multi-file refactoring",
+        "tags": [
+          "development",
+          "coding",
+          "implementation"
+        ],
+        "dependencies": [
+          "subagent:doc-writer",
+          "subagent:coder-agent",
+          "subagent:test-engineer",
+          "subagent:code-reviewer",
+          "subagent:build-agent",
+          "subagent:context-scout",
+          "subagent:external-scout",
+          "subagent:task-manager",
+          "subagent:batch-executor",
+          "subagent:frontend-specialist",
+          "subagent:devops-specialist",
+          "context:standards-code",
+          "context:task-delegation-basics",
+          "context:component-planning",
+          "context:external-libraries-workflow"
+        ],
+        "category": "core"
+      },
+      {
+        "id": "open-agent",
+        "name": "OpenAgent",
+        "type": "agent",
+        "path": "agents/core/open-agent.md",
+        "description": "Universal agent for answering queries, executing tasks, and coordinating workflows across any domain",
+        "tags": [
+          "universal",
+          "coordination",
+          "primary"
+        ],
+        "dependencies": [
+          "subagent:task-manager",
+          "subagent:doc-writer",
+          "subagent:context-scout",
+          "subagent:external-scout",
+          "subagent:batch-executor",
+          "subagent:coder-agent",
+          "subagent:code-reviewer",
+          "context:standards-code",
+          "context:standards-docs",
+          "context:standards-tests",
+          "context:review-ref",
+          "context:delegation-ref",
+          "context:external-libraries-workflow"
+        ],
+        "category": "core"
+      }
+    ],
+    "subagents": [
+      {
+        "id": "batch-executor",
+        "name": "BatchExecutor",
+        "type": "subagent",
+        "path": "agents/subagents/core/batch-executor.md",
+        "description": "Execute multiple tasks in parallel, managing simultaneous CoderAgent delegations",
+        "tags": [
+          "parallel-execution",
+          "batch",
+          "coordination"
+        ],
+        "dependencies": [
+          "subagent:coder-agent",
+          "skill:task-management"
+        ],
+        "category": "standard"
+      },
+      {
+        "id": "task-manager",
+        "name": "TaskManager",
+        "type": "subagent",
+        "path": "agents/subagents/core/task-manager.md",
+        "description": "Breaks down complex features into small, verifiable subtasks",
+        "tags": [
+          "planning",
+          "organization",
+          "task-management"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "code-reviewer",
+        "name": "CodeReviewer",
+        "type": "subagent",
+        "path": "agents/subagents/code/code-reviewer.md",
+        "description": "Performs code review with security and quality checks",
+        "tags": [
+          "review",
+          "security",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "test-engineer",
+        "name": "TestEngineer",
+        "type": "subagent",
+        "path": "agents/subagents/code/test-engineer.md",
+        "description": "Writes unit and integration tests",
+        "tags": [
+          "testing",
+          "tdd",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "doc-writer",
+        "name": "DocWriter",
+        "type": "subagent",
+        "path": "agents/subagents/core/doc-writer.md",
+        "description": "Creates and updates documentation",
+        "tags": [
+          "docs",
+          "documentation",
+          "writing"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "coder-agent",
+        "name": "CoderAgent",
+        "type": "subagent",
+        "path": "agents/subagents/code/coder-agent.md",
+        "description": "Executes coding subtasks in sequence",
+        "tags": [
+          "coding",
+          "implementation",
+          "execution"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "build-agent",
+        "name": "BuildAgent",
+        "type": "subagent",
+        "path": "agents/subagents/code/build-agent.md",
+        "description": "Type checks and validates builds",
+        "tags": [
+          "build",
+          "validation",
+          "type-checking"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "frontend-specialist",
+        "name": "FrontendSpecialist",
+        "type": "subagent",
+        "path": "agents/subagents/development/frontend-specialist.md",
+        "description": "Expert in React, Vue, and modern CSS architecture",
+        "tags": [],
+        "dependencies": [],
+        "category": "development"
+      },
+      {
+        "id": "devops-specialist",
+        "name": "DevopsSpecialist",
+        "type": "subagent",
+        "path": "agents/subagents/development/devops-specialist.md",
+        "description": "Expert in CI/CD, infrastructure as code, and deployment automation",
+        "tags": [],
+        "dependencies": [],
+        "category": "development"
+      },
+      {
+        "id": "context-organizer",
+        "name": "ContextOrganizer",
+        "type": "subagent",
+        "path": "agents/subagents/system-builder/context-organizer.md",
+        "description": "Organizes and generates modular context files",
+        "tags": [
+          "context",
+          "organization",
+          "knowledge-management"
+        ],
+        "dependencies": [
+          "context:core/context-system/*"
+        ],
+        "category": "meta"
+      },
+      {
+        "id": "context-scout",
+        "name": "ContextScout",
+        "type": "subagent",
+        "path": "agents/subagents/core/context-scout.md",
+        "version": "5.1.0",
+        "description": "Get accurate context FIRST before diving deep—save time, energy, and avoid rework. ContextScout intelligently discovers and retrieves the exact context files you need with precise file paths and line ranges, so you start with the right information instead of guessing. Optimized for multi-model compatibility (Claude, Gemini, GPT-4) with 20% token reduction.",
+        "tags": [
+          "context",
+          "search",
+          "discovery",
+          "navigation",
+          "subagent",
+          "optimized"
+        ],
+        "dependencies": [
+          "context:registry-dependencies",
+          "context:context-system",
+          "context:mvi",
+          "context:structure",
+          "context:workflows",
+          "subagent:external-scout",
+          "context:root-navigation",
+          "context:context-paths-config"
+        ],
+        "category": "core"
+      },
+      {
+        "id": "external-scout",
+        "name": "ExternalScout",
+        "type": "subagent",
+        "path": "agents/subagents/core/external-scout.md",
+        "version": "2.0.0",
+        "description": "Fetches live, version-specific documentation for external libraries and frameworks using Context7 and other sources. Optimized with 42% token reduction and enhanced references to prompt engineering and context system docs.",
+        "tags": [
+          "external-docs",
+          "libraries",
+          "frameworks",
+          "context7",
+          "subagent",
+          "optimized"
+        ],
+        "dependencies": [
+          "context:context-system"
+        ],
+        "category": "core"
+      }
+    ],
+    "commands": [
+      {
+        "id": "test",
+        "name": "Test Pipeline",
+        "type": "command",
+        "path": "commands/test.md",
+        "description": "Run the complete testing pipeline",
+        "tags": [
+          "testing",
+          "ci",
+          "validation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "commit",
+        "name": "Smart Commit",
+        "type": "command",
+        "path": "commands/commit.md",
+        "description": "Create intelligent git commits with context",
+        "tags": [
+          "git",
+          "commit",
+          "version-control"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context",
+        "name": "Context Manager",
+        "type": "command",
+        "path": "commands/context.md",
+        "description": "Context system manager - harvest summaries, extract knowledge, organize context",
+        "tags": [
+          "context",
+          "knowledge-management",
+          "harvest"
+        ],
+        "dependencies": [
+          "subagent:context-organizer",
+          "subagent:context-scout"
+        ],
+        "category": "essential"
+      },
+      {
+        "id": "add-context",
+        "name": "Add Context",
+        "type": "command",
+        "path": "commands/add-context.md",
+        "description": "Interactive wizard to add project patterns using Project Intelligence standard",
+        "tags": [
+          "context",
+          "onboarding",
+          "project-intelligence",
+          "wizard"
+        ],
+        "dependencies": [
+          "subagent:context-organizer",
+          "context:mvi",
+          "context:frontmatter",
+          "context:project-intelligence"
+        ],
+        "category": "essential"
+      },
+      {
+        "id": "clean",
+        "name": "Clean Project",
+        "type": "command",
+        "path": "commands/clean.md",
+        "description": "Clean build artifacts and temporary files",
+        "tags": [
+          "cleanup",
+          "maintenance",
+          "build"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "optimize",
+        "name": "Code Optimizer",
+        "type": "command",
+        "path": "commands/optimize.md",
+        "description": "Optimize code performance and bundle size",
+        "tags": [
+          "optimization",
+          "performance",
+          "build"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "analyze-patterns",
+        "name": "Analyze Patterns",
+        "type": "command",
+        "path": "commands/analyze-patterns.md",
+        "description": "Analyze codebase for patterns and similar implementations",
+        "tags": [
+          "analysis",
+          "patterns",
+          "refactoring"
+        ],
+        "category": "standard"
+      }
+    ],
+    "tools": [
+      {
+        "id": "env",
+        "name": "Environment Manager",
+        "type": "tool",
+        "path": "tools/env/index.ts",
+        "description": "Load and manage environment variables securely",
+        "tags": [
+          "environment",
+          "config",
+          "security"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      }
+    ],
+    "plugins": [],
+    "contexts": [
+      {
+        "id": "essential-patterns",
+        "name": "Essential Patterns",
+        "type": "context",
+        "path": "context/core/essential-patterns.md",
+        "description": "Core development patterns and best practices",
+        "tags": [
+          "patterns",
+          "best-practices",
+          "guidelines"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "standards-code",
+        "name": "Code Standards",
+        "type": "context",
+        "path": "context/core/standards/code-quality.md",
+        "description": "Modular, functional code standards",
+        "tags": [
+          "standards",
+          "code",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "standards-patterns",
+        "name": "Pattern Standards",
+        "type": "context",
+        "path": "context/core/standards/security-patterns.md",
+        "description": "Language-agnostic pattern catalog",
+        "tags": [
+          "standards",
+          "patterns",
+          "architecture"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "standards-tests",
+        "name": "Testing Standards",
+        "type": "context",
+        "path": "context/core/standards/test-coverage.md",
+        "description": "Testing best practices and guidelines",
+        "tags": [
+          "standards",
+          "testing",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "standards-docs",
+        "name": "Documentation Standards",
+        "type": "context",
+        "path": "context/core/standards/documentation.md",
+        "description": "Documentation guidelines and templates",
+        "tags": [
+          "standards",
+          "documentation",
+          "writing"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "standards-analysis",
+        "name": "Analysis Standards",
+        "type": "context",
+        "path": "context/core/standards/code-analysis.md",
+        "description": "Code analysis framework and guidelines",
+        "tags": [
+          "standards",
+          "analysis",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-review",
+        "name": "Code Review Workflow",
+        "type": "context",
+        "path": "context/core/workflows/code-review.md",
+        "description": "Code review process and guidelines",
+        "tags": [
+          "workflows",
+          "review",
+          "quality"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "system-context-guide",
+        "name": "Context System Guide",
+        "type": "context",
+        "path": "context/core/system/context-guide.md",
+        "description": "Guide to the context system and file organization",
+        "tags": [
+          "system",
+          "guide",
+          "context"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "clean-code",
+        "name": "Clean Code",
+        "type": "context",
+        "path": "context/dev/principles/clean-code.md",
+        "description": "Clean Code Principles",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "react-patterns",
+        "name": "React Patterns",
+        "type": "context",
+        "path": "context/web/react-patterns.md",
+        "description": "React Patterns & Best Practices",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "api-design",
+        "name": "Api Design",
+        "type": "context",
+        "path": "context/dev/principles/api-design.md",
+        "description": "API Design Patterns",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-systems",
+        "name": "Design Systems",
+        "type": "context",
+        "path": "context/web/design-systems.md",
+        "description": "Design Systems",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "harvest",
+        "name": "Harvest",
+        "type": "context",
+        "path": "context/core/context-system/operations/harvest.md",
+        "description": "Context Harvest Operation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "extract",
+        "name": "Extract",
+        "type": "context",
+        "path": "context/core/context-system/operations/extract.md",
+        "description": "Extract Operation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "error",
+        "name": "Error",
+        "type": "context",
+        "path": "context/core/context-system/operations/error.md",
+        "description": "Error Operation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "migrate",
+        "name": "Migrate",
+        "type": "context",
+        "path": "context/core/context-system/operations/migrate.md",
+        "description": "Migrate context from global to local project",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "organize",
+        "name": "Organize",
+        "type": "context",
+        "path": "context/core/context-system/operations/organize.md",
+        "description": "Organize Operation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "update",
+        "name": "Update",
+        "type": "context",
+        "path": "context/core/context-system/operations/update.md",
+        "description": "Update Operation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows",
+        "name": "Workflows",
+        "type": "context",
+        "path": "context/core/context-system/guides/workflows.md",
+        "description": "Context Operation Workflows",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "creation",
+        "name": "Creation",
+        "type": "context",
+        "path": "context/core/context-system/guides/creation.md",
+        "description": "Context File Creation Standards",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "compact",
+        "name": "Compact",
+        "type": "context",
+        "path": "context/core/context-system/guides/compact.md",
+        "description": "Context Compaction (Minimization)",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "mvi",
+        "name": "Mvi",
+        "type": "context",
+        "path": "context/core/context-system/standards/mvi.md",
+        "description": "MVI Principle (Minimal Viable Information)",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "structure",
+        "name": "Structure",
+        "type": "context",
+        "path": "context/core/context-system/standards/structure.md",
+        "description": "Context Structure",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system",
+        "name": "Context System",
+        "type": "context",
+        "path": "context/core/context-system.md",
+        "description": "Context System",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "registry-dependencies",
+        "name": "Registry Dependencies",
+        "type": "context",
+        "path": "context/repo/quality/registry-dependencies.md",
+        "description": "Maintain registry quality through dependency validation and consistency checks",
+        "tags": [
+          "registry",
+          "quality",
+          "validation",
+          "dependencies"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "frontmatter",
+        "name": "Frontmatter Standard",
+        "type": "context",
+        "path": "context/core/context-system/standards/frontmatter.md",
+        "description": "HTML comment frontmatter format for all context files",
+        "tags": [
+          "context-system",
+          "standards",
+          "frontmatter",
+          "metadata"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "codebase-references",
+        "name": "Codebase References Standard",
+        "type": "context",
+        "path": "context/core/context-system/standards/codebase-references.md",
+        "description": "How to link context files to actual code implementation",
+        "tags": [
+          "context-system",
+          "standards",
+          "codebase",
+          "references",
+          "documentation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "scroll-animation-prompts",
+        "name": "Scroll Animation Prompts",
+        "type": "context",
+        "path": "context/web/design/lookup/scroll-animation-prompts.md",
+        "description": "Lookup: Scroll Animation Image Generation Prompts",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "building-scrollytelling-pages",
+        "name": "Building Scrollytelling Pages",
+        "type": "context",
+        "path": "context/web/design/guides/building-scrollytelling-pages.md",
+        "description": "Guide: Building Scrollytelling Pages",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "scrollytelling-headphone",
+        "name": "Scrollytelling Headphone",
+        "type": "context",
+        "path": "context/web/design/examples/scrollytelling-headphone.md",
+        "description": "Example: Scrollytelling Headphone Animation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "scroll-linked-animations",
+        "name": "Scroll Linked Animations",
+        "type": "context",
+        "path": "context/web/design/concepts/scroll-linked-animations.md",
+        "description": "Concept: Scroll-Linked Animations",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "feature-breakdown",
+        "name": "Feature Breakdown",
+        "type": "context",
+        "path": "context/core/workflows/feature-breakdown.md",
+        "aliases": [
+          "workflows-task-breakdown"
+        ],
+        "description": "Task Breakdown Guidelines",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "session-management",
+        "name": "Session Management",
+        "type": "context",
+        "path": "context/core/workflows/session-management.md",
+        "aliases": [
+          "workflows-sessions"
+        ],
+        "description": "Session Management",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "component-planning",
+        "name": "Component Planning",
+        "type": "context",
+        "path": "context/core/workflows/component-planning.md",
+        "aliases": [
+          "workflows-component-planning"
+        ],
+        "description": "Iterative component-based planning for complex features",
+        "tags": [
+          "workflows",
+          "planning",
+          "architecture",
+          "components"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "changelog",
+        "name": "Changelog",
+        "type": "context",
+        "path": "context/core/context-system/CHANGELOG.md",
+        "description": "Context System Changelog",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "organizing-context",
+        "name": "Organizing Context",
+        "type": "context",
+        "path": "context/core/context-system/guides/organizing-context.md",
+        "description": "Guide: Organizing Context by Concern",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "navigation-examples",
+        "name": "Navigation Examples",
+        "type": "context",
+        "path": "context/core/context-system/examples/navigation-examples.md",
+        "description": "Examples: Navigation Files",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "code-quality",
+        "name": "Code Quality",
+        "type": "context",
+        "path": "context/core/standards/code-quality.md",
+        "description": "Code Standards",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "test-coverage",
+        "name": "Test Coverage",
+        "type": "context",
+        "path": "context/core/standards/test-coverage.md",
+        "description": "Testing Standards",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "documentation",
+        "name": "Documentation",
+        "type": "context",
+        "path": "context/core/standards/documentation.md",
+        "description": "Documentation Standards",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "fullstack-navigation",
+        "name": "Fullstack Navigation",
+        "type": "context",
+        "path": "context/dev/fullstack-navigation.md",
+        "description": "Full-Stack Development Navigation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "backend-navigation",
+        "name": "Backend Navigation",
+        "type": "context",
+        "path": "context/dev/backend-navigation.md",
+        "description": "Backend Development Navigation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-commands",
+        "name": "Task Commands",
+        "type": "context",
+        "path": "context/core/task-management/lookup/task-commands.md",
+        "description": "Lookup: Task CLI Commands",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "splitting-tasks",
+        "name": "Splitting Tasks",
+        "type": "context",
+        "path": "context/core/task-management/guides/splitting-tasks.md",
+        "description": "Guide: Splitting Features into Tasks",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "managing-tasks",
+        "name": "Managing Tasks",
+        "type": "context",
+        "path": "context/core/task-management/guides/managing-tasks.md",
+        "description": "Guide: Managing Task Lifecycle",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-schema",
+        "name": "Task Schema",
+        "type": "context",
+        "path": "context/core/task-management/standards/task-schema.md",
+        "description": "Standard: Task JSON Schema",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "mastra-config",
+        "name": "Mastra Config",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/lookup/mastra-config.md",
+        "description": "Lookup: Mastra Configuration",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "modular-building",
+        "name": "Modular Building",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/guides/modular-building.md",
+        "description": "Guide: Modular Mastra Building",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "testing",
+        "name": "Testing",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/guides/testing.md",
+        "description": "Guide: Testing Mastra",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflow-step-structure",
+        "name": "Workflow Step Structure",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/guides/workflow-step-structure.md",
+        "description": "Guide: Workflow Step Structure",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflow-example",
+        "name": "Workflow Example",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/examples/workflow-example.md",
+        "description": "Example: Document Ingestion Workflow",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "storage",
+        "name": "Storage",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/storage.md",
+        "description": "Concept: Mastra Data Storage",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "mastra-workflows",
+        "name": "Mastra Workflows",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/workflows.md",
+        "description": "Concept: Mastra Workflows",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "agents-tools",
+        "name": "Agents Tools",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/agents-tools.md",
+        "description": "Concept: Mastra Agents & Tools",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "core",
+        "name": "Core",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/core.md",
+        "description": "Concept: Mastra Core",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "evaluations",
+        "name": "Evaluations",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/evaluations.md",
+        "description": "Concept: Mastra Evaluations",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "mastra-errors",
+        "name": "Mastra Errors",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/errors/mastra-errors.md",
+        "description": "Errors: Mastra Implementation",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence",
+        "name": "Project Intelligence",
+        "type": "context",
+        "path": "context/core/standards/project-intelligence.md",
+        "description": "What and why of project intelligence - bridging business and technical domains",
+        "tags": [
+          "project-intelligence",
+          "onboarding",
+          "business",
+          "technical"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-management",
+        "name": "Project Intelligence Management",
+        "type": "context",
+        "path": "context/core/standards/project-intelligence-management.md",
+        "description": "How to manage project intelligence files - add, update, remove, version",
+        "tags": [
+          "project-intelligence",
+          "management",
+          "lifecycle"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-nav",
+        "name": "Project Intelligence Navigation",
+        "type": "context",
+        "path": "context/intelligence/navigation.md",
+        "description": "Quick overview and routes for project intelligence files",
+        "tags": [
+          "project-intelligence",
+          "navigation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-business",
+        "name": "Business Domain",
+        "type": "context",
+        "path": "context/intelligence/business-domain.md",
+        "description": "Business context, problems solved, target users, and value proposition",
+        "tags": [
+          "project-intelligence",
+          "business",
+          "domain"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-technical",
+        "name": "Technical Domain",
+        "type": "context",
+        "path": "context/intelligence/technical-domain.md",
+        "description": "Technical foundation, stack, architecture, and key decisions",
+        "tags": [
+          "project-intelligence",
+          "technical",
+          "architecture"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-bridge",
+        "name": "Business Tech Bridge",
+        "type": "context",
+        "path": "context/intelligence/business-tech-bridge.md",
+        "description": "How business needs map to technical solutions",
+        "tags": [
+          "project-intelligence",
+          "business",
+          "technical",
+          "mapping"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-decisions",
+        "name": "Decisions Log",
+        "type": "context",
+        "path": "context/intelligence/decisions-log.md",
+        "description": "Major architectural and business decisions with full context",
+        "tags": [
+          "project-intelligence",
+          "decisions",
+          "context"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "project-intelligence-notes",
+        "name": "Living Notes",
+        "type": "context",
+        "path": "context/intelligence/living-notes.md",
+        "description": "Active issues, technical debt, open questions, and insights",
+        "tags": [
+          "project-intelligence",
+          "issues",
+          "debt",
+          "notes"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "delegation-ref",
+        "name": "Delegation Workflow Reference",
+        "type": "context",
+        "path": "context/core/workflows/delegation.md",
+        "description": "Quick reference to delegation workflow (see task-delegation-basics.md and related split files)",
+        "tags": [
+          "workflows",
+          "delegation",
+          "reference"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "review-ref",
+        "name": "Review Workflow Reference",
+        "type": "context",
+        "path": "context/core/workflows/review.md",
+        "description": "Quick reference to code review workflow (see code-review.md for full content)",
+        "tags": [
+          "workflows",
+          "review",
+          "reference"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-external-context-management",
+        "name": "External Context Management",
+        "type": "context",
+        "path": "context/core/workflows/external-context-management.md",
+        "description": "Complete guide to managing external context: persistence, organization, cleanup, and best practices",
+        "tags": [
+          "external-context",
+          "management",
+          "workflows",
+          "cleanup"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-external-context-integration",
+        "name": "External Context Integration",
+        "type": "context",
+        "path": "context/core/workflows/external-context-integration.md",
+        "description": "Integration guide for external context: how main agents fetch and pass to subagents",
+        "tags": [
+          "external-context",
+          "integration",
+          "workflows",
+          "delegation"
+        ],
+        "dependencies": [
+          "context:task-delegation-basics",
+          "context:workflows-external-context-management"
+        ],
+        "category": "standard"
+      },
+      {
+        "id": "external-libraries-workflow",
+        "name": "External Libraries Workflow",
+        "type": "context",
+        "path": "context/core/workflows/external-libraries-workflow.md",
+        "description": "Guide for fetching current documentation for external packages when adding agents or skills",
+        "tags": [
+          "external-libraries",
+          "workflow",
+          "agents",
+          "skills",
+          "dependencies"
+        ],
+        "dependencies": [
+          "context:external-libraries-workflow",
+          "context:adding-agent-basics",
+          "context:adding-skill-basics"
+        ],
+        "category": "standard"
+      },
+      {
+        "id": "core-navigation",
+        "name": "Navigation: CORE",
+        "type": "context",
+        "path": "context/core/navigation.md",
+        "description": "Navigation guide for core",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-standards-navigation",
+        "name": "Navigation: CORE STANDARDS",
+        "type": "context",
+        "path": "context/core/standards/navigation.md",
+        "description": "Navigation guide for core standards",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-workflows-navigation",
+        "name": "Navigation: CORE WORKFLOWS",
+        "type": "context",
+        "path": "context/core/workflows/navigation.md",
+        "description": "Navigation guide for core workflows",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-context-system-navigation",
+        "name": "Navigation: CORE CONTEXT SYSTEM",
+        "type": "context",
+        "path": "context/core/context-system/navigation.md",
+        "description": "Navigation guide for core context system",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-system-navigation",
+        "name": "Navigation: CORE SYSTEM",
+        "type": "context",
+        "path": "context/core/system/navigation.md",
+        "description": "Navigation guide for core system",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-task-management-navigation",
+        "name": "Navigation: CORE TASK MANAGEMENT",
+        "type": "context",
+        "path": "context/core/task-management/navigation.md",
+        "description": "Navigation guide for core task management",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "core-config-navigation",
+        "name": "Navigation: CORE CONFIG",
+        "type": "context",
+        "path": "context/core/config/navigation.md",
+        "description": "Navigation guide for core config",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "development-navigation",
+        "name": "Navigation: DEVELOPMENT",
+        "type": "context",
+        "path": "context/dev/navigation.md",
+        "description": "Navigation guide for development",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "development-ai-navigation",
+        "name": "Navigation: DEVELOPMENT AI",
+        "type": "context",
+        "path": "context/dev/ai/navigation.md",
+        "description": "Navigation guide for development ai",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "development-frontend-navigation",
+        "name": "Navigation: DEVELOPMENT FRONTEND",
+        "type": "context",
+        "path": "context/dev/frontend/navigation.md",
+        "description": "Navigation guide for development frontend",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "development-principles-navigation",
+        "name": "Navigation: DEVELOPMENT PRINCIPLES",
+        "type": "context",
+        "path": "context/dev/principles/navigation.md",
+        "description": "Navigation guide for development principles",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "ui-navigation",
+        "name": "Navigation: UI",
+        "type": "context",
+        "path": "context/web/navigation.md",
+        "description": "Navigation guide for ui",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "ui-web-design-navigation",
+        "name": "Navigation: UI WEB DESIGN",
+        "type": "context",
+        "path": "context/web/design/navigation.md",
+        "description": "Navigation guide for ui web design",
+        "tags": [
+          "navigation",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "navigation"
+      },
+      {
+        "id": "context-paths",
+        "name": "Context Paths",
+        "type": "context",
+        "path": "context/core/system/context-paths.md",
+        "description": "Additional Context File Paths",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "when-to-delegate",
+        "name": "When To Delegate",
+        "type": "context",
+        "path": "context/dev/frontend/when-to-delegate.md",
+        "description": "When to Delegate to Frontend Specialist",
+        "tags": [],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-delegation-basics",
+        "name": "Task Delegation Basics",
+        "type": "context",
+        "path": "context/core/workflows/task-delegation-basics.md",
+        "description": "Task delegation fundamentals and basic usage patterns",
+        "tags": [
+          "workflows",
+          "delegation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-delegation-specialists",
+        "name": "Task Delegation Specialists",
+        "type": "context",
+        "path": "context/core/workflows/task-delegation-specialists.md",
+        "description": "Specialist subagents for task delegation workflows",
+        "tags": [
+          "workflows",
+          "delegation",
+          "subagents"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-delegation-caching",
+        "name": "Task Delegation Caching",
+        "type": "context",
+        "path": "context/core/workflows/task-delegation-caching.md",
+        "description": "Caching strategies for task delegation workflows",
+        "tags": [
+          "workflows",
+          "delegation",
+          "caching"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-overview",
+        "name": "Design Iteration Overview",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-overview.md",
+        "description": "Overview of the design iteration workflow process",
+        "tags": [
+          "workflows",
+          "design",
+          "iteration"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-plan-file",
+        "name": "Design Iteration Plan File",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-plan-file.md",
+        "description": "Structure and format for design iteration plan files",
+        "tags": [
+          "workflows",
+          "design",
+          "planning"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-plan-iterations",
+        "name": "Design Iteration Plan Iterations",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-plan-iterations.md",
+        "description": "Planning iterations in the design workflow",
+        "tags": [
+          "workflows",
+          "design",
+          "planning"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-stage-layout",
+        "name": "Design Iteration Stage - Layout",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-stage-layout.md",
+        "description": "Layout stage guidelines for design iteration",
+        "tags": [
+          "workflows",
+          "design",
+          "layout"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-stage-theme",
+        "name": "Design Iteration Stage - Theme",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-stage-theme.md",
+        "description": "Theme stage guidelines for design iteration",
+        "tags": [
+          "workflows",
+          "design",
+          "theme"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-stage-implementation",
+        "name": "Design Iteration Stage - Implementation",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-stage-implementation.md",
+        "description": "Implementation stage guidelines for design iteration",
+        "tags": [
+          "workflows",
+          "design",
+          "implementation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-stage-animation",
+        "name": "Design Iteration Stage - Animation",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-stage-animation.md",
+        "description": "Animation stage guidelines for design iteration",
+        "tags": [
+          "workflows",
+          "design",
+          "animation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "design-iteration-best-practices",
+        "name": "Design Iteration Best Practices",
+        "type": "context",
+        "path": "context/core/workflows/design-iteration-best-practices.md",
+        "description": "Best practices for design iteration workflows",
+        "tags": [
+          "workflows",
+          "design",
+          "best-practices"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "external-libraries-scenarios",
+        "name": "External Libraries Scenarios",
+        "type": "context",
+        "path": "context/core/workflows/external-libraries-scenarios.md",
+        "description": "Common scenarios for external library integration",
+        "tags": [
+          "workflows",
+          "external",
+          "libraries",
+          "scenarios"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "external-libraries-faq",
+        "name": "External Libraries FAQ",
+        "type": "context",
+        "path": "context/core/workflows/external-libraries-faq.md",
+        "description": "Frequently asked questions about external libraries",
+        "tags": [
+          "workflows",
+          "external",
+          "libraries",
+          "faq"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "adding-agent-basics",
+        "name": "Adding Agent - Basics",
+        "type": "context",
+        "path": "context/repo/guides/adding-agent-basics.md",
+        "description": "Basic guide for adding new agents",
+        "tags": [
+          "guides",
+          "agents",
+          "basics"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "adding-skill-basics",
+        "name": "Adding Skill - Basics",
+        "type": "context",
+        "path": "context/repo/guides/adding-skill-basics.md",
+        "description": "Basic guide for adding new skills",
+        "tags": [
+          "guides",
+          "skills",
+          "basics"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "navigation-design-basics",
+        "name": "Navigation Design Basics",
+        "type": "context",
+        "path": "context/core/context-system/guides/navigation-design-basics.md",
+        "description": "Basics of designing navigation files",
+        "tags": [
+          "context-system",
+          "navigation",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "navigation-templates",
+        "name": "Navigation Templates",
+        "type": "context",
+        "path": "context/core/context-system/guides/navigation-templates.md",
+        "description": "Templates for navigation files",
+        "tags": [
+          "context-system",
+          "navigation",
+          "templates"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-basics",
+        "name": "Animation Basics",
+        "type": "context",
+        "path": "context/web/animation-basics.md",
+        "description": "Basic animation patterns and guidelines",
+        "tags": [
+          "ui",
+          "web",
+          "animation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-advanced",
+        "name": "Animation Advanced",
+        "type": "context",
+        "path": "context/web/animation-advanced.md",
+        "description": "Advanced animation patterns and techniques",
+        "tags": [
+          "ui",
+          "web",
+          "animation"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-components",
+        "name": "Animation Components",
+        "type": "context",
+        "path": "context/web/animation-components.md",
+        "description": "Component-specific animation patterns",
+        "tags": [
+          "ui",
+          "web",
+          "animation",
+          "components"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-forms",
+        "name": "Animation Forms",
+        "type": "context",
+        "path": "context/web/animation-forms.md",
+        "description": "Animation patterns for forms",
+        "tags": [
+          "ui",
+          "web",
+          "animation",
+          "forms"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-chat",
+        "name": "Animation Chat",
+        "type": "context",
+        "path": "context/web/animation-chat.md",
+        "description": "Animation patterns for chat interfaces",
+        "tags": [
+          "ui",
+          "web",
+          "animation",
+          "chat"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "animation-loading",
+        "name": "Animation Loading",
+        "type": "context",
+        "path": "context/web/animation-loading.md",
+        "description": "Loading animation patterns",
+        "tags": [
+          "ui",
+          "web",
+          "animation",
+          "loading"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-paths-config",
+        "name": "Context Paths Configuration",
+        "type": "context",
+        "path": "context/core/config/paths.json",
+        "description": "CRITICAL: Context root path configuration - loaded via @ reference by agents",
+        "tags": [
+          "config",
+          "paths",
+          "critical",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "root-navigation",
+        "name": "Root Navigation",
+        "type": "context",
+        "path": "context/navigation.md",
+        "description": "CRITICAL: Root navigation file for context discovery - ContextScout starts here",
+        "tags": [
+          "navigation",
+          "root",
+          "critical",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "workflows-lightweight-context-handoff",
+        "name": "Lightweight Context Handoff",
+        "type": "context",
+        "path": "context/core/workflows/lightweight-context-handoff.md",
+        "description": "Pattern for efficient multi-agent context passing",
+        "tags": [
+          "workflows",
+          "context",
+          "handoff",
+          "multi-agent"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-lightweight-context-handoff-example",
+        "name": "Lightweight Context Handoff Example",
+        "type": "context",
+        "path": "context/core/workflows/lightweight-context-handoff-example.md",
+        "description": "Example implementation of lightweight context handoff pattern",
+        "tags": [
+          "workflows",
+          "context",
+          "handoff",
+          "example"
+        ],
+        "dependencies": [
+          "context:workflows-lightweight-context-handoff"
+        ],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-multi-stage-orchestration",
+        "name": "Multi-Stage Orchestration",
+        "type": "context",
+        "path": "context/core/workflows/multi-stage-orchestration.md",
+        "description": "8-stage complex feature workflow pattern",
+        "tags": [
+          "workflows",
+          "orchestration",
+          "multi-stage",
+          "complex"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "workflows-session-context-pattern",
+        "name": "Session Context Pattern",
+        "type": "context",
+        "path": "context/core/workflows/session-context-pattern.md",
+        "description": "Pattern for managing session context across agent interactions",
+        "tags": [
+          "workflows",
+          "context",
+          "session",
+          "pattern"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-guides-navigation-design-basics",
+        "name": "Navigation Design Basics",
+        "type": "context",
+        "path": "context/core/context-system/guides/navigation-design-basics.md",
+        "description": "Basic principles for designing navigation files",
+        "tags": [
+          "guides",
+          "navigation",
+          "design",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-guides-navigation-templates",
+        "name": "Navigation Templates",
+        "type": "context",
+        "path": "context/core/context-system/guides/navigation-templates.md",
+        "description": "Templates for creating navigation files",
+        "tags": [
+          "guides",
+          "navigation",
+          "templates",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-examples-navigation",
+        "name": "Context System Examples Navigation",
+        "type": "context",
+        "path": "context/core/context-system/examples/navigation.md",
+        "description": "Navigation for context system examples",
+        "tags": [
+          "navigation",
+          "examples",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-guides-navigation",
+        "name": "Context System Guides Navigation",
+        "type": "context",
+        "path": "context/core/context-system/guides/navigation.md",
+        "description": "Navigation for context system guides",
+        "tags": [
+          "navigation",
+          "guides",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-operations-navigation",
+        "name": "Context System Operations Navigation",
+        "type": "context",
+        "path": "context/core/context-system/operations/navigation.md",
+        "description": "Navigation for context system operations",
+        "tags": [
+          "navigation",
+          "operations",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "context-system-standards-navigation",
+        "name": "Context System Standards Navigation",
+        "type": "context",
+        "path": "context/core/context-system/standards/navigation.md",
+        "description": "Navigation for context system standards",
+        "tags": [
+          "navigation",
+          "standards",
+          "context-system"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-management-guides-navigation",
+        "name": "Task Management Guides Navigation",
+        "type": "context",
+        "path": "context/core/task-management/guides/navigation.md",
+        "description": "Navigation for task management guides",
+        "tags": [
+          "navigation",
+          "guides",
+          "task-management"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-management-lookup-navigation",
+        "name": "Task Management Lookup Navigation",
+        "type": "context",
+        "path": "context/core/task-management/lookup/navigation.md",
+        "description": "Navigation for task management lookup",
+        "tags": [
+          "navigation",
+          "lookup",
+          "task-management"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "task-management-standards-navigation",
+        "name": "Task Management Standards Navigation",
+        "type": "context",
+        "path": "context/core/task-management/standards/navigation.md",
+        "description": "Navigation for task management standards",
+        "tags": [
+          "navigation",
+          "standards",
+          "task-management"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "guides-resuming-sessions",
+        "name": "Resuming Sessions",
+        "type": "context",
+        "path": "context/core/guides/resuming-sessions.md",
+        "description": "Guide for resuming agent sessions",
+        "tags": [
+          "guides",
+          "sessions",
+          "resuming"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "guides-navigation",
+        "name": "Core Guides Navigation",
+        "type": "context",
+        "path": "context/core/guides/navigation.md",
+        "description": "Navigation for core guides",
+        "tags": [
+          "navigation",
+          "guides"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-navigation",
+        "name": "Mastra AI Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/navigation.md",
+        "description": "Navigation for Mastra AI development",
+        "tags": [
+          "navigation",
+          "ai",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-concepts-navigation",
+        "name": "Mastra AI Concepts Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/concepts/navigation.md",
+        "description": "Navigation for Mastra AI concepts",
+        "tags": [
+          "navigation",
+          "concepts",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-errors-navigation",
+        "name": "Mastra AI Errors Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/errors/navigation.md",
+        "description": "Navigation for Mastra AI errors",
+        "tags": [
+          "navigation",
+          "errors",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-examples-navigation",
+        "name": "Mastra AI Examples Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/examples/navigation.md",
+        "description": "Navigation for Mastra AI examples",
+        "tags": [
+          "navigation",
+          "examples",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-guides-navigation",
+        "name": "Mastra AI Guides Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/guides/navigation.md",
+        "description": "Navigation for Mastra AI guides",
+        "tags": [
+          "navigation",
+          "guides",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "development-ai-mastra-ai-lookup-navigation",
+        "name": "Mastra AI Lookup Navigation",
+        "type": "context",
+        "path": "context/dev/ai/mastra-ai/lookup/navigation.md",
+        "description": "Navigation for Mastra AI lookup",
+        "tags": [
+          "navigation",
+          "lookup",
+          "mastra-ai"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-premium-dark-ui-advanced",
+        "name": "Premium Dark UI Advanced",
+        "type": "context",
+        "path": "context/web/design/guides/premium-dark-ui-advanced.md",
+        "description": "Advanced premium dark UI patterns",
+        "tags": [
+          "ui",
+          "dark-mode",
+          "advanced",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-premium-dark-ui-colors",
+        "name": "Premium Dark UI Colors",
+        "type": "context",
+        "path": "context/web/design/guides/premium-dark-ui-colors.md",
+        "description": "Premium dark UI color palette",
+        "tags": [
+          "ui",
+          "dark-mode",
+          "colors",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-premium-dark-ui-components",
+        "name": "Premium Dark UI Components",
+        "type": "context",
+        "path": "context/web/design/guides/premium-dark-ui-components.md",
+        "description": "Premium dark UI component library",
+        "tags": [
+          "ui",
+          "dark-mode",
+          "components",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-premium-dark-ui-layouts",
+        "name": "Premium Dark UI Layouts",
+        "type": "context",
+        "path": "context/web/design/guides/premium-dark-ui-layouts.md",
+        "description": "Premium dark UI layout patterns",
+        "tags": [
+          "ui",
+          "dark-mode",
+          "layouts",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-premium-dark-ui-visual-reference",
+        "name": "Premium Dark UI Visual Reference",
+        "type": "context",
+        "path": "context/web/design/guides/premium-dark-ui-visual-reference.md",
+        "description": "Premium dark UI visual reference guide",
+        "tags": [
+          "ui",
+          "dark-mode",
+          "visual-reference",
+          "design"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-cdn-resources",
+        "name": "CDN Resources",
+        "type": "context",
+        "path": "context/web/cdn-resources.md",
+        "description": "CDN resources for web development",
+        "tags": [
+          "ui",
+          "cdn",
+          "resources",
+          "web"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-fonts-guide",
+        "name": "Fonts Guide",
+        "type": "context",
+        "path": "context/web/fonts-guide.md",
+        "description": "Guide for web fonts",
+        "tags": [
+          "ui",
+          "fonts",
+          "web"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-icons-guide",
+        "name": "Icons Guide",
+        "type": "context",
+        "path": "context/web/icons-guide.md",
+        "description": "Guide for web icons",
+        "tags": [
+          "ui",
+          "icons",
+          "web"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-images-guide",
+        "name": "Images Guide",
+        "type": "context",
+        "path": "context/web/images-guide.md",
+        "description": "Guide for web images",
+        "tags": [
+          "ui",
+          "images",
+          "web"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-design-concepts-navigation",
+        "name": "UI Design Concepts Navigation",
+        "type": "context",
+        "path": "context/web/design/concepts/navigation.md",
+        "description": "Navigation for UI design concepts",
+        "tags": [
+          "navigation",
+          "ui",
+          "design",
+          "concepts"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-design-examples-navigation",
+        "name": "UI Design Examples Navigation",
+        "type": "context",
+        "path": "context/web/design/examples/navigation.md",
+        "description": "Navigation for UI design examples",
+        "tags": [
+          "navigation",
+          "ui",
+          "design",
+          "examples"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-design-guides-navigation",
+        "name": "UI Design Guides Navigation",
+        "type": "context",
+        "path": "context/web/design/guides/navigation.md",
+        "description": "Navigation for UI design guides",
+        "tags": [
+          "navigation",
+          "ui",
+          "design",
+          "guides"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "ui-design-lookup-navigation",
+        "name": "UI Design Lookup Navigation",
+        "type": "context",
+        "path": "context/web/design/lookup/navigation.md",
+        "description": "Navigation for UI design lookup",
+        "tags": [
+          "navigation",
+          "ui",
+          "design",
+          "lookup"
+        ],
+        "dependencies": [],
+        "category": "standard"
+      },
+      {
+        "id": "standards-typescript-functions",
+        "name": "TypeScript Functions",
+        "type": "context",
+        "path": "context/core/standards/typescript-functions.md",
+        "description": "TypeScript function standards and patterns",
+        "tags": [
+          "standards",
+          "typescript",
+          "functions"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-typescript-type-safety",
+        "name": "TypeScript Type Safety",
+        "type": "context",
+        "path": "context/core/standards/typescript-type-safety.md",
+        "description": "TypeScript type safety standards and patterns",
+        "tags": [
+          "standards",
+          "typescript",
+          "type-safety"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-typescript-arrays",
+        "name": "TypeScript Arrays",
+        "type": "context",
+        "path": "context/core/standards/typescript-arrays.md",
+        "description": "TypeScript array handling standards and patterns",
+        "tags": [
+          "standards",
+          "typescript",
+          "arrays"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-typescript-async",
+        "name": "TypeScript Async",
+        "type": "context",
+        "path": "context/core/standards/typescript-async.md",
+        "description": "TypeScript async/await standards and patterns",
+        "tags": [
+          "standards",
+          "typescript",
+          "async"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-typescript-control-flow",
+        "name": "TypeScript Control Flow",
+        "type": "context",
+        "path": "context/core/standards/typescript-control-flow.md",
+        "description": "TypeScript control flow standards and patterns",
+        "tags": [
+          "standards",
+          "typescript",
+          "control-flow"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-typescript-organization",
+        "name": "TypeScript Organization",
+        "type": "context",
+        "path": "context/core/standards/typescript-organization.md",
+        "description": "TypeScript file and code organization standards",
+        "tags": [
+          "standards",
+          "typescript",
+          "organization"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "context-system-templates-concept-example",
+        "name": "Templates: Concept & Example",
+        "type": "context",
+        "path": "context/core/context-system/standards/templates-concept-example.md",
+        "description": "Template standards for concept and example context files",
+        "tags": [
+          "context-system",
+          "standards",
+          "templates"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "context-system-templates-guide-lookup",
+        "name": "Templates: Guide & Lookup",
+        "type": "context",
+        "path": "context/core/context-system/standards/templates-guide-lookup.md",
+        "description": "Template standards for guide and lookup context files",
+        "tags": [
+          "context-system",
+          "standards",
+          "templates"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "context-system-templates-error-navigation",
+        "name": "Templates: Error & Navigation",
+        "type": "context",
+        "path": "context/core/context-system/standards/templates-error-navigation.md",
+        "description": "Template standards for error and navigation context files",
+        "tags": [
+          "context-system",
+          "standards",
+          "templates"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "task-management-standards-task-fields",
+        "name": "Task Fields",
+        "type": "context",
+        "path": "context/core/task-management/standards/task-fields.md",
+        "description": "Standard fields and structure for task JSON definitions",
+        "tags": [
+          "standards",
+          "task-management",
+          "fields"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "task-management-standards-task-examples",
+        "name": "Task Examples",
+        "type": "context",
+        "path": "context/core/task-management/standards/task-examples.md",
+        "description": "Example task JSON definitions for reference",
+        "tags": [
+          "standards",
+          "task-management",
+          "examples"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "task-management-standards-task-migration",
+        "name": "Task Migration",
+        "type": "context",
+        "path": "context/core/task-management/standards/task-migration.md",
+        "description": "Guide for migrating task definitions between schema versions",
+        "tags": [
+          "standards",
+          "task-management",
+          "migration"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "web-css-framework",
+        "name": "CSS Framework",
+        "type": "context",
+        "path": "context/web/css-framework.md",
+        "description": "CSS framework patterns, Tailwind CSS, and utility-first styling",
+        "tags": [
+          "ui",
+          "web",
+          "css",
+          "tailwind"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "web-responsive-layout",
+        "name": "Responsive Layout",
+        "type": "context",
+        "path": "context/web/responsive-layout.md",
+        "description": "Responsive design patterns and layout strategies",
+        "tags": [
+          "ui",
+          "web",
+          "responsive",
+          "layout"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "web-typography-colors",
+        "name": "Typography & Colors",
+        "type": "context",
+        "path": "context/web/typography-colors.md",
+        "description": "Typography systems and color palette standards",
+        "tags": [
+          "ui",
+          "web",
+          "typography",
+          "colors"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "web-components-accessibility",
+        "name": "Components & Accessibility",
+        "type": "context",
+        "path": "context/web/components-accessibility.md",
+        "description": "Web component patterns and accessibility standards",
+        "tags": [
+          "ui",
+          "web",
+          "components",
+          "accessibility"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      },
+      {
+        "id": "standards-naming-conventions",
+        "name": "Naming Conventions",
+        "type": "context",
+        "path": "context/core/standards/naming-conventions.md",
+        "description": "Naming conventions and identifier standards for code",
+        "tags": [
+          "standards",
+          "naming",
+          "conventions"
+        ],
+        "dependencies": [],
+        "category": "standard",
+        "version": "1.0.0",
+        "profiles": [
+          "developer"
+        ]
+      }
+    ],
+    "config": [
+      {
+        "id": "readme",
+        "name": "README",
+        "type": "config",
+        "path": "README.md",
+        "description": "Project documentation and setup guide",
+        "tags": [
+          "documentation",
+          "readme",
+          "guide"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      }
+    ],
+    "skills": [
+      {
+        "id": "task-management",
+        "name": "Task Management",
+        "type": "skill",
+        "path": "skills/task-management/SKILL.md",
+        "description": "Task management CLI for tracking and managing feature subtasks with status, dependencies, and validation",
+        "tags": [
+          "tasks",
+          "cli",
+          "workflow"
+        ],
+        "dependencies": [],
+        "category": "essential",
+        "files": [
+          "skills/task-management/SKILL.md",
+          "skills/task-management/router.sh",
+          "skills/task-management/scripts/task-cli.ts"
+        ]
+      }
+    ]
+  },
+  "profiles": {
+    "developer": {
+      "name": "Developer",
+      "description": "Complete software development environment with code generation, testing, review, and build tools. Includes UI/UX patterns, development principles, and design systems. Use OpenAgent for general tasks or OpenCoder for complex architecture. Recommended for most developers.",
+      "badge": "RECOMMENDED",
+      "components": [
+        "agent:open-agent",
+        "agent:open-coder",
+        "subagent:batch-executor",
+        "subagent:task-manager",
+        "subagent:frontend-specialist",
+        "subagent:devops-specialist",
+        "subagent:doc-writer",
+        "subagent:coder-agent",
+        "subagent:code-reviewer",
+        "subagent:test-engineer",
+        "subagent:build-agent",
+        "subagent:context-scout",
+        "subagent:external-scout",
+        "skill:task-management",
+        "command:commit",
+        "command:test",
+        "command:context",
+        "command:add-context",
+        "command:clean",
+        "command:optimize",
+        "command:analyze-patterns",
+        "tool:env",
+        "context:core/*",
+        "context:intelligence/*",
+        "context:web/*",
+        "context:dev/*",
+        "config:readme"
+      ]
+    }
+  },
+  "metadata": {
+    "lastUpdated": "2026-07-28",
+    "schemaVersion": "1.0.0"
+  }
+}

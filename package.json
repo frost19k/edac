@@ -1,0 +1,14 @@
+{
+  "name": "edac",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "validate": "bun run scripts/registry/validate-registry.ts && bun run scripts/validation/validate-markdown-links.ts",
+    "validate:registry": "bun run scripts/registry/validate-registry.ts",
+    "validate:context-links": "bun run scripts/validation/validate-markdown-links.ts",
+    "validate:deps": "bun run scripts/registry/check-dependencies.ts"
+  },
+  "devDependencies": {
+    "glob": "^13.0.0"
+  }
+}
