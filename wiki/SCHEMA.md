@@ -121,6 +121,16 @@ test -f ../src/metadata.json && echo "src/metadata.json ok" || echo "MISSING: ..
 ```
 Any page asserting a version, file, or path that does not match the live repo is stale and must be corrected.
 
+**6. Secret scan** — WikiJanitor may `grep` *any* directory (its `grep` permission is intentionally broad) to detect leaked secrets — API keys, tokens, credentials — that have landed in normal files. Sensitive-file paths (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`) are denied under `grep`, so known-secret files are never opened; only leaks into ordinary files are surfaced. Flag leaks to SystemBuilder; never write secret values into wiki pages.
+
+### Cross-Reference Protocol
+The wiki must be a navigable graph, not a set of standalone blobs. Every page is responsible for linking its related concepts inline so WikiLibrarian can traverse and Lint can verify.
+
+- **Inline links are mandatory.** Whenever a page mentions a concept that has (or should have) its own wiki page, embed an inline markdown link in the prose — e.g. `the [permission model](./permission-model.md) governs access`. A trailing `## Related` section is a supplement only; it does **not** substitute for inline links. Inline links are grep-discoverable, which is what Lint checks (Check 2) and what lets WikiLibrarian walk the graph.
+- **Back-links.** When page A links to page B, WikiJanitor also ensures B's `## Related` (and, where natural, B's prose) acknowledges A — unless B is a deliberate hub. This keeps the graph bidirectional.
+- **Lint enforces** (Check 2): inline + `## Related` links resolve; no orphan page (zero inbound links); gap detection — a concept mentioned but lacking a page is a candidate for the ingest queue (fed to ResearchAgent / WikiLibrarian); bidirectional-consistency warning on asymmetry (asymmetry is allowed for hubs, so warn, don't fail).
+- **Format.** Use relative markdown links to the target `.md` (`[label](./target.md)` or `[label](../dir/target.md)`). Keep the label human-readable; the link target is what Lint greps.
+
 ## index.md format
 Catalog of all pages, grouped by directory, each with a one-line summary and optional metadata (date, source count). Updated on every ingest. Example:
 

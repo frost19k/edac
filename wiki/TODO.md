@@ -9,7 +9,7 @@ Cross-session build plan for the EDAC wiki workflow.
 
 ## Next
 - [ ] Define ResearchAgent subagent (`.opencode/agents/`) — external research → `sources/`
-- [ ] Define WikiJanitor subagent — ingest + lint
+- [x] Define WikiJanitor subagent — ingest + lint (`.opencode/agents/subagents/wiki-janitor.md`)
 - [ ] Define WikiLibrarian subagent — query/synthesis
 - [ ] Establish lint cadence (post-ingest lint pass)
 - [ ] Ingest loop against `src/` (verify an EDAC convention via the wiki)

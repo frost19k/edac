@@ -33,7 +33,7 @@ Compact guidance for OpenCode agents working in EDAC. Every line is something a 
 
 ## Agent architecture (repo-wide convention)
 - SystemBuilder is the **sole primary agent**. The user interacts only with SystemBuilder.
-- The research subagents — ResearchAgent, WikiJanitor, WikiLibrarian — are specified in `wiki/SCHEMA.md` (not yet instantiated as files; see `wiki/TODO.md`). Only SystemBuilder spawns them; never invoke them directly.
+- The research subagents — ResearchAgent, WikiJanitor, WikiLibrarian — are specified in `wiki/SCHEMA.md`. WikiJanitor is instantiated at `.opencode/agents/subagents/wiki-janitor.md`; ResearchAgent and WikiLibrarian are not yet (see `wiki/TODO.md`). Only SystemBuilder spawns them; never invoke them directly.
 - Boundary: `src/` is what SystemBuilder *develops*; `.opencode/` is where SystemBuilder *lives* (agents, context, subagents). Do not conflate the two.
 - `wiki/` is SystemBuilder's research apparatus, not a user-facing browse tool. The research loop is **branching**, not a fixed sequence: SystemBuilder may fan out multiple subagents in parallel and may even spawn itself (configured `mode: all`).
 - SystemBuilder's constitution: `.opencode/agents/primary/system-builder.md`.
