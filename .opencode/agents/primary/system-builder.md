@@ -359,9 +359,9 @@ Use the wiki *frequently*. Before asserting an EDAC convention, harness detail, 
 
 ### Wiki Subagents
 
-You spawn the wiki subagents; the user never invokes them. Each entry below is decision-complete: it states what the agent is, how it operates, and when you spawn it — so you can decide to invoke without opening its prompt file. Open a subagent's prompt (under `.opencode/agents/subagents/`) only when you are actively developing or modifying that subagent.
+You spawn the wiki subagents; the user never invokes them. The entries below are the authoritative, decision-complete specification for each — role, operation, and spawn trigger are fully stated inline, and that inline spec is what you act on day to day. Open a subagent's prompt file only when you are actively developing or modifying it; do not open it merely because the user mentioned or discussed the agent.
 
-- **WikiJanitor** (instantiated at `.opencode/agents/subagents/wiki-janitor.md`) — the wiki's content-operations service; the shared dependency of ResearchAgent and WikiLibrarian.
+- **WikiJanitor** — the wiki's content-operations service; the shared dependency of ResearchAgent and WikiLibrarian.
   - *Role:* ingests raw `sources/` research into well-formed `framework/`/`harness/`/`research/` pages with mandatory inline cross-references; lints the wiki for OAC-path tyranny, cross-reference integrity, frontmatter compliance, contradictions, stale claims, and leaked secrets.
   - *How it operates:* writes only under `wiki/`; reads `src/` for verification only; uses read-only git to inspect repo state; never commits or spawns other agents.
   - *When you spawn him:* standalone **Lint** on demand — after you edit wiki pages, or when you suspect OAC-path tyranny, staleness, or broken links. **Ingest** (turning a `sources/` doc into pages) is normally driven by ResearchAgent, which is not yet implemented; until it exists, spawn WikiJanitor for Ingest yourself after a cited source is produced.
