@@ -19,6 +19,15 @@ subagents are spawned by SystemBuilder, never directly.
 
 Pattern reference: `llm-wiki.md` (the abstract LLM-wiki idea this repo instantiates).
 
+## Authority & layering
+This file is the **canonical procedure source** for the EDAC wiki. It defines what the wiki is, its structure, and what workflows are performed — the contract every wiki actor follows.
+
+The schema is **conceptual**: it says *what* to do. The agents (ResearchAgent, WikiJanitor, WikiLibrarian, SystemBuilder) encode the agent-specific operating procedures and protocols — they say *how* to do it. A schema statement and an agent's procedure must never disagree; if they appear to, SCHEMA is authoritative and the agent's procedure is corrected to mirror it.
+
+Concretely:
+- **SCHEMA.md** — structure, conventions, and the *what* of each workflow (Research, Ingest, Query, Lint, Audit). The single editable home for procedure intent.
+- **The agents** (ResearchAgent, WikiJanitor, WikiLibrarian, SystemBuilder) — the *how*: operational steps, tool translations, and conflict handling for the agent that owns each workflow.
+
 ## Layout
 - `sources/` — raw, immutable primary data. ResearchAgent writes cited research docs here; the user may also drop sources. Never modified after creation.
 - `framework/` — generated pages on EDAC's conceptual architecture (agentic-system design, the layered model, registry/install model, component taxonomy).
@@ -28,6 +37,7 @@ Pattern reference: `llm-wiki.md` (the abstract LLM-wiki idea this repo instantia
 - `index.md` — content catalog (updated every ingest).
 - `log.md` — chronological activity record (append-only).
 - `TODO.md` — cross-session build plan for the wiki workflow itself.
+- `AUDIT.md` — ad-hoc scratchpad for wiki flaws spotted mid-task. Anyone may append a bullet; WikiJanitor drains it (verify problem + fix → apply → log → delete). Not a generated page; exempt from Lint's page checks.
 
 ## Page format
 Every generated page (under `framework/` `harness/` `research/`) starts with YAML frontmatter:
@@ -61,6 +71,8 @@ author: ...
 Body: structured notes + verbatim quotes where useful, with inline citations. ResearchAgent works in `.tmp/{stub}/external-research/` and writes the final cited doc to `sources/{stub}.md`.
 
 ## Procedures
+The workflows below are described conceptually — *what* each does and which agent owns it. The operational steps (*how*) live with the owning agent (see Authority & layering above).
+
 ### Research (ResearchAgent)
 Gather external data via web search / fetch / curl / wget. Produce a structured, cited doc in `sources/`. Scratch work stays in `.tmp/{stub}/external-research/` and is not committed.
 
@@ -71,60 +83,37 @@ Given a source, create/update relevant pages across `framework/` `harness/` `res
 Read `index.md` to locate relevant pages, read them, synthesize an answer with citations. Good answers may be filed back as new pages.
 
 ### Lint (WikiJanitor)
-Run after every ingest and on demand. Scope: only generated pages under `framework/`, `harness/`, `research/`. WikiJanitor may use **read-only** git (`git status`, `git log`, `git diff`, `git show`, `git ls-files`, `git rev-parse`) to inspect repo state for verification, but never commits, pushes, or modifies the working tree.
+Standalone health-check of the generated pages (`framework/`, `harness/`, `research/`). WikiJanitor verifies, against `src/` and `wiki/framework/src-structure.md`:
+1. **OAC-path tyranny** — no generated page asserts an OAC `.opencode/` path or a wrong `src/` path as EDAC fact.
+2. **Structural-claim traceability** — every EDAC path/directory/layout assertion traces to `src-structure.md`.
+3. **Cross-link integrity** — inline + `## Related` links resolve; no orphan pages; gap detection for concepts lacking a page.
+4. **Frontmatter compliance** — all seven required keys present; `type`/`status` enums valid.
+5. **Contradictions** — pages (and `src-structure.md` / live `src/`) do not contradict.
+6. **Stale claims** — version/file/path assertions match the live repo.
+7. **Secret scan** — leaked secrets in ordinary files are flagged (never written into pages).
 
-> **`sources/` is immutable OAC raw documentation — never lint it for OAC paths; those are upstream documents, not EDAC assertions.** Correction/explanation contexts (`wiki/TODO.md`, `wiki/log.md`, `wiki/framework/src-structure.md`) are exempt from the OAC-path checks below because they deliberately quote the wrong forms to explain the fix.
+Exempt from these checks: `sources/` (immutable upstream docs), `SCHEMA.md`, `TODO.md`, `log.md`, `AUDIT.md` (scratchpad), and `framework/src-structure.md` (legitimately quotes wrong forms to explain the fix).
 
-**1. OAC-path tyranny** — no generated page may assert an OAC `.opencode/` path or a wrong `src/` path as EDAC fact. The greps below must return **zero matches** (Lint passes when grep fails). Run from `wiki/`:
+Operational steps and tool translations: **WikiJanitor, Tier 2** — this schema is the canonical *what*; the agent file is the *how*.
 
-```bash
-# 1a. OAC metadata path must be src/metadata.json, never .opencode/config/agent-metadata.json
-rg -n '\.opencode/config/agent-metadata\.json' framework harness research --glob '!framework/src-structure.md'
+### Audit capture (anyone)
+Ad-hoc, low-friction. While working on anything, if you spot a flaw in the wiki, append a bullet to `AUDIT.md` and return to the task — do not fix it inline. The recommended bullet shape is encoded as a comment in `AUDIT.md` itself:
 
-# 1b. bare/unqualified agent-metadata.json must be src/metadata.json
-#     (src/metadata.json does NOT contain this substring, so a clean page yields no match)
-rg -n 'agent-metadata\.json' framework harness research --glob '!framework/src-structure.md'
+  <where>: <problem> → <fix>
 
-# 1c. registry.json lives at repo root, never under src/
-rg -n 'src/registry\.json' framework harness research --glob '!framework/src-structure.md'
-```
+- `<where>` — path (+ optional `:line`) within the wiki, or `wiki-wide`.
+- `<problem>` — one-line statement of what is wrong.
+- `<fix>` — the proposed correction. WikiJanitor verifies it before applying; it is **not** trusted blindly.
 
-1d. **Structural-claim traceability** — every EDAC file path, directory, or layout assertion in a generated page must trace to `wiki/framework/src-structure.md`. For each path-like token a page asserts, confirm it appears in (or is consistent with) the tables in `src-structure.md`. If a claim cannot be traced, correct it against the live `src/` tree or flag it in `TODO.md`.
+The file is a scratchpad: it holds only unprocessed bullets. No structure beyond the bullet list is required.
 
-**2. Cross-link integrity**
-- Every relative markdown link (`[text](path.md)`, `[text](../dir/page.md)`) must resolve to an existing file. Extract links, then verify each target exists relative to the referencing page:
-  ```bash
-  rg -no '\[[^\]]+\]\(([^)]+\.md)\)' framework harness research
-  ```
-  (Anchored links `path.md#sec` are rare here; re-check any that the pattern misses.)
-- **Orphan pages** — flag any generated page with zero inbound links (no other page links to it). Cross-check against `index.md` and the link graph.
-- **Missing pages** — flag concepts/entities named in pages (especially `tags`, `sources`, and "Related" sections) that are referenced but have no corresponding page.
+### Audit drain (WikiJanitor — Step 0 of standalone Lint)
+A standalone Lint begins by draining `AUDIT.md`: for each bullet, WikiJanitor **verifies the problem and the proposed fix** against `src/` or `src-structure.md`; if both verify it applies the fix, logs it, and deletes the bullet; if either fails it **surfaces the item to SystemBuilder** and deletes the bullet. It never spawns ResearchAgent or does external research. When `AUDIT.md` is empty this step is a no-op.
 
-**3. Frontmatter compliance** — every generated page must open with valid YAML frontmatter containing exactly these keys: `title`, `type`, `tags`, `created`, `updated`, `sources`, `status`. Verify:
-```bash
-for f in $(rg -l '^---$' framework harness research); do
-  rg -q '^title:' "$f" && rg -q '^type:' "$f" && rg -q '^tags:' "$f" \
-    && rg -q '^created:' "$f" && rg -q '^updated:' "$f" \
-    && rg -q '^sources:' "$f" && rg -q '^status:' "$f" || echo "MISSING FRONTMATTER KEY: $f"
-done
-```
-Also confirm `type` ∈ {entity, concept, comparison, summary, source-note} and `status` ∈ {draft, stable} per the Page format section.
-
-**4. Contradictions** — pages must not contradict each other, nor contradict `wiki/framework/src-structure.md` or the actual `src/` tree. Reconcile any conflicting claims (differing paths, component lists, version facts) by re-reading `src-structure.md` and the live `src/` directory; record resolutions in `log.md` and fix the offending page. Note contradictions explicitly rather than silently overwriting (per Page format).
-
-**5. Stale claims** — verify version/file assertions against the repo. Confirm these exist at the stated locations (paths relative to `wiki/`):
-```bash
-test -f ../VERSION && echo "VERSION ok" || echo "MISSING: ../VERSION"
-test -f ../package.json && echo "package.json ok" || echo "MISSING: ../package.json"
-test -f ../registry.json && echo "registry.json ok" || echo "MISSING: ../registry.json"
-test -f ../src/metadata.json && echo "src/metadata.json ok" || echo "MISSING: ../src/metadata.json"
-```
-Any page asserting a version, file, or path that does not match the live repo is stale and must be corrected.
-
-**6. Secret scan** — WikiJanitor may `grep` *any* directory (its `grep` permission is intentionally broad) to detect leaked secrets — API keys, tokens, credentials — that have landed in normal files. Sensitive-file paths (`.env`, `.key`, `.secret`, `.pem`, `.crt`, `credentials*`) are denied under `grep`, so known-secret files are never opened; only leaks into ordinary files are surfaced. Flag leaks to SystemBuilder; never write secret values into wiki pages.
+Operational steps: **WikiJanitor, Tier 2, Step 0** — schema = *what*; agent = *how*.
 
 ### Cross-Reference Protocol
-The wiki must be a navigable graph, not a set of standalone blobs. Every page is responsible for linking its related concepts inline so WikiLibrarian can traverse and Lint can verify.
+The wiki is a navigable graph, not standalone blobs. These are conventions (the *what*); WikiJanitor enforces them in Lint and WikiLibrarian traverses them in Query. Every page is responsible for linking its related concepts inline so WikiLibrarian can traverse and Lint can verify.
 
 - **Inline links are mandatory.** Whenever a page mentions a concept that has (or should have) its own wiki page, embed an inline markdown link in the prose — e.g. `the [permission model](./permission-model.md) governs access`. A trailing `## Related` section is a supplement only; it does **not** substitute for inline links. Inline links are grep-discoverable, which is what Lint checks (Check 2) and what lets WikiLibrarian walk the graph.
 - **Back-links.** When page A links to page B, WikiJanitor also ensures B's `## Related` (and, where natural, B's prose) acknowledges A — unless B is a deliberate hub. This keeps the graph bidirectional.

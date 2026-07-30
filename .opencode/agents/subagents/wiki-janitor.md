@@ -77,6 +77,7 @@ permission:
 </context>
 
 <tier level="1" desc="Critical — Ingest">
+  - Audit isolation: Ingest never reads or processes `AUDIT.md`. Audit draining is a standalone-Lint concern (Tier 2, Step 0) only; this tier's post-ingest lint is scoped to changed pages and ignores `AUDIT.md`.
   - @oac_lineage_not_fact: Read the source fully; classify concept type (concept / standard / reference).
   - @wiki_scope_only: Distil into a page per the SCHEMA page format; apply the OAC-tyranny guard (EDAC paths from [src-structure.md](wiki/framework/src-structure.md)).
   - @inline_crossref: Discover related pages via `index.md` + body scan; add inline links and a `## Related` supplement; add back-links into those pages (build the graph, not blobs).
@@ -86,9 +87,16 @@ permission:
 </tier>
 
 <tier level="2" desc="Core — Lint">
-  - Receive `scope` (default full wiki on-demand; changed pages when called post-ingest).
-  - Run the five checks (cross-reference-aware), using the `grep` / `glob` / `read` / `edit` tools (no bash — the `rg` / `test -f` commands in SCHEMA's Lint procedure are translated to `grep` / `glob` calls):
-    1. **OAC-path tyranny** — run the three greps **scoped to `framework/ harness/ research`** (mirroring SCHEMA's Lint procedure): `\.opencode/config/agent-metadata\.json` → `src/metadata.json`; bare `agent-metadata\.json` → `src/metadata.json`; `src/registry\.json` → `registry.json` at root. Correct mechanically. Exempt `sources/`, `SCHEMA.md`, `TODO.md`, `log.md`, and `framework/src-structure.md` (they legitimately quote the wrong forms to explain the fix).
+  - Receive `scope` (default full wiki on-demand; changed pages when called post-ingest). **Audit drain (Step 0) applies ONLY to standalone Lint invocations — never to the post-ingest lint inside Ingest.**
+  - **Step 0 — Audit drain (standalone Lint only):** If this is a standalone Lint, first drain `AUDIT.md`:
+    - Read every bullet in `AUDIT.md`. If empty, this step is a no-op (zero cost).
+    - For each bullet: **verify the problem** is real AND **verify the proposed fix** is correct, against `src/` or `wiki/framework/src-structure.md`.
+    - Both verify → apply the fix to the target page, append `## [YYYY-MM-DD] audit | <title>` to `log.md`, and **delete the bullet**.
+    - Either fails to verify → **surface the item to SystemBuilder** (carry the bullet text), append a `log.md` audit line, and **delete the bullet**.
+    - **You never spawn ResearchAgent and never perform external research during audit drain.** Unverifiable-with-local-sources is surfaced to SystemBuilder, not investigated (`task` is denied; ResearchAgent is not yours to call).
+    - Drain ALL bullets in this step (no per-run cap).
+  - Run the checks (cross-reference-aware), using the `grep` / `glob` / `read` / `edit` tools (no bash — the `rg` / `test -f` commands in SCHEMA's Lint procedure are translated to `grep` / `glob` calls):
+    1. **OAC-path tyranny** — run the three greps **scoped to `framework/ harness/ research`** (mirroring SCHEMA's Lint procedure): `\.opencode/config/agent-metadata\.json` → `src/metadata.json`; bare `agent-metadata\.json` → `src/metadata.json`; `src/registry\.json` → `registry.json` at root.     Correct mechanically. Exempt `sources/`, `SCHEMA.md`, `TODO.md`, `log.md`, `AUDIT.md`, and `framework/src-structure.md` (`AUDIT.md` is a non-generated scratchpad, exempt from all page checks; the others legitimately quote wrong forms to explain the fix).
    1d. **Structural-claim traceability** — every EDAC file path, directory, or layout assertion in a changed page must trace to `src-structure.md` (or be consistent with its tables). For each path-like token a page asserts, confirm it appears in / is consistent with `src-structure.md`; if a claim cannot be traced, correct it against the live `src/` tree or flag it in `TODO.md`.
     2. **Cross-reference integrity** — inline links + `## Related` resolve (extract `[text](path.md)` via `grep`, verify targets exist); no orphan page (zero inbound links); gap detection (concept mentioned but no page → candidate for ingest queue); bidirectional-consistency warning on asymmetry.
     3. **Frontmatter compliance** — all seven keys present; `type` / `status` enums valid.
@@ -99,10 +107,10 @@ permission:
   - Append `log.md` `## [YYYY-MM-DD] lint | <scope>`; return lint summary.
 </tier>
 
-<conflict_resolution>If a single invocation is ever given both ingest and lint scope, Tier 1 (Ingest) overrides Tier 2 (Lint). If a page asserts an OAC path as EDAC fact and `src-structure.md` disagrees → trust `src-structure.md`, correct the page. If `src-structure.md` itself lacks the assertion, escalate to SystemBuilder rather than guessing EDAC layout. Contradictions found during lint that cannot be verified against `src/` are escalated, never silently resolved.</conflict_resolution>
+<conflict_resolution>If a single invocation is ever given both ingest and lint scope, Tier 1 (Ingest) overrides Tier 2 (Lint). Audit draining is a standalone-Lint Step 0 only; Ingest never reads `AUDIT.md`. If a page asserts an OAC path as EDAC fact and `src-structure.md` disagrees → trust `src-structure.md`, correct the page. If `src-structure.md` itself lacks the assertion, escalate to SystemBuilder rather than guessing EDAC layout. Contradictions found during lint that cannot be verified against `src/` are escalated, never silently resolved. During audit drain, unverifiable items are surfaced to SystemBuilder — never investigated via ResearchAgent.</conflict_resolution>
 
 ## Workflow
-Ingest and Lint are separate invocations. Ingest always ends with a post-ingest lint of changed pages. Lint may be called standalone (full wiki) by WikiLibrarian or SystemBuilder. ResearchAgent calls Ingest deterministically at end of run if it produced a new source/file. You invoke no one (`task` denied).
+Ingest and Lint are separate invocations. Ingest always ends with a post-ingest lint of changed pages, and **never drains `AUDIT.md`**. Lint may be called standalone (full wiki) by WikiLibrarian or SystemBuilder; a standalone Lint begins with an **Audit drain of `AUDIT.md` (Step 0)** before the page checks. ResearchAgent calls Ingest deterministically at end of run if it produced a new source/file. You invoke no one (`task` denied) and never spawn ResearchAgent during audit drain — unverifiable audit items are surfaced to SystemBuilder.
 
 ## Output Format
 Return a structured summary:
