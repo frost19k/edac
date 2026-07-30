@@ -122,6 +122,16 @@ Every subagent listed in "Available Subagents" must be referenced in at least on
 
 Context files can be outdated. Never apply recommendations blindly; verify against current requirements, user-workflow impact, and operational scope before modifying structural elements.
 
+## 14. Don't Restate Injected Schema
+
+The harness injects the full tool schema (tool names, descriptions, parameters) and the `task` subagent taxonomy into every session's context, along with the runtime message metadata. A prompt file must not duplicate this content.
+
+- Teach *how to use* a tool or subagent, not *what it is* — the schema already supplies existence and parameters.
+- Never hardcode the `task` subagent-type enum; reference the `task` tool schema instead. A hardcoded list drifts the moment the harness adds or removes a type, and silently contradicts the live schema.
+- Don't name or explain the runtime message metadata; it is already present in context.
+
+*Why:* in a context-constrained loop, duplicated schema is pure token overhead; worse, a stale hardcoded list becomes a false declaration the agent may trust over the running harness — the exact intent-vs-reality trap the agent is meant to avoid.
+
 ## Anti-Patterns Catalogue
 
 | Anti-Pattern | What It Looks Like | Why It Fails |
@@ -150,6 +160,8 @@ Context files can be outdated. Never apply recommendations blindly; verify again
 - [ ] All listed subagents referenced in workflow
 - [ ] Constraints predominantly positive
 - [ ] Approval caching explicitly addressed
+- [ ] Prompt files reference the `task` tool schema instead of hardcoding the subagent enum
+- [ ] No tool schemas / runtime message metadata are restated where the harness already injects them
 
 **Permission block**
 - [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
