@@ -15,3 +15,5 @@
 ## [2026-07-30] lint | inconsistency & contradiction (parallel lens) — harness scope; fixed metadata-field (author) + OAC-path inconsistencies in harness/; flagged framework/ versioning `repo/` + prompt-design metadata-field gaps.
 ## [2026-07-30] lint | optimisation & conciseness (parallel lens, WikiJanitor) — flagged harness dedup, versioning `## Cross-links`→`## Related`, and gap candidates (layered-architecture, D2/D3).
 ## [2026-07-30] lint | remediation A+B applied — permission-model type→concept; versioning `repo/`→`dev/` + `## Cross-links`→`## Related`; harness dedup (Bundle B) delegated to WikiJanitor; src-structure inbound gap closed via agent-frontmatter cross-links; meta reconciled.
+## [2026-07-30] edit | permission-model + agent-frontmatter + subagent-structure — CIA/mission calibration, temp range, sensitive-file all-agents, dangerous-command set
+## [2026-07-30] edit | follow-up fixes — removed duplicate §f checklist item (permission-model), corrected Write-Enabled prose to read/edit/grep, updated subagent-structure provenance note to temp 0.2-0.3

@@ -65,7 +65,7 @@ mode: subagent                       # primary, subagent, or all
 ### Optional
 
 ```yaml
-temperature: 0.2                     # Response randomness (0.0-1.0) — EDAC convention
+temperature: 0.2-0.3                     # Response randomness (0.0-1.0) — EDAC convention
 model: anthropic/claude-sonnet-4-5   # Model override
 steps: 50                            # Max iterations before text-only response
 disable: false                       # Disable agent
@@ -91,6 +91,13 @@ permission:                          # Permission rules (replaces deprecated too
     "git status *": "allow"
   edit:
     "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   grep:
     "*": "allow"
     "**/*.env": "deny"               # grep is a leak vector — deny sensitive files
@@ -130,6 +137,7 @@ The complete permission-key reference, evaluation order, and pattern syntax live
 - `external_directory` is a valid OpenCode key but EDAC agents rely on its default behaviour and do not set it explicitly.
 - **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical sensitive-file deny block") for the rationale and the deny block.
 - **Correction vs OAC source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete; `question`, `list`, and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` is **not** valid. The authoritative 15-key list is in the consolidated [Permission Model](../harness/permission-model.md).
+- `question` is valid only on primary agents (those that interact with the user directly); subagents omit it.
 
 ---
 
@@ -140,7 +148,7 @@ The complete permission-key reference, evaluation order, and pattern syntax live
 name: TestEngineer
 description: Test authoring and TDD agent
 mode: subagent
-temperature: 0.2
+temperature: 0.2-0.3
 permission:
   read:
     "*": "allow"
@@ -155,6 +163,13 @@ permission:
   edit:
     "*": "allow"
     "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   grep:
     "*": "allow"
     "**/*.env": "deny"
@@ -227,7 +242,7 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 - [ ] No duplicate keys?
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?
-- [ ] Sensitive files denied under `read`, `edit`, AND `grep` (not just `edit`)?
+- [ ] Sensitive files denied under `read`, `edit`, AND `grep` for ALL agents (not just `edit`)?
 - [ ] Only one `---` delimiter at top?
 - [ ] Valid YAML syntax?
 

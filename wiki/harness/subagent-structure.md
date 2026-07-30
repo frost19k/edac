@@ -23,7 +23,7 @@ Cross-links: the frontmatter contract is governed by [Agent Frontmatter](../harn
 name: AgentName
 description: Brief description
 mode: subagent
-temperature: 0.2
+temperature: 0.2-0.3
 permission: {...}
 ---
 
@@ -54,7 +54,7 @@ status: "success" | "failure"
 ```
 ```
 
-> **Note (D3)**: the OAC source specifies `temperature: 0.1` in its template. EDAC convention is `temperature: 0.2`; all example frontmatter blocks in this page use `0.2`.
+> **Note (D3)**: the OAC source specifies `temperature: 0.1` in its template. EDAC convention is `temperature: 0.2-0.3`; all example frontmatter blocks in this page use `0.2-0.3`.
 
 ---
 
@@ -104,7 +104,7 @@ status: "success" | "failure"
 
 Refer to [Permission Model](../harness/permission-model.md) for complete agent-type permission patterns (Read-Only, Write-Enabled, Orchestrators, Restricted Bash). *(D2: the OAC source links to `permission-agent-patterns.md`; that page is consolidated into the EDAC `permission-model.md` above.)*
 
-**Quick reference**: Read-Only agents deny `edit` and `bash`. Write-Enabled agents deny `**/*.env` and `**/*.key` in `edit`, restrict `bash` to specific commands. Task Managers use restricted bash (only task-cli).
+**Quick reference**: All agents deny sensitive files (`**/*.env`, `**/*.key`, `**/*.secret`, `**/*.pem`, `**/*.crt`, `**/credentials*`, `**/*.api`, `**/creds*`) under `read`, `edit`, AND `grep`. Read-Only agents additionally deny `edit` and `bash` wholesale; Write-Enabled agents restrict `bash` to specific commands.
 
 ---
 
@@ -151,14 +151,38 @@ Refer to [Permission Model](../harness/permission-model.md) for complete agent-t
   Read-only agent. NEVER use write, edit, or bash. Provide suggestions only.
 </rule>
 ```
+Sensitive files are denied under `read` and `grep` (not just `edit`).
 
 **Security Pattern**:
 ```yaml
 permission:
+  read:
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
   edit:
     "**/*.env": "deny"
     "**/*.key": "deny"
     "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
+  grep:
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/credentials*": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
 ```
 
 ---
@@ -180,4 +204,4 @@ permission:
 
 ---
 
-**Source**: OAC Standard v1.2.0 (source `oac-standards/subagent-structure.md` removed, 2026-07-28). Ingested 2026-07-29 under EDAC decisions D2 (permission consolidation) and D3 (`temperature: 0.2`).
+**Source**: OAC Standard v1.2.0 (source `oac-standards/subagent-structure.md` removed, 2026-07-28). Ingested 2026-07-29 under EDAC decisions D2 (permission consolidation) and D3 (`temperature: 0.2-0.3`).

@@ -154,17 +154,17 @@ Context files can be outdated. Never apply recommendations blindly; verify again
 **Permission block**
 - [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
 - [ ] No OAC metadata fields in frontmatter (belong in `src/metadata.json` — see [Agent Frontmatter](../harness/agent-frontmatter.md) and [src/ Package Structure](./src-structure.md))
-- [ ] Sensitive files denied for both `read` and `edit`
+- [ ] Sensitive files denied under `read`, `edit`, and `grep` for all agents
 - [ ] Destructive commands denied
 
-**Example frontmatter (EDAC convention — `temperature: 0.2`):**
+**Example frontmatter (EDAC convention — `temperature: 0.2-0.3`):**
 
 ```yaml
 ---
 name: ExampleAgent
 description: One-line trigger description
 mode: primary
-temperature: 0.2
+temperature: 0.2-0.3
 permission:
   bash: ask
   read: [src/**, !**/secrets/**]
