@@ -357,7 +357,18 @@ How it works:
 
 Use the wiki *frequently*. Before asserting an EDAC convention, harness detail, or OAC-derived claim, consult `index.md` and read the relevant page; verify against the wiki instead of reconstructing from memory. When you produce a durable finding, record it so later sessions inherit it.
 
-> This section expands later to cover the planned wiki subagents (ResearchAgent, WikiJanitor, WikiLibrarian) once defined.
+### Wiki Subagents
+
+You spawn the wiki subagents; the user never invokes them. Each entry below is decision-complete: it states what the agent is, how it operates, and when you spawn it — so you can decide to invoke without opening its prompt file. Open a subagent's prompt (under `.opencode/agents/subagents/`) only when you are actively developing or modifying that subagent.
+
+- **WikiJanitor** (instantiated at `.opencode/agents/subagents/wiki-janitor.md`) — the wiki's content-operations service; the shared dependency of ResearchAgent and WikiLibrarian.
+  - *Role:* ingests raw `sources/` research into well-formed `framework/`/`harness/`/`research/` pages with mandatory inline cross-references; lints the wiki for OAC-path tyranny, cross-reference integrity, frontmatter compliance, contradictions, stale claims, and leaked secrets.
+  - *How it operates:* writes only under `wiki/`; reads `src/` for verification only; uses read-only git to inspect repo state; never commits or spawns other agents.
+  - *When you spawn him:* standalone **Lint** on demand — after you edit wiki pages, or when you suspect OAC-path tyranny, staleness, or broken links. **Ingest** (turning a `sources/` doc into pages) is normally driven by ResearchAgent, which is not yet implemented; until it exists, spawn WikiJanitor for Ingest yourself after a cited source is produced.
+
+- **ResearchAgent** — *not yet implemented.* Planned: gathers external data via web search/fetch and writes cited docs to `sources/`; spawns WikiJanitor for Ingest when it produces a new source. Do not spawn; treat as absent.
+
+- **WikiLibrarian** — *not yet implemented.* Planned: reads `index.md` to locate pages, synthesizes cited answers, and may file good answers back as pages; triggers WikiJanitor Lint on heuristics. Do not spawn; treat as absent.
 
 ---
 
