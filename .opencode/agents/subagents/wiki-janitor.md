@@ -5,10 +5,19 @@ mode: subagent
 temperature: 0.2
 permission:
   "*": "ask"
+  bash:
+    "*": "deny"
+    "git status *": "allow"
+    "git log *": "allow"
+    "git diff *": "allow"
+    "git show *": "allow"
+    "git ls-files *": "allow"
+    "git rev-parse *": "allow"
   read:
     "*": "deny"
     "wiki/**": "allow"
     "src/**": "allow"
+    ".tmp/**": "allow"
     "**/*.env": "deny"
     "**/*.key": "deny"
     "**/*.secret": "deny"
@@ -20,6 +29,7 @@ permission:
   edit:
     "*": "deny"
     "wiki/**": "allow"
+    ".tmp/**": "allow"
     "**/*.env": "deny"
     "**/*.key": "deny"
     "**/*.secret": "deny"
@@ -28,14 +38,6 @@ permission:
     "**/credentials*": "deny"
     "**/*.api": "deny"
     "**/creds*": "deny"
-  bash:
-    "*": "deny"
-    "git status *": "allow"
-    "git log *": "allow"
-    "git diff *": "allow"
-    "git show *": "allow"
-    "git ls-files *": "allow"
-    "git rev-parse *": "allow"
   grep:
     "*": "allow"
     "**/*.env": "deny"
