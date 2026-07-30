@@ -65,6 +65,7 @@ permission:
     "git remote *": "allow"
     "git stash list *": "allow"
     "git tag *": "allow"
+    "git -C *": "deny"
     # Package info (read-only)
     "npm ls *": "allow"
     "npm list *": "allow"
