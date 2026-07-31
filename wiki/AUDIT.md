@@ -16,5 +16,3 @@ Bullet format (recommended):
 Example (this line is a comment — it is NOT processed):
   - framework/permission-model.md:17: lists 14 keys → fix: should be 15 (canonical set)
 -->
-
-- wiki-wide: do the conventions (framework/prompt-design-principles.md) have clarity on prohibiting prompt files from restating harness-injected tool schema? → fix: if no standard exists there, add one so the redundancy state does not accumulate further

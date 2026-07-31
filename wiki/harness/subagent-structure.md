@@ -3,7 +3,7 @@ title: Subagent File Structure
 type: concept
 tags: [opencode, subagent, structure, harness, oac-standards]
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-31
 sources: ["(removed) oac-standards/subagent-structure.md"]
 status: stable
 ---
@@ -104,7 +104,7 @@ status: "success" | "failure"
 
 Refer to [Permission Model](../harness/permission-model.md) for complete agent-type permission patterns (Read-Only, Write-Enabled, Orchestrators, Restricted Bash). *(D2: the OAC source links to `permission-agent-patterns.md`; that page is consolidated into the EDAC `permission-model.md` above.)*
 
-**Quick reference**: All agents deny sensitive files (`**/*.env`, `**/*.key`, `**/*.secret`, `**/*.pem`, `**/*.crt`, `**/credentials*`, `**/*.api`, `**/creds*`) under `read`, `edit`, AND `grep`. Read-Only agents additionally deny `edit` and `bash` wholesale; Write-Enabled agents restrict `bash` to specific commands.
+**Quick reference**: All agents deny sensitive files (`**/*.env`, `**/*.key`, `**/*.secret`, `**/*.pem`, `**/*.crt`, `**/credentials*`, `**/*.api`, `**/creds*`) under `read` and `edit` (path globs, which match file paths and work correctly). `grep` is a leak vector too, but its permission matches the **search query**, not the file path — so path globs are **inert** under `grep:`; restrict `grep:` with search-term denies instead (see [Permission Model](../harness/permission-model.md) §d). Read-Only agents additionally deny `edit` and `bash` wholesale; Write-Enabled agents restrict `bash` to specific commands.
 
 ---
 
@@ -151,7 +151,7 @@ Refer to [Permission Model](../harness/permission-model.md) for complete agent-t
   Read-only agent. NEVER use write, edit, or bash. Provide suggestions only.
 </rule>
 ```
-Sensitive files are denied under `read` and `grep` (not just `edit`).
+Sensitive files are denied under `read` and `edit` (path globs); `grep` is restricted by search-term denies (see [Permission Model](../harness/permission-model.md) §d) — `grep` CANNOT be scoped by file path.
 
 **Security Pattern**:
 ```yaml
@@ -175,14 +175,9 @@ permission:
     "**/*.api": "deny"
     "**/creds*": "deny"
   grep:
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    "*": "allow"
+    # grep matches the SEARCH QUERY, not the file path — path globs (e.g. **/*.env) are INERT here.
+    # Sensitive search-term denies: see Permission Model §d "Canonical grep search-term deny block".
 ```
 
 ---

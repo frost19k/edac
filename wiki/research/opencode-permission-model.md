@@ -3,7 +3,7 @@ title: OpenCode Permission Model — Verified Canonical Key Set
 type: source-note
 tags: [opencode, permissions, harness, upstream, verification]
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-31
 sources: [https://opencode.ai/docs/permissions/, https://opencode.ai/docs/agents/]
 status: stable
 ---
@@ -29,7 +29,8 @@ The **definitive, complete set of valid OpenCode permission keys is 15**:
 - **Three actions**, each rule resolves to one of: `"allow"` (run without approval), `"ask"` (prompt for approval), `"deny"` (block).
 - **Evaluation order: last-match-wins.** Rules are evaluated by pattern match; the last matching rule wins. Canonical pattern is to put the catch-all `"*"` rule first and more specific rules after it (Permissions page, "Granular Rules" and "Task permissions").
 - **Defaults:** most permissions default to `"allow"`; `doom_loop` and `external_directory` default to `"ask"`; `read` is `"allow"` but `*.env` / `*.env.*` are denied by default.
-- **Wildcards:** `*` matches zero-or-more of any character; `?` matches exactly one. Keys are matched as wildcard patterns against the underlying tool name, so the same syntax works for built-ins, custom tools, and MCP tools (e.g. `"mymcp_*": "deny"`).
+  - **Wildcards:** `*` matches zero-or-more of any character; `?` matches exactly one. Keys are matched as wildcard patterns against the underlying tool name, so the same syntax works for built-ins, custom tools, and MCP tools (e.g. `"mymcp_*": "deny"`).
+  - **`grep` matches the search query, not the file path.** The `grep` permission pattern is compared against the content/regex the agent searches for, so path globs like `**/*.env` are inert under `grep:`; restrict `grep:` with search-term wildcards instead. Verified in-repo — see [../sources/grep-permission-semantics.md](../sources/grep-permission-semantics.md) and the canonical block in [../harness/permission-model.md](../harness/permission-model.md) §d.
 - **Granular vs shorthand:** `read, edit, glob, grep, list, bash, task, external_directory, lsp, skill` accept either a shorthand action or an object of glob/pattern → action. The remaining keys (`webfetch, websearch, question, todowrite, doom_loop`) accept the shorthand action only.
 
 ### Keys valid upstream but absent from some OAC sources

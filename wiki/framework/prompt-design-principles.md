@@ -3,7 +3,7 @@ title: Prompt Design Principles
 type: concept
 tags: [prompt-design, agent-design, anti-patterns, approval-gates, oac-standards]
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-31
 sources: ["(removed) oac-standards/agent-prompt-design.md"]
 status: stable
 ---
@@ -166,7 +166,7 @@ The harness injects the full tool schema (tool names, descriptions, parameters) 
 **Permission block**
 - [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
 - [ ] No OAC metadata fields in frontmatter (belong in `src/metadata.json` — see [Agent Frontmatter](../harness/agent-frontmatter.md) and [src/ Package Structure](./src-structure.md))
-- [ ] Sensitive files denied under `read`, `edit`, and `grep` for all agents
+  - [ ] Sensitive files denied under `read` and `edit` (path globs) for all agents; `grep` restricted by search-term denies (see [Permission Model](../harness/permission-model.md) §d) — `grep` CANNOT be scoped by file path
 - [ ] Destructive commands denied
 
 **Example frontmatter (EDAC convention — `temperature: 0.2-0.3`):**

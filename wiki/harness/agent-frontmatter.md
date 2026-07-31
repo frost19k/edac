@@ -3,7 +3,7 @@ title: Agent YAML Frontmatter
 type: concept
 tags: [opencode, frontmatter, agent-schema, harness, oac-standards]
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-31
 sources: ["(removed) oac-standards/agent-frontmatter.md"]
 status: stable
 ---
@@ -100,14 +100,8 @@ permission:                          # Permission rules (replaces deprecated too
     "**/creds*": "deny"
   grep:
     "*": "allow"
-    "**/*.env": "deny"               # grep is a leak vector — deny sensitive files
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # grep matches the SEARCH QUERY, not the file path — path globs (e.g. **/*.env) are INERT here.
+    # Sensitive search-term denies: see Permission Model §d "Canonical grep search-term deny block".
   task:                              # Subagent delegation control (v1.17.x)
     "*": "deny"                      # Catch-all first (last-match-wins)
     ContextScout: "allow"            # Uses Display Name (frontmatter name field)
@@ -135,7 +129,7 @@ The complete permission-key reference, evaluation order, and pattern syntax live
 - **Actions**: `allow` | `ask` | `deny`.
 - **Evaluation order**: last-match-wins (catch-all `"*"` first, specific overrides after) — full rules in the consolidated [Permission Model](../harness/permission-model.md).
 - `external_directory` is a valid OpenCode key but EDAC agents rely on its default behaviour and do not set it explicitly.
-- **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical sensitive-file deny block") for the rationale and the deny block.
+- **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical grep search-term deny block") for the rationale and the deny block.
 - **Correction vs OAC source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete; `question`, `list`, and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` is **not** valid. The authoritative 15-key list is in the consolidated [Permission Model](../harness/permission-model.md).
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it.
 
@@ -172,14 +166,8 @@ permission:
     "**/creds*": "deny"
   grep:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/credentials*": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
+    # grep matches the SEARCH QUERY, not the file path — path globs (e.g. **/*.env) are INERT here.
+    # Sensitive search-term denies: see Permission Model §d "Canonical grep search-term deny block".
   bash:
     "*": "deny"                      # Catch-all first (last-match-wins)
     "npx vitest *": "allow"
@@ -242,7 +230,7 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 - [ ] No duplicate keys?
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?
-- [ ] Sensitive files denied under `read`, `edit`, AND `grep` for ALL agents (not just `edit`)?
+- [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see Permission Model §d) — `grep` CANNOT be scoped by file path.
 - [ ] Only one `---` delimiter at top?
 - [ ] Valid YAML syntax?
 
@@ -258,4 +246,4 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 
 ---
 
-**Last Updated**: 2026-07-29 | **Source Version**: 1.2.0 | **Spec**: OpenCode v1.17.x
+**Last Updated**: 2026-07-31 | **Source Version**: 1.2.0 | **Spec**: OpenCode v1.17.x
