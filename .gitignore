@@ -11,6 +11,9 @@ coverage/
 # ── Local agent / tooling working directory (sessions, task files) ──
 .tmp/
 
+# ── Local/personal agents (not part of EDAC) ──────────────────
+.opencode/agents/primary/PromptWriter.md
+
 # ── Editor ────────────────────────────────────────────────────
 .vscode/
 
