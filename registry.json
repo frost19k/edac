@@ -195,7 +195,7 @@
         "id": "context-organizer",
         "name": "ContextOrganizer",
         "type": "subagent",
-        "path": "agents/subagents/system-builder/context-organizer.md",
+        "path": "agents/subagents/core/context-organizer.md",
         "description": "Organizes and generates modular context files",
         "tags": [
           "context",
@@ -205,7 +205,7 @@
         "dependencies": [
           "context:core/context-system/*"
         ],
-        "category": "meta"
+        "category": "core"
       },
       {
         "id": "context-scout",
@@ -223,7 +223,6 @@
           "optimized"
         ],
         "dependencies": [
-          "context:registry-dependencies",
           "context:context-system",
           "context:mvi",
           "context:structure",
@@ -654,21 +653,6 @@
         "category": "standard"
       },
       {
-        "id": "registry-dependencies",
-        "name": "Registry Dependencies",
-        "type": "context",
-        "path": "context/repo/quality/registry-dependencies.md",
-        "description": "Maintain registry quality through dependency validation and consistency checks",
-        "tags": [
-          "registry",
-          "quality",
-          "validation",
-          "dependencies"
-        ],
-        "dependencies": [],
-        "category": "standard"
-      },
-      {
         "id": "frontmatter",
         "name": "Frontmatter Standard",
         "type": "context",
@@ -1046,7 +1030,7 @@
         "id": "project-intelligence-nav",
         "name": "Project Intelligence Navigation",
         "type": "context",
-        "path": "context/intelligence/navigation.md",
+        "path": "context/intl/navigation.md",
         "description": "Quick overview and routes for project intelligence files",
         "tags": [
           "project-intelligence",
@@ -1059,7 +1043,7 @@
         "id": "project-intelligence-business",
         "name": "Business Domain",
         "type": "context",
-        "path": "context/intelligence/business-domain.md",
+        "path": "context/intl/business-domain.md",
         "description": "Business context, problems solved, target users, and value proposition",
         "tags": [
           "project-intelligence",
@@ -1073,7 +1057,7 @@
         "id": "project-intelligence-technical",
         "name": "Technical Domain",
         "type": "context",
-        "path": "context/intelligence/technical-domain.md",
+        "path": "context/intl/technical-domain.md",
         "description": "Technical foundation, stack, architecture, and key decisions",
         "tags": [
           "project-intelligence",
@@ -1087,7 +1071,7 @@
         "id": "project-intelligence-bridge",
         "name": "Business Tech Bridge",
         "type": "context",
-        "path": "context/intelligence/business-tech-bridge.md",
+        "path": "context/intl/business-tech-bridge.md",
         "description": "How business needs map to technical solutions",
         "tags": [
           "project-intelligence",
@@ -1102,7 +1086,7 @@
         "id": "project-intelligence-decisions",
         "name": "Decisions Log",
         "type": "context",
-        "path": "context/intelligence/decisions-log.md",
+        "path": "context/intl/decisions-log.md",
         "description": "Major architectural and business decisions with full context",
         "tags": [
           "project-intelligence",
@@ -1116,7 +1100,7 @@
         "id": "project-intelligence-notes",
         "name": "Living Notes",
         "type": "context",
-        "path": "context/intelligence/living-notes.md",
+        "path": "context/intl/living-notes.md",
         "description": "Active issues, technical debt, open questions, and insights",
         "tags": [
           "project-intelligence",
@@ -1202,9 +1186,7 @@
           "dependencies"
         ],
         "dependencies": [
-          "context:external-libraries-workflow",
-          "context:adding-agent-basics",
-          "context:adding-skill-basics"
+          "context:external-libraries-workflow"
         ],
         "category": "standard"
       },
@@ -1576,34 +1558,6 @@
           "external",
           "libraries",
           "faq"
-        ],
-        "dependencies": [],
-        "category": "standard"
-      },
-      {
-        "id": "adding-agent-basics",
-        "name": "Adding Agent - Basics",
-        "type": "context",
-        "path": "context/repo/guides/adding-agent-basics.md",
-        "description": "Basic guide for adding new agents",
-        "tags": [
-          "guides",
-          "agents",
-          "basics"
-        ],
-        "dependencies": [],
-        "category": "standard"
-      },
-      {
-        "id": "adding-skill-basics",
-        "name": "Adding Skill - Basics",
-        "type": "context",
-        "path": "context/repo/guides/adding-skill-basics.md",
-        "description": "Basic guide for adding new skills",
-        "tags": [
-          "guides",
-          "skills",
-          "basics"
         ],
         "dependencies": [],
         "category": "standard"
@@ -2613,6 +2567,7 @@
         "subagent:code-reviewer",
         "subagent:test-engineer",
         "subagent:build-agent",
+        "subagent:context-organizer",
         "subagent:context-scout",
         "subagent:external-scout",
         "skill:task-management",
@@ -2625,7 +2580,7 @@
         "command:analyze-patterns",
         "tool:env",
         "context:core/*",
-        "context:intelligence/*",
+        "context:intl/*",
         "context:web/*",
         "context:dev/*",
         "config:readme"

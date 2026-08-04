@@ -49,52 +49,6 @@
         "context:external-libraries-workflow"
       ]
     },
-    "open-repo-manager": {
-      "id": "open-repo-manager",
-      "name": "OpenRepoManager",
-      "category": "meta",
-      "type": "agent",
-      "version": "2.0.0",
-      "author": "opencode",
-      "tags": ["repository", "management", "orchestration"],
-      "dependencies": [
-        "subagent:task-manager",
-        "subagent:context-scout",
-        "subagent:doc-writer",
-        "subagent:coder-agent",
-        "subagent:test-engineer",
-        "subagent:code-reviewer",
-        "subagent:build-agent"
-      ]
-    },
-    "open-system-builder": {
-      "id": "open-system-builder",
-      "name": "OpenSystemBuilder",
-      "category": "meta",
-      "type": "agent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["system-generation", "architecture", "scaffolding"],
-      "dependencies": [
-        "subagent:agent-generator",
-        "subagent:command-creator",
-        "subagent:domain-analyzer",
-        "subagent:context-organizer",
-        "subagent:workflow-designer"
-      ]
-    },
-    "eval-runner": {
-      "id": "eval-runner",
-      "name": "EvalRunner",
-      "category": "testing",
-      "type": "agent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["testing", "evaluation", "quality"],
-      "dependencies": [
-        "context:standards-tests"
-      ]
-    },
     "task-manager": {
       "id": "task-manager",
       "name": "TaskManager",
@@ -150,26 +104,6 @@
       "version": "1.0.0",
       "author": "opencode",
       "tags": ["external", "documentation", "search"],
-      "dependencies": []
-    },
-    "context-manager": {
-      "id": "context-manager",
-      "name": "ContextManager",
-      "category": "subagents/core",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["context", "management", "organization"],
-      "dependencies": []
-    },
-    "context-retriever": {
-      "id": "context-retriever",
-      "name": "ContextRetriever",
-      "category": "subagents/core",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["context", "retrieval", "search"],
       "dependencies": []
     },
     "coder-agent": {
@@ -241,54 +175,14 @@
       "tags": ["devops", "ci-cd", "infrastructure"],
       "dependencies": []
     },
-    "agent-generator": {
-      "id": "agent-generator",
-      "name": "AgentGenerator",
-      "category": "subagents/system-builder",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["generation", "agents", "scaffolding"],
-      "dependencies": []
-    },
-    "command-creator": {
-      "id": "command-creator",
-      "name": "CommandCreator",
-      "category": "subagents/system-builder",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["commands", "generation", "scaffolding"],
-      "dependencies": []
-    },
-    "domain-analyzer": {
-      "id": "domain-analyzer",
-      "name": "DomainAnalyzer",
-      "category": "subagents/system-builder",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["analysis", "domain", "architecture"],
-      "dependencies": []
-    },
     "context-organizer": {
       "id": "context-organizer",
       "name": "ContextOrganizer",
-      "category": "subagents/system-builder",
+      "category": "subagents/core",
       "type": "subagent",
       "version": "1.0.0",
       "author": "opencode",
       "tags": ["context", "organization", "structure"],
-      "dependencies": []
-    },
-    "workflow-designer": {
-      "id": "workflow-designer",
-      "name": "WorkflowDesigner",
-      "category": "subagents/system-builder",
-      "type": "subagent",
-      "version": "1.0.0",
-      "author": "opencode",
-      "tags": ["workflow", "design", "architecture"],
       "dependencies": []
     }
   },

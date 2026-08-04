@@ -21,6 +21,7 @@ literal:.opencode/context/architecture/patterns.md
 literal:.opencode/context/core/story-mapping/guide.md
 literal:.opencode/context/core/prioritization/scoring.md
 literal:.opencode/context/development/backend/auth/jwt-patterns.md
+literal:.opencode/context/intelligence/technical-domain.md
 
 # Ignore external and anchor links (also filtered in code, kept for clarity).
 ^https?://
