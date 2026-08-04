@@ -1,6 +1,6 @@
 # Wiki Index
 
-<!-- Updated on every ingest by WikiJanitor. Group entries by directory. -->
+<!-- Updated on every ingest by SystemBuilder. Group entries by directory. -->
 
 ## framework/
 - [Epistemic Standards](framework/epistemic-standards.md) — the 7-principle epistemic constitution for agents (probe, evidence gradients, intent-vs-reality, uncertainty, contradiction, sensitive output, pre-conclusion).
