@@ -2,12 +2,6 @@
   "version": "1.0.0",
   "schema_version": "1.0.0",
   "repository": "https://github.com/frost19k/edac.git",
-  "categories": {
-    "essential": "Minimal components for basic functionality",
-    "standard": "Standard components for typical use",
-    "extended": "Extended components for advanced features",
-    "meta": "Meta-level components for system generation"
-  },
   "components": {
     "agents": [
       {
@@ -212,7 +206,6 @@
         "name": "ContextScout",
         "type": "subagent",
         "path": "agents/subagents/core/context-scout.md",
-        "version": "5.1.0",
         "description": "Get accurate context FIRST before diving deep—save time, energy, and avoid rework. ContextScout intelligently discovers and retrieves the exact context files you need with precise file paths and line ranges, so you start with the right information instead of guessing. Optimized for multi-model compatibility (Claude, Gemini, GPT-4) with 20% token reduction.",
         "tags": [
           "context",
@@ -238,7 +231,6 @@
         "name": "ExternalScout",
         "type": "subagent",
         "path": "agents/subagents/core/external-scout.md",
-        "version": "2.0.0",
         "description": "Fetches live, version-specific documentation for external libraries and frameworks using Context7 and other sources. Optimized with 42% token reduction and enhanced references to prompt engineering and context system docs.",
         "tags": [
           "external-docs",

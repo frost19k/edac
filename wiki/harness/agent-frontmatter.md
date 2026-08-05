@@ -18,7 +18,7 @@ status: stable
 
 ## Core Principle
 
-Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata belongs in `src/metadata.json` (see the field list in [../framework/src-structure.md](../framework/src-structure.md)) — it must not appear in the agent's frontmatter.
+Agent frontmatter should use only valid OpenCode fields. OAC-specific metadata belongs in `registry.json` (repo root — see the field list in [../framework/src-structure.md](../framework/src-structure.md)) — it must not appear in the agent's frontmatter.
 
 **Why**: OpenCode silently ignores unknown frontmatter fields. They cause no errors but add noise and clutter, and they break the clean separation between harness configuration and OAC's component registry. Keeping frontmatter clean ensures agents behave consistently across OpenCode versions.
 
@@ -218,7 +218,7 @@ name: MyAgent
 
 The OAC metadata fields (see the canonical field list in [src/ Package Structure](../framework/src-structure.md)) are NOT valid OpenCode frontmatter fields.
 
-**Fix**: Move them to `src/metadata.json`.
+**Fix**: Move them to `registry.json`.
 
 ---
 
@@ -226,7 +226,7 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 
 - [ ] All required fields present (`name`, `description`, `mode`)?
 - [ ] No deprecated fields (`maxSteps`, `tools:`, `skills:`)?
-- [ ] No OAC metadata fields in frontmatter (`id`, `category`, `type`, `version`, `author`, `tags`, `dependencies`)?
+- [ ] No OAC metadata fields in frontmatter (`id`, `category`, `type`, `tags`, `dependencies`)?
 - [ ] No duplicate keys?
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?

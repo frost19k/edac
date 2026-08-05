@@ -150,8 +150,8 @@ task(subagent_type="ContextScout", description="Find build standards", prompt="F
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
   <context_first>ContextScout before any validation — understand project conventions first</context_first>
   <detect_first>Language detection before any commands — never assume</detect_first>

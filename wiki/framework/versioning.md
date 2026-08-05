@@ -10,15 +10,14 @@ status: stable
 
 # Versioning Model
 
-**Finding:** EDAC (inheriting OpenAgentsControl) maintains three *independent* version numbers that must not be conflated: the **Repo version** (semver, in `VERSION` + `package.json`), the **Registry schema version** (in `registry.json` → `schema_version`), and **Component versions** (per-agent `version` in `src/metadata.json`). Bumping one never requires bumping the others.
+**Finding:** EDAC maintains two *independent* version numbers that must not be conflated: the **Repo version** (semver, in `VERSION` + `package.json`) and the **Registry schema version** (in `registry.json` → `schema_version`). Bumping one never requires bumping the other. Per-component versioning was dropped — `registry.json` is the sole source of truth and does not track per-agent `version` or `author`.
 
-## The Three Coexisting Versions
+## The Two Coexisting Versions
 
 | Version | Location | Bumped When |
 |---------|----------|-------------|
 | **Repo** | `VERSION` + `package.json` | Agent behavior changes |
 | **Registry schema** | `registry.json` → `schema_version` | Registry JSON structure changes |
-| **Component** | `src/metadata.json` → per-agent `version` | Individual agent changes |
 
 These are independent: a patch to one agent does not affect the repo version, and adding/removing component entries is a content change, not a schema change.
 
@@ -28,19 +27,13 @@ These are independent: a patch to one agent does not affect the repo version, an
 
 - **MAJOR** — breaking agent behavior: renaming an agent (display name or file path), removing an agent/subagent, changing agent frontmatter structure, restructuring the context tree (`core/`, `dev/`, etc.), changing permission rules that alter allowed/blocked actions, or modifying delegation chains.
 - **MINOR** — new agents or features: adding a new agent/subagent, adding new context files, adding slash commands or skills, new eval test categories, or enhancing existing agent prompts without breaking behavior.
-- **PATCH** — fixes and docs: fixing typos in agent prompts, updating documentation, fixing eval tests, updating `registry.json` component entries, or updating `src/metadata.json` (tags, descriptions).
+- **PATCH** — fixes and docs: fixing typos in agent prompts, updating documentation, fixing eval tests, or updating `registry.json` component entries (tags, descriptions).
 
 ## Registry Schema Version
 
 **Source:** `registry.json` → `"schema_version"`.
 
 Bump only when the **JSON structure** of `registry.json` changes — adding/removing top-level fields, changing component entry schema, or changing category definitions. **Do NOT bump** when only component entries are added/removed/updated; that is a content change, not a schema change.
-
-## Component Versions
-
-**Source:** `src/metadata.json` → per-agent `"version"`.
-
-Each agent carries its own version, bumped when its prompt changes (behavioral), its permissions change, its dependencies change, or its description changes. Independent of the repo version — a change to one agent does not affect others.
 
 ## Decision Tree
 
@@ -53,16 +46,12 @@ Did an agent's behavior change?
 Did registry.json structure change?
   ├─ Yes → bump schema_version
   └─ No → don't touch schema_version
-
-Did one agent change?
-  └─ Yes → bump that agent's component version only
 ```
 
 ## Sync Rules
 
 - `VERSION` and `package.json` → **must match** (update both together).
 - `registry.json` → independent; bump only on schema changes.
-- `src/metadata.json` → independent per-agent.
 
 ## Related
 
@@ -71,5 +60,5 @@ Did one agent change?
 
 ## Contradictions / Flags
 
-- **Verified against EDAC (2026-07-29).** Repo version lives in `VERSION` + `package.json`; registry schema version in `registry.json` (repo root, not `src/`); per-agent version in `src/metadata.json`. OAC's agent-metadata location is OAC lineage only — EDAC stores agent metadata in `src/metadata.json`.
+- **Verified against EDAC (2026-08-05).** Repo version lives in `VERSION` + `package.json`; registry schema version in `registry.json` (repo root, not `src/`). Per-component versioning was dropped — `registry.json` is the sole source of truth and does not track per-agent `version` or `author`. `src/metadata.json` and `src/manifest.json` are deprecated.
 - The source's "Related" links (`../core-concepts/registry.md`, etc.) point to OAC's wiki tree and do not exist in EDAC's wiki; they are intentionally omitted here in favor of EDAC sibling pages.

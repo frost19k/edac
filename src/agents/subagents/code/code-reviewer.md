@@ -106,8 +106,8 @@ task(subagent_type="ContextScout", description="Find code review standards", pro
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
 ---
 
@@ -122,8 +122,8 @@ task(subagent_type="ContextScout", description="Find code review standards", pro
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
   <context_first>ContextScout before any review — standards-blind reviews are useless</context_first>
   <security_first>Security findings always surface first — they have the highest impact</security_first>

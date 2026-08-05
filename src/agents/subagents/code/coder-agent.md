@@ -169,8 +169,8 @@ task(subagent_type="ContextScout", description="Find coding standards for [featu
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
 ---
 
@@ -320,8 +320,8 @@ Summary: Implemented JWT authentication with refresh tokens and error handling
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
 ---
 

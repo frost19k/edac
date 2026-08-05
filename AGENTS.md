@@ -13,18 +13,21 @@ Compact guidance for OpenCode agents working in EDAC. Every line is something a 
 - `install.sh` requires **jq** on PATH (it aborts if missing).
 
 ## Developer commands
-- `bun run validate` — full check: registry validation + markdown link check.
+- `bun run validate` — full check: registry + component + context-link + context-ref validation.
 - `bun run validate:registry` — `scripts/registry/validate-registry.ts`.
-- `bun run validate:deps` — `scripts/registry/check-dependencies.ts` (dependency-resolution sanity).
+- `bun run validate:components` — `scripts/registry/validate-component.ts`.
 - `bun run validate:context-links` — `scripts/validation/validate-markdown-links.ts` (honors `scripts/validation/markdown-link-skip-patterns.txt`).
+- `bun run validate:context-refs` — `scripts/validation/validate-context-refs.ts`.
+- `bun run validate:deps` — `scripts/registry/check-dependencies.ts` (dependency-resolution sanity).
+- `bun run detect:components` — `scripts/registry/auto-detect-components.ts` (detect/fix/add new components; `--dry-run` to preview).
 - `./install.sh` — install the Developer profile to `~/.config/opencode`.
   - `--dry-run` first to preview what would be installed.
   - `--overwrite` to replace existing files (default skips).
   - `EDAC_INSTALL_DIR=<dir> ./install.sh` (or `--install-dir <dir>`) for a custom target.
 
 ## Structure & ownership
-- `src/` — **the EDAC system** (the product, the center of this repo): component library (`agents/core`, `agents/subagents`, `commands`, `context`, `skills`, `tools`), `manifest.json` (Developer profile descriptor — badge/name/description + a 35-component list; `install.sh` does **not** read it), and `metadata.json` (agent-metadata store used for registry management/install; not part of the OpenCode agent schema). Mirrored by `install.sh`.
-- `registry.json` lives at the **repo root**, not in `src/`. It is the source of truth for components, dependencies, and the Developer profile seed (`profiles.developer.components`, 27 entries) that `install.sh` actually installs.
+- `src/` — **the EDAC system** (the product, the center of this repo): component library (`agents/core`, `agents/subagents`, `commands`, `context`, `skills`, `tools`). Mirrored by `install.sh`. (`manifest.json` and `metadata.json` are deprecated — `registry.json` is the sole source of truth; no script reads them.)
+- `registry.json` lives at the **repo root**, not in `src/`. It is the sole source of truth for components, dependencies, and the Developer profile seed (`profiles.developer.components`, 28 entries) that `install.sh` actually installs.
 - `.opencode/` — SystemBuilder's working environment: the agent + subagent definitions (`.opencode/agents/`) and context used while building EDAC. SystemBuilder lives here; EDAC does **not** exist to serve SystemBuilder.
 - `wiki/` — research and conventions that aid the **development of EDAC (`src/`)**, not SystemBuilder's personal apparatus. `sources/` holds raw cited research; `framework/`, `harness/`, `research/` hold generated pages; `llm-wiki.md` is the pattern doc. Governing contract: `wiki/SCHEMA.md` (which states: OAC ≈ `src/`; treat `src/` as the source of truth for EDAC structure).
 - `scripts/` — bun validation + dependency resolution (`registry/`, `validation/`).

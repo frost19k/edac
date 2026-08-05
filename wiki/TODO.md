@@ -17,7 +17,7 @@ Cross-session build plan for the EDAC wiki workflow.
 
 ## Verification items flagged during ingest (resolved 2026-07-29)
 - OAC directory layout (`.opencode/agents/subagents/{code,core,system-builder}/`) — EDAC's `src/agents/subagents/` mirrored this internally with tiers `core`/`code`/`development`/`system-builder`; only the root differed (`src/agents/` vs `.opencode/agents/`). **`system-builder` is NO LONGER a tier — the `src/agents/subagents/system-builder/` directory was deleted on 2026-07-29.** Verified against `src/`.
-- Agent metadata store: OAC's `.opencode/config/agent-metadata.json` → EDAC's `src/metadata.json` (added 2026-07-29, uncommitted). `registry.json` is at the **repo root**, not `src/`. Corrected across the wiki.
+- Agent metadata store: OAC's `.opencode/config/agent-metadata.json` → EDAC's `registry.json` (repo root). `src/metadata.json` and `src/manifest.json` are deprecated — `registry.json` is the sole source of truth; no script reads them. Corrected across the wiki.
 - OAC example agents `open-coder.md` / `open-agent.md` **do exist** in EDAC at `src/agents/core/` — the earlier "do not exist" flag was wrong; references are valid.
 
 ## Lint findings (2026-07-30, full mechanical pass — SystemBuilder lint)
@@ -28,8 +28,8 @@ Cross-session build plan for the EDAC wiki workflow.
 - [ ] **Bidirectional asymmetry (warn, not fail)** — `versioning.md` links out to `agent-frontmatter`/`subagent-structure`/`permission-model` with no back-links; `opencode-permission-model.md` is linked by `agent-frontmatter`+`permission-model` but links back to neither. Allowed for hubs; reconcile if desired.
 
 ## Deferred operational tasks
-- [ ] Clean `src/metadata.json`: for each entry, confirm a `.md` file exists on disk at the path derived from `category`+`id` (e.g. `category: subagents/code`, `id: coder-agent` → `src/agents/subagents/code/coder-agent.md`). Remove orphaned entries with no file. Rule: *if there is no file, the metadata is wrong.*
-- [ ] `src/metadata.json` still contains orphaned entries for the deleted `system-builder` agents (`context-organizer`, `agent-generator`, `command-creator`, `domain-analyzer`, `workflow-designer`). Per the cleaning rule *if there is no .md file on disk, the metadata is wrong*, these entries must be removed. **Deferred** (metadata cleaning is deferred).
+- [x] ~~Clean `src/metadata.json`~~ — **resolved (2026-08-05):** `registry.json` is now the sole source of truth. `src/metadata.json` is deprecated; no script reads it. Per-component `version` and `author` fields were dropped.
+- [x] ~~`src/metadata.json` orphaned `system-builder` entries~~ — **resolved (2026-08-05):** ghost entries were purged from `src/metadata.json` (commit `ba29a07`); the file itself is now deprecated.
 
 ## Remediation (2026-07-30, A+B applied)
 - [x] Frontmatter enum violation — `src-structure.md` fixed (Agent 1, → `concept`); `permission-model.md` fixed (→ `concept`). SCHEMA enum left unchanged (pages conformed rather than extending the enum).
@@ -39,4 +39,4 @@ Cross-session build plan for the EDAC wiki workflow.
 - [x] `src-structure.md` inbound-link gap — closed (`agent-frontmatter.md` now cross-links `src-structure.md` at 2 points).
 - [ ] Gap: `framework/layered-architecture.md` — referenced at `epistemic-standards.md:57`; create via ingest queue.
 - [ ] Gap: EDAC decisions D2/D3 — referenced across `permission-model.md` / `subagent-structure.md`; document or catalog.
-- [ ] `src/metadata.json` orphaned `subagents/system-builder` entries (`agent-generator`, `command-creator`, `domain-analyzer`, `context-organizer`, `workflow-designer`) — no `.md` files; remove per cleaning rule. **ESCALATED to SystemBuilder** (src/ decision, not wiki).
+- [x] ~~`src/metadata.json` orphaned `subagents/system-builder` entries~~ — **resolved (2026-08-05):** purged in commit `ba29a07`; `src/metadata.json` is now deprecated.

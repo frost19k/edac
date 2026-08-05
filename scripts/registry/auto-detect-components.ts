@@ -48,7 +48,6 @@ const colors = {
 const REGISTRY_FILE = 'registry.json';
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const MIRROR_ROOT = join(REPO_ROOT, MIRROR_DIR);
-const METADATA_FILE = join(MIRROR_ROOT, 'metadata.json');
 
 // CLI flags
 let AUTO_ADD = false;
@@ -116,7 +115,7 @@ interface Registry {
   version: string;
   schema_version: string;
   repository: string;
-  categories: Record<string, string>;
+  categories?: Record<string, string>;
   metadata?: {
     lastUpdated?: string;
     [key: string]: unknown;
@@ -131,19 +130,6 @@ interface Registry {
     config?: Component[];
     skills?: Component[];
   };
-}
-
-interface MetadataEntry {
-  id?: string;
-  name?: string;
-  category?: string;
-  type?: string;
-  tags?: string[];
-  dependencies?: string[];
-}
-
-interface MetadataFile {
-  agents?: Record<string, MetadataEntry>;
 }
 
 // Utility Functions
@@ -514,34 +500,6 @@ function extractMetadataFromFile(file: string): {
   name = filename
     .replace(/-/g, ' ')
     .replace(/\b\w/g, char => char.toUpperCase());
-
-  // Merge metadata from src/metadata.json when available.
-  if (existsSync(METADATA_FILE)) {
-    try {
-      const metadataFile = JSON.parse(
-        readFileSync(METADATA_FILE, 'utf-8')
-      ) as MetadataFile;
-      const metadataEntry = metadataFile.agents?.[id];
-
-      if (metadataEntry) {
-        if (metadataEntry.name) {
-          name = metadataEntry.name;
-        }
-        if (!tags && metadataEntry.tags && metadataEntry.tags.length > 0) {
-          tags = metadataEntry.tags.join(',');
-        }
-        if (
-          !dependencies &&
-          metadataEntry.dependencies &&
-          metadataEntry.dependencies.length > 0
-        ) {
-          dependencies = metadataEntry.dependencies.join(',');
-        }
-      }
-    } catch {
-      // Ignore malformed metadata.json — frontmatter values remain authoritative.
-    }
-  }
 
   return { id, name, description, tags, dependencies };
 }

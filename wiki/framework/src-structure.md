@@ -4,7 +4,7 @@ type: concept
 tags: [edac, packaging, structure, src, layout]
 created: 2026-07-29
 updated: 2026-07-29
-sources: [src/ directory listing, registry.json, manifest.json, metadata.json, VERSION]
+sources: [src/ directory listing, registry.json, VERSION]
 status: stable
 ---
 
@@ -24,27 +24,27 @@ status: stable
 | `src/context/` | Context files by domain: `web/`, `core/`, `intl/`, `dev/`, plus `navigation.md` |
 | `src/skills/` | Skills: `task-management/` |
 | `src/tools/` | Tooling: `env/` |
-| `src/manifest.json` | Developer profile descriptor — `name`, `badge`, `components` list |
-| `src/metadata.json` | Per-agent metadata store (see below) |
+| `src/manifest.json` | Deprecated — `registry.json` `profiles.developer` carries the same fields. |
+| `src/metadata.json` | Deprecated — `registry.json` is the sole source of truth; no script reads this file. |
 | `src/README.md` | (currently empty) |
 
 ## Adjacent files at repo root (NOT in `src/`)
 
 | Path | Role |
 |---|---|
-| `registry.json` | Component registry + installable profile seed. Per-component `id`/`name`/`type`/`path`/`description`/`tags`/`dependencies`/`category`; top-level `version` + `schema_version`. Read by `install.sh` and `scripts/registry/` validators. |
+| `registry.json` | Component registry + installable profile seed. Per-component `id`/`name`/`type`/`path`/`description`/`tags`/`dependencies`/`category`; top-level `version` + `schema_version`. Sole source of truth — read by `install.sh` and `scripts/registry/` validators. |
 | `VERSION` | Repo semver; mirrors `package.json` `version`. |
-| `package.json` | Repo version + `bun` scripts (`validate`, `validate:registry`, `validate:deps`, `validate:context-links`). |
+| `package.json` | Repo version + `bun` scripts (`validate`, `validate:registry`, `validate:components`, `validate:context-links`, `validate:context-refs`, `validate:deps`, `detect:components`). |
 
 > **Critical:** `registry.json` lives at the **repo root**, not in `src/`. Wiki pages must reference `registry.json` (repo root), never `src/registry.json`.
 
-## Agent metadata: `src/metadata.json`
+## Agent metadata: `registry.json`
 
-Each agent/subagent that exists as a `.md` file under `src/agents/` has a corresponding entry in `src/metadata.json`, keyed by its `id`. The entry carries metadata that is **not** part of the OpenCode agent frontmatter (which allows only `name`, `description`, `mode`, `temperature`, `permission`, …): specifically `id`, `category`, `type`, `version`, `author`, `tags`, `dependencies`.
+Each agent/subagent that exists as a `.md` file under `src/agents/` has a corresponding entry in `registry.json` (repo root), keyed by its `id`. The entry carries metadata that is **not** part of the OpenCode agent frontmatter (which allows only `name`, `description`, `mode`, `temperature`, `permission`, …): specifically `id`, `name`, `type`, `path`, `description`, `tags`, `dependencies`, `category`.
 
 **Path mapping:** an entry with `category: core` and `id: open-coder` resolves to `src/agents/core/open-coder.md`; an entry with `category: subagents/code` and `id: coder-agent` resolves to `src/agents/subagents/code/coder-agent.md`.
 
-> **Cleaning rule:** if no `.md` file exists on disk for a metadata entry, the metadata entry is wrong (orphaned) and must be removed. (See TODO.md — metadata cleaning is a tracked, deferred task.)
+> `src/metadata.json` and `src/manifest.json` are deprecated. `registry.json` is the sole source of truth — no script reads the deprecated files.
 
 ## Why this page exists
 
@@ -52,6 +52,6 @@ The initial OAC-standards ingest copied OAC's `.opencode/` paths into the wiki (
 
 ## Related
 
-- [Versioning](versioning.md) — three coexisting versions and where each lives (`VERSION`/`package.json`, `registry.json`, `src/metadata.json`).
-- [Agent Frontmatter](harness/agent-frontmatter.md) — what belongs in frontmatter vs `src/metadata.json`.
+- [Versioning](versioning.md) — two coexisting versions and where each lives (`VERSION`/`package.json`, `registry.json`).
+- [Agent Frontmatter](harness/agent-frontmatter.md) — what belongs in frontmatter vs `registry.json`.
 - `wiki/SCHEMA.md` — the EDAC↔OAC relationship note.

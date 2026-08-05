@@ -61,7 +61,7 @@ interface Registry {
   version: string;
   schema_version: string;
   repository: string;
-  categories: Record<string, string>;
+  categories?: Record<string, string>;
   components: {
     agents?: Component[];
     subagents?: Component[];

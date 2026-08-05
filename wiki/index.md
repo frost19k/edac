@@ -21,5 +21,5 @@
 
 ## Routing (folded from oac-standards/navigation.md)
 - **Creating new agents**: load `harness/agent-frontmatter.md` → `harness/subagent-structure.md` → reference existing agents in `.opencode/agents/`.
-- **Fixing existing agents**: load `harness/agent-frontmatter.md` (find invalid fields) → move OAC metadata to `src/metadata.json` → validate YAML.
+- **Fixing existing agents**: load `harness/agent-frontmatter.md` (find invalid fields) → move OAC metadata to `registry.json` → validate YAML.
 - **Code reviews**: check frontmatter validity (`harness/agent-frontmatter.md`) + structure compliance (`harness/subagent-structure.md`).

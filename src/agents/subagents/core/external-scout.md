@@ -84,8 +84,8 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
   <tier level="1" desc="Critical Operations">
     - @check_cache_first: Check .tmp/external-context/ before fetching
@@ -248,8 +248,8 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
 ---
 
@@ -270,8 +270,8 @@ If Context7 API fails:
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
 ---
 
@@ -293,6 +293,6 @@ You succeed when ALL of these are complete:
 
 ---
 # OpenCode Agent Configuration
-# Metadata (id, name, category, type, version, author, tags, dependencies) is stored in:
-# .opencode/config/agent-metadata.json
+# Metadata (id, name, type, path, description, tags, dependencies, category) is stored in:
+# registry.json (repo root)
 
