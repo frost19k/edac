@@ -1,8 +1,28 @@
 #!/usr/bin/env bun
 
 /**
- * Context Reference Validator (TypeScript/Bun version)
- * Validates that all context references follow the strict convention.
+ * Context Reference Validator (TypeScript/Bun)
+ *
+ * Validates that all context references follow the strict convention:
+ *   @.opencode/context/{category}/{file}.md
+ *
+ * Uses remark (mdast AST) to distinguish prose from code blocks, inline code,
+ * and link URLs. Only prose `text` nodes are checked for non-standard
+ * references — code blocks (`code`), inline code (`inlineCode`), and HTML
+ * (`html`) are structurally skipped by the AST, eliminating false positives
+ * from CSS at-rules, npm version specifiers, JSDoc tags, and domain
+ * identifiers that happen to contain `@`.
+ *
+ * A context reference is identified by `@` followed by a path (at least one
+ * `/`). Domain identifiers (`@critical_rules`), CSS at-rules (`@media`), and
+ * email addresses lack a path and are ignored. The canonical form
+ * `@.opencode/context/...` is excluded; everything else with a path is a
+ * non-standard reference (warning).
+ *
+ * Dynamic variable references (`@$VAR`, `@${VAR}`) are checked at line level
+ * (errors) since they may appear in any content type and cannot be resolved
+ * at install time.
+ *
  * Exit codes:
  *   0 = Pass (warnings are allowed)
  *   1 = Fail (errors found)
@@ -12,6 +32,8 @@ import { existsSync, readFileSync } from 'fs';
 import { dirname, join, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
+import { remark } from 'remark';
+import { visit } from 'unist-util-visit';
 import { MIRROR_DIR } from '../registry/dependency-resolution';
 
 // Colors
@@ -43,6 +65,8 @@ function collectFiles(dir: string): string[] {
   return globSync(join('**', '*.md'), { cwd: dir, absolute: true }).sort();
 }
 
+// --- Dynamic variable detection (line-level, error) ---
+
 function hasDynamicVar(line: string): boolean {
   return /@\$[^0-9]|@\$\{/.test(line);
 }
@@ -59,54 +83,73 @@ function findDynamicVarLines(file: string): string[] {
   return matches;
 }
 
-// Agent/Command non-standard reference check.
-// Mirrors the bash grep chain:
-//   grep -E '@[^~$]' | grep -v '@\.opencode/context/' | grep -v '@AGENTS\.md' |
-//   grep -v '@\.cursorrules' | grep -v '@\$[0-9]' | grep -v '^#' |
-//   grep -v 'email' [| grep -v 'mailto' for agents]
-function isNonStandardAgentOrCommandRef(line: string, includeMailto: boolean): boolean {
-  if (!/@[^~$]/.test(line)) return false;
-  if (/^#/.test(line)) return false;
-  if (/@\.opencode\/context\//.test(line)) return false;
-  if (/@AGENTS\.md/.test(line)) return false;
-  if (/@\.cursorrules/.test(line)) return false;
-  if (/@\$[0-9]/.test(line)) return false;
-  if (/email/.test(line)) return false;
-  if (includeMailto && /mailto/.test(line)) return false;
-  return true;
+// --- Non-standard reference detection (AST-based, warning) ---
+
+/**
+ * Strip YAML frontmatter (agent/command files) before parsing.
+ * Context files use HTML comments, not frontmatter — this is a no-op for them.
+ */
+function stripFrontmatter(content: string): string {
+  const match = content.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/);
+  return match ? content.slice(match[0].length) : content;
 }
 
-function findNonStandardAgentRefLines(file: string): string[] {
-  const lines = readLines(file);
-  const matches: string[] = [];
-  for (let i = 0; i < lines.length; i++) {
-    if (isNonStandardAgentOrCommandRef(lines[i], true)) {
-      matches.push(lines[i]);
-      if (matches.length >= 2) break;
-    }
+/**
+ * A context reference contains a path: `@` followed by word/dot/hyphen chars
+ * followed by `/`. This matches `@core/workflows.md` and
+ * `@.opencode/context/core/workflows.md` but not `@media`, `@critical_rules`,
+ * `@AGENTS.md`, `@.cursorrules`, or email addresses (which lack a `/` after
+ * the `@` token).
+ */
+const REF_PATTERN = /@[\w.-]+\/[\w./-]*/g;
+
+interface NonStandardRef {
+  line: number;
+  match: string;
+}
+
+function findNonStandardRefs(file: string): NonStandardRef[] {
+  const content = readFileSync(file, 'utf-8');
+  const body = stripFrontmatter(content);
+  const results: NonStandardRef[] = [];
+
+  try {
+    const tree = remark().parse(body);
+
+    visit(tree, 'text', (node) => {
+      // `text` nodes are prose by definition — code blocks are `code` nodes,
+      // inline code is `inlineCode`, HTML is `html`, link URLs are on `link`
+      // nodes (not in child text). This structural discrimination eliminates
+      // the false-positive classes the line-based regex produced.
+      const text = node.value;
+      if (!text.includes('@')) return;
+
+      const line = node.position?.start.line ?? 0;
+
+      REF_PATTERN.lastIndex = 0;
+      let m: RegExpExecArray | null;
+      while ((m = REF_PATTERN.exec(text)) !== null) {
+        const ref = m[0];
+        // Exclude the canonical convention
+        if (ref.startsWith('@.opencode/context/')) continue;
+        results.push({ line, match: ref });
+      }
+    });
+  } catch {
+    // If remark fails to parse, fall back to no results — the dynamic var
+    // check and other validators still run. Report nothing to avoid noise.
   }
-  return matches;
+
+  return results;
 }
 
-function hasNonStandardCommandRef(file: string): boolean {
-  return readLines(file).some((line) => isNonStandardAgentOrCommandRef(line, false));
-}
-
-function isNonStandardContextRef(line: string): boolean {
-  if (!/@/.test(line)) return false;
-  if (/^#/.test(line)) return false;
-  if (/@\.opencode\/context\//.test(line)) return false;
-  if (/email/.test(line)) return false;
-  return true;
-}
-
-function hasNonStandardContextRef(file: string): boolean {
-  return readLines(file).some((line) => isNonStandardContextRef(line));
-}
+// --- Shell command detection (line-level, info) ---
 
 function hasShellCommandWithPath(line: string): boolean {
   return /!`.*\.opencode\/context/.test(line);
 }
+
+// --- Check functions ---
 
 function checkAgents(): void {
   console.log('Checking agent files...');
@@ -123,11 +166,11 @@ function checkAgents(): void {
       errors++;
     }
 
-    const nonStandardLines = findNonStandardAgentRefLines(file);
-    if (nonStandardLines.length > 0) {
+    const refs = findNonStandardRefs(file);
+    if (refs.length > 0) {
       console.log(`${colors.yellow}⚠️${colors.reset}  Non-standard reference in: ${rel}`);
-      for (const line of nonStandardLines) {
-        console.log(`   ${line}`);
+      for (const ref of refs) {
+        console.log(`   line ${ref.line}: ${ref.match}`);
       }
       warnings++;
     }
@@ -149,8 +192,12 @@ function checkCommands(): void {
       errors++;
     }
 
-    if (hasNonStandardCommandRef(file)) {
+    const refs = findNonStandardRefs(file);
+    if (refs.length > 0) {
       console.log(`${colors.yellow}⚠️${colors.reset}  Non-standard reference in: ${rel}`);
+      for (const ref of refs) {
+        console.log(`   line ${ref.line}: ${ref.match}`);
+      }
       warnings++;
     }
   }
@@ -171,8 +218,12 @@ function checkContexts(): void {
       errors++;
     }
 
-    if (hasNonStandardContextRef(file)) {
+    const refs = findNonStandardRefs(file);
+    if (refs.length > 0) {
       console.log(`${colors.yellow}⚠️${colors.reset}  Context file has non-standard reference: ${rel}`);
+      for (const ref of refs) {
+        console.log(`   line ${ref.line}: ${ref.match}`);
+      }
       warnings++;
     }
   }

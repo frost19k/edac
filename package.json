@@ -12,6 +12,8 @@
     "detect:components": "bun run scripts/registry/auto-detect-components.ts"
   },
   "devDependencies": {
-    "glob": "^13.0.0"
+    "glob": "^13.0.0",
+    "remark": "^15.0.1",
+    "unist-util-visit": "^5.1.0"
   }
 }
