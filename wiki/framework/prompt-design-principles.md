@@ -3,14 +3,14 @@ title: Prompt Design Principles
 type: concept
 tags: [prompt-design, agent-design, anti-patterns, approval-gates, oac-standards]
 created: 2026-07-29
-updated: 2026-07-31
-sources: ["(removed) oac-standards/agent-prompt-design.md"]
+updated: 2026-08-13
+sources: ["(removed) oac-standards/agent-prompt-design.md", "(removed) sources/anji-prompt.md"]
 status: stable
 ---
 
 # Prompt Design Principles
 
-**Finding:** A well-formed agent prompt is an architecture, not a document. It anchors behaviour through a strong identity, separates three safeguard layers, embeds a complete epistemic framework (with explicit permission to abstain), treats the permission block as a structural gate rather than a length target, and governs execution through three-tier approval gates where approval never caches. These 13 principles, the anti-pattern catalogue, and the validation checklists below are the OAC-derived contract for any primary-agent or subagent prompt in EDAC.
+**Finding:** A well-formed agent prompt is an architecture, not a document. It anchors behaviour through a strong identity, separates three safeguard layers, embeds a complete epistemic framework (with explicit permission to abstain), treats the permission block as a structural gate rather than a length target, and governs execution through three-tier approval gates where approval never caches. These 17 principles, the anti-pattern catalogue, and the validation checklists below are the contract for any primary-agent or subagent prompt in EDAC. Principles 1–14 are OAC-derived; principles 15–17 are distilled from external framework analysis (source removed).
 
 ## 1. Identity First, Define the Name
 
@@ -90,6 +90,8 @@ For both ANALYSIS and TASK paths, the agent restates its understanding before ex
 - **ANALYSIS:** "Here's what I understand you're asking — [restate]. Correct?"
 - **TASK:** present a proposal template covering what, current state, components, approach, known unknowns, in scope, out of scope.
 
+**Conditional skip (refinement):** restatement is not universal — it is triggered by ambiguity or risk. Restate before executing when: (a) the deliverable is ambiguous, (b) the scope exceeds a single observable action, (c) irreversible side effects are possible, or (d) the user's stated intent could reasonably be interpreted multiple ways. For single-action requests where intent, target, and outcome are all unambiguous, proceed directly. This prevents the over-asking failure mode where the agent restates for trivial requests and erodes the signal value of restatement for complex ones.
+
 ## 9. Templates: Keep the Contracts
 
 Preserve templates that are **contracts between agents**:
@@ -137,6 +139,41 @@ The harness injects the full tool schema (tool names, descriptions, parameters) 
 
 *Why:* in a context-constrained loop, duplicated schema is pure token overhead; worse, a stale hardcoded list becomes a false declaration the agent may trust over the running harness — the exact intent-vs-reality trap the agent is meant to avoid.
 
+## 15. Temporal Scope: Define the Units
+
+Approval gates, scope boundaries, and operational discipline operate on temporal units the prompt must define explicitly. Without definitions, "per-turn" and "session" are interpreted inconsistently and "project scope" becomes a vehicle for overreach.
+
+- **Turn** — a single prompt-response pair. Operational discipline and approval gates apply per-turn unless explicitly stated otherwise.
+- **Session** — a chat thread comprising multiple turns.
+- **Project** — work directed at a specific endeavour; it qualifies when it spans multiple sessions, exceeds ~5 turns with a coherent goal, or produces artifacts a future session would need to understand.
+
+**Critical mechanism:** *project scope defines boundaries; it does not pre-authorise execution across turns.* This is a poka-yoke against the scope-creep failure where "you approved the project" gets read as "you pre-authorised execution across turns." Approval for one action in one turn never extends to subsequent turns or to merely similar actions (see [Principle 5](#5-approval-gates-need-granularity)).
+
+*Why:* without defined temporal units, the non-caching approval rule floats free of any anchor — the agent has no shared vocabulary for "when does approval expire." Defining the units makes the non-caching rule operational rather than aspirational.
+
+## 16. Failure-Loop Detection
+
+When the same negative feedback occurs twice, the agent is in a failure loop. The loop is caused by the agent's own corrective mechanism — more correction is the wrong move.
+
+**Protocol:**
+1. Halt all current activity.
+2. State plainly that you have failed to understand.
+3. Ask the user to tell you directly what to do differently.
+4. Do not attempt to self-correct — your self-correction is what produced the loop.
+
+*Why:* self-correction within a failure loop is not neutral — it is the mechanism generating the loop. The agent's model of what the user wants is wrong, and each corrective attempt is a variant of the same wrong model. Halting and deferring to the user is the only move that breaks the cycle; it converts the loop from a self-reinforcing error into a request for new information. This is a structural mechanism, not a behavioural declaration — it names the cause (self-correction) and prescribes the only action that interrupts it (halt + defer).
+
+## 17. Mode Switching: Domain-Mode Detection
+
+Intent classification (ANALYSIS / TASK / CONVERSATIONAL — see [Principle 7](#7-execution-path-classification-with-scope-boundary)) and domain classification are **orthogonal axes**. An agent that classifies intent but not domain defaults to the domain its examples and defaults are shaped for — typically coding. Domain-mode detection gives a universal agent a mechanism for operating differently across domains rather than coding-with-extra-steps.
+
+**Protocol:**
+- Most real tasks span multiple domains. "Write a research report" requires research, writing, and analysis. "Set up a project" requires planning, technical execution, and documentation.
+- Recognise when a task crosses domains and signal the transition: state which mode you are operating in and why. Example: "I'll start by researching the topic, then draft the report."
+- When domain heuristics conflict, the epistemic principles (see [Epistemic Standards](../framework/epistemic-standards.md)) win for factual claims. For non-factual conflicts (style vs clarity, speed vs thoroughness), prioritise the user's stated preference, or ask if none is stated.
+
+*Why:* a universal agent without domain-mode detection has intent classification but no mechanism for applying different heuristics in different domains. Its defaults — the probe, the context-loading scheme, the routing table, the validation criteria — are shaped by whatever domain the prompt was written for, and that shape persists invisibly. Mode switching makes the domain an explicit, signalled choice rather than an inherited default. This is the structural fix for the "coder agent lite" failure mode: an agent that *detects* the domain rather than *assuming* it.
+
 ## Anti-Patterns Catalogue
 
 | Anti-Pattern | What It Looks Like | Why It Fails |
@@ -151,6 +188,9 @@ The harness injects the full tool schema (tool names, descriptions, parameters) 
 | Contradictory constraints | "One step at a time" AND "delegate ALL tasks simultaneously" | Reconcile or agent behaves unpredictably |
 | Orphaned capabilities | Listing subagents never referenced in workflow | Evaluate: integrate or remove |
 | Negative-only constraints | 9/9 constraints using "NEVER" | Gives boundary but no trajectory; reframe positively |
+| Undefined temporal units | "Per-turn" and "session" used without definition | Approval non-caching rule has no anchor; scope creep follows |
+| Self-correction in a failure loop | Same negative feedback twice → try a variant of the same approach | The correction is the loop's cause; halt and defer to the user |
+| Domain-assuming universality | Agent claims "any domain" but probes for language/runtime, routes to CoderAgent, validates with tests/build | Intent classification without domain classification defaults to the prompt's domain of origin |
 
 ## Validation Checklist
 
@@ -165,6 +205,10 @@ The harness injects the full tool schema (tool names, descriptions, parameters) 
 - [ ] All listed subagents referenced in workflow
 - [ ] Constraints predominantly positive
 - [ ] Approval caching explicitly addressed
+- [ ] Temporal units (turn/session/project) defined; project scope ≠ pre-authorisation
+- [ ] Failure-loop detection protocol present (halt + defer, not self-correct)
+- [ ] Domain-mode detection present for universal agents (orthogonal to intent classification)
+- [ ] Restatement protocol has conditional skip for unambiguous single-action requests
 - [ ] Prompt files reference the `task` tool schema instead of hardcoding the subagent enum
 - [ ] No tool schemas / runtime message metadata are restated where the harness already injects them
 
@@ -193,9 +237,9 @@ permission:
 ## Related
 
 - [../framework/epistemic-standards.md](../framework/epistemic-standards.md) — the 7 reasoning principles that principle #3 embeds.
-- [Anti-Fabrication Mechanisms](../framework/anti-fabrication.md) — empirical backing for principle #3 (71% finding, tiered techniques) and principle #6 (deontological framing, 27–64% improvement).
+- [Anti-Fabrication Mechanisms](../framework/anti-fabrication.md) — empirical backing for principle #3 (71% finding, tiered techniques), principle #6 (deontological framing, 27–64% improvement), and the topical-engagement-vs-epistemic-abstention separation (principle #17's conflict rule).
 - [Research Completeness](../framework/research-completeness.md) — the "when to stop" failure class that principle #3's epistemic framework must also guard against.
-- [Mechanistic Framing](../framework/mechanistic-framing.md) — why agent files must be written as stateless contracts, not human-addressed documents; the anti-anthropomorphism discipline underlying all 13 principles.
+- [Mechanistic Framing](../framework/mechanistic-framing.md) — why agent files must be written as stateless contracts, not human-addressed documents; the anti-anthropomorphism discipline underlying all 17 principles.
 - [../harness/subagent-structure.md](../harness/subagent-structure.md) — standard subagent file template (principle #12).
 - [../harness/agent-frontmatter.md](../harness/agent-frontmatter.md) — valid YAML frontmatter keys.
 - [../harness/permission-model.md](../harness/permission-model.md) — consolidated permission allow/deny/ask model (principles #4, #5).

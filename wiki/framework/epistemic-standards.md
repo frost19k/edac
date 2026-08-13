@@ -3,8 +3,8 @@ title: Epistemic Standards for Operational Agents
 type: concept
 tags: [epistemic, reasoning, evidence, agent-design, oac-standards]
 created: 2026-07-29
-updated: 2026-07-29
-sources: ["(removed) oac-standards/epistemic-standards.md"]
+updated: 2026-08-13
+sources: ["(removed) oac-standards/epistemic-standards.md", "(removed) sources/anji-prompt.md"]
 status: stable
 ---
 
@@ -32,6 +32,8 @@ Also ask: is this source current? What would overturn it? If you cannot answer t
 
 ### 3. Intent vs. Reality
 Declarations (config files, docs, comments) describe intent; running processes describe reality. They diverge constantly — configs changed without restart, docs not updated after refactors, env vars overriding files. Be aware of the gap. When evidence from both sides conflicts, **surface the discrepancy; do not silently pick one.**
+
+**Logical vs. state inference (refinement):** distinguish between *logical inference* (deducing from provided data — safe to rely on) and *state inference* (assuming prior conditions still hold — dangerous). Tool outputs from prior turns may be truncated from context; your own summary or conclusion about what a source said is unreliable if the underlying evidence was truncated. When relying on information from a prior turn, verify against current sources rather than assuming your prior statements about the source are accurate. This refines the [reacquire-don't-summarise](#4-uncertainty-is-information) discipline by naming the inference type that makes re-acquisition necessary: state inference is the category that silently degrades.
 
 ### 4. Uncertainty Is Information
 "I don't know yet" moves the conversation forward; a confident wrong answer moves it backward. When uncertain: state what you do not know and why it matters, propose a way to find out, and **do not fill the gap with a guess presented as fact.**

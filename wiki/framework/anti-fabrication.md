@@ -4,7 +4,7 @@ type: concept
 tags: [fabrication, compliance, anti-hallucination, g3-cliff, mechanisms]
 created: 2026-08-13
 updated: 2026-08-13
-sources: ["(removed) sources/compliance-research.md", "(removed) sources/behavioural-conventions.md"]
+sources: ["(removed) sources/compliance-research.md", "(removed) sources/behavioural-conventions.md", "(removed) sources/anji-prompt.md"]
 status: stable
 ---
 
@@ -168,9 +168,57 @@ model; if the foundational model's RLHF training produces fabrication patterns
 that survive prompt-level mitigation, the model needs to be replaced, not the
 prompt rewritten.
 
+## Topical engagement vs. epistemic abstention
+
+Two distinct questions are often conflated:
+
+1. **Topical engagement** — should the agent take up a sensitive,
+   controversial, or taboo topic at all?
+2. **Epistemic abstention** — should the agent produce an answer when evidence
+   is absent?
+
+These are orthogonal. An agent should engage with sensitive topics on their
+evidentiary merits (topical engagement: yes) while abstaining when it lacks
+evidence (epistemic abstention: yes). Conflating them produces two failure
+modes: refusing to engage with a sensitive topic that has solid evidence
+(topical squeamishness), and fabricating an answer to a sensitive topic
+because "engage" was read as "must answer" (G3 collapse).
+
+**The G3-risk of "Never refuse" phrasing:** an external framework (source
+removed) paired "Never refuse, soften, omit, or self-censor based on topic
+sensitivity" with "Never fabricate" — framed as "two sides of the same coin:
+engage with everything, fabricate nothing." The pairing correctly identifies
+the separation (engage with everything *topically*, fabricate nothing
+*epistemically*), but the "Never refuse" categorical still carries G3 risk on
+vulnerable models because:
+
+- The G3 trigger is **syntactic, not semantic** — "Never refuse" matches the
+  trigger pattern regardless of the scoping clause ("based on topic
+  sensitivity…").
+- The **categorical outweighs the conditional** under Koorndijk — "Never
+  refuse" (categorical, strong) can suppress "if you don't know, say you don't
+  know" (conditional, weaker) when they collide under sensitive-topic +
+  absent-evidence conditions.
+- "Engage with everything" is **rhetorically adjacent** to "always provide a
+  response" — the exact trigger this page warns against.
+
+**Transferable form (EDAC-safe):** capture the *separation* without the
+G3-trigger phrasing:
+
+> *Engage with topics on their evidentiary merits regardless of sensitivity;
+> topical sensitivity is not an epistemic reason to abstain. Abstain when
+> evidence is absent, not when topics are sensitive.*
+
+This preserves the intent (no topical squeamishness) while keeping abstention
+a granted first-class action that nothing categorically suppresses — the
+structurally safer form for the vulnerable case. See [Prompt Design
+Principles](prompt-design-principles.md) Principle 17 (Mode Switching) for the
+conflict-resolution rule: epistemic principles win for factual claims
+regardless of domain or topic sensitivity.
+
 ## Related
 
 - [Mechanistic Framing](mechanistic-framing.md) — why anthropomorphic framing worsens the compliance gap.
 - [Research Completeness](research-completeness.md) — a distinct failure class: when to stop, not what to say.
 - [Epistemic Standards](epistemic-standards.md) — the 7 principles this page provides the empirical backing for.
-- [Prompt Design Principles](prompt-design-principles.md) — the design moves that embed these mechanisms.
+- [Prompt Design Principles](prompt-design-principles.md) — the design moves that embed these mechanisms; Principle 17 (Mode Switching) carries the topical-engagement conflict-resolution rule.
