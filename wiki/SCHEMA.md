@@ -89,7 +89,19 @@ Standalone health-check of the generated pages (`framework/`, `harness/`, `resea
 3. **Cross-link integrity** — inline + `## Related` links resolve; no orphan pages; gap detection for concepts lacking a page.
 4. **Frontmatter compliance** — all seven required keys present; `type`/`status` enums valid.
 5. **Contradictions** — pages (and `src-structure.md` / live `src/`) do not contradict.
-6. **Stale claims** — version/file/path assertions match the live repo.
+    6. **Stale claims** — version/file/path assertions match the live repo.
+       **Critical caveat (packaging vs runtime):** `src/context/` is EDAC's
+       *packaging* tree, not the runtime location. The agents' hardcoded
+       `.opencode/context/` references are correct for the *installed* location
+       (`.opencode/context/` local or `~/.config/opencode/context/` global, per
+       `install.sh`), NOT for `src/context/`. Do **not** flag agent path strings
+       as stale on the basis that they don't match `src/context/`. The real
+       stale-context defects are: (a) `navigation.md` / `paths.json` prose that
+       asserts OAC-era directory names (`repo/`, `intelligence/`) the tree no
+       longer uses (EDAC uses `intl/`, not `intelligence/`); (b) any context
+       file whose content references OAC by name or a wrong install variable
+       (`OPENCODE_INSTALL_DIR` — the real one is `EDAC_INSTALL_DIR`). See
+       `framework/src-structure.md` "Packaging vs. runtime location".
 7. **Secret scan** — leaked secrets in ordinary files are flagged (never written into pages).
 
 Exempt from these checks: `sources/` (immutable upstream docs), `SCHEMA.md`, `TODO.md`, `log.md`, `AUDIT.md` (scratchpad), and `framework/src-structure.md` (legitimately quotes wrong forms to explain the fix).

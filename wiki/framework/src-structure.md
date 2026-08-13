@@ -10,6 +10,39 @@ status: stable
 
 > EDAC is inspired by OpenAgentsControl (OAC) but has its own package structure. OAC patterns exist exclusively in `src/`; OAC's `.opencode/` layout does **not** apply to EDAC. **This page is the source of truth for EDAC's on-disk layout.** Any wiki page that asserts a file path or directory structure must trace to the tables below — never to OAC's `.opencode/`.
 
+## Packaging vs. runtime location (read first)
+
+This is the single most misread fact about EDAC's structure, and it has caused
+audits to wrongly flag agent path strings as "stale." State it plainly:
+
+- **`src/` is the packaging tree only.** It lives in this repo (`EDAC/`) and is
+  where EDAC is *developed and assembled*. Agents do **not** read context from
+  `src/context/` at runtime. Nothing in `src/` is the runtime location.
+- **At install time, `install.sh` mirrors `src/` into a target OpenCode
+  environment.** The install target is either:
+  - project-local: `.opencode/` (when run with `--install-dir .opencode` or a
+    local `.opencode` path), or
+  - global: `~/.config/opencode` (the default, when `EDAC_INSTALL_DIR` is unset
+    or points at `~/.config/opencode`).
+- **The agents' hardcoded `.opencode/context/` references are correct for the
+  *runtime* location, not for `src/context/`.** After `install.sh` copies
+  `src/context/` to `.opencode/context/` (local) or `~/.config/opencode/context/`
+  (global), those references resolve. They are **not** stale — they describe
+  where the files land, not where they're packaged.
+- **`install.sh` rewrites `.opencode/context/` references inside installed files
+  to absolute install-dir paths — but only for *global* installs.** For a local
+  `.opencode` install the references are left as-is (they already resolve
+  relative to the project). See `install.sh` lines ~270–282.
+
+Consequence for any audit: when evaluating `src/context/` against the agents,
+**do not** treat `src/context/` as the location the agents read from. Judge
+linkage against the *installed* path (`.opencode/context/` or
+`~/.config/opencode/context/`), and judge content against the agent mandate.
+The only `src/context/` defects that are real are: (a) directory/name
+mismatches between `navigation.md` and the actual `src/context/` tree, and (b)
+prose that asserts OAC-era names (`repo/`, `intelligence/`) that the tree no
+longer uses.
+
 ## Overview
 
 `src/` is EDAC's install package: the component library that `install.sh` mirrors into a target OpenCode environment. It is the authoritative representation of EDAC's structure. The wiki references `src/` paths; OAC's `.opencode/` paths (e.g. `.opencode/config/agent-metadata.json`) are OAC lineage only and do not exist in EDAC.

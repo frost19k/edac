@@ -6,7 +6,7 @@
 - [Epistemic Standards](framework/epistemic-standards.md) — the 7-principle epistemic constitution for agents (probe, evidence gradients, intent-vs-reality, uncertainty, contradiction, sensitive output, pre-conclusion).
 - [Prompt Design Principles](framework/prompt-design-principles.md) — 13 agent-prompt design principles, anti-patterns, and three-tier approval gates.
 - [Versioning](framework/versioning.md) — three coexisting versions: repo semver, registry schema_version, per-agent component version.
-- [src/ Package Structure](framework/src-structure.md) — EDAC's authoritative on-disk layout; the source of truth for all path assertions.
+- [src/ Package Structure](framework/src-structure.md) — EDAC's authoritative on-disk layout; the source of truth for all path assertions. **Includes "Packaging vs. runtime location"** — `src/context/` is packaging-only; agents' `.opencode/context/` strings are correct for the installed location, not stale.
 
 ## harness/
 - [Agent Frontmatter](harness/agent-frontmatter.md) — valid OpenCode frontmatter fields, display-name vs file-name, deprecated keys, common mistakes.
