@@ -122,7 +122,9 @@ SELECTED=()
 RESOLVED_ORDER=()
 
 resolve_dependencies() {
-  local comp="$1" type="${comp%%:*}" id="${comp##*:}"
+  local comp="$1"
+  local type="${comp%%:*}"
+  local id="${comp##*:}"
 
   # Already resolved?
   for existing in "${RESOLVED_ORDER[@]}"; do
