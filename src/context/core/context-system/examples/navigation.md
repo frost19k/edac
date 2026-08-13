@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Example navigation files and context patterns
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System Examples
-
-**Purpose**: Example navigation files and context patterns
 
 ---
 
@@ -32,7 +34,7 @@ examples/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Context System** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

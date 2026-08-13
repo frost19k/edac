@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.2 | Updated: 2026-08-08 -->
+---
+description: "Read `AGENTS.md` (repo root) first — it's the manual for this repo."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Navigation
-
-**Orientation:** Read `AGENTS.md` (repo root) first — it's the manual for this repo.
 
 ---
 

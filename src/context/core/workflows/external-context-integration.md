@@ -1,4 +1,9 @@
-<!-- Context: workflows/external-context-integration | Priority: high | Version: 1.0 | Updated: 2026-01-28 -->
+---
+description: This guide explains how to integrate external context (fetched via ExternalScout) into the main agent workflow so that subagents can access it without re-fetching.
+version: 1.0
+updated: 2026-08-13
+---
+
 # External Context Integration Guide
 
 ## Overview

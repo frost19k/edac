@@ -1,10 +1,10 @@
-<!-- Context: core/task-schema | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: JSON schema reference for task management files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Standard: Task JSON Schema
-
-**Purpose**: JSON schema reference for task management files
-
-**Last Updated**: 2026-02-14
 
 ---
 
@@ -23,9 +23,9 @@ Location: `.tmp/tasks/{feature-slug}/` (at project root)
 This document describes the **base schema** (v1.0) that all task files must follow.
 
 For **enhanced features** (line-number precision, domain modeling, contracts, ADRs, prioritization):
-- See `enhanced-task-schema.md` for extended fields and capabilities
+- See `task-examples.md` for field-level examples and capabilities
 - All enhanced fields are **optional** and backward compatible
-- Use enhanced schema for multi-stage orchestration workflows
+- Use enhanced fields for multi-stage orchestration workflows
 
 ---
 
@@ -111,7 +111,7 @@ These two fields serve fundamentally different purposes. **Never mix them.**
 ```json
 "context_files": [
   ".opencode/context/core/standards/code-quality.md",
-  ".opencode/context/core/standards/security-patterns.md"
+  ".opencode/context/core/standards/code-quality.md"
 ],
 "reference_files": [
   "package.json",
@@ -133,7 +133,7 @@ These two fields serve fundamentally different purposes. **Never mix them.**
   "parallel": false,
   "context_files": [
     ".opencode/context/core/standards/code-quality.md",
-    ".opencode/context/core/standards/security-patterns.md"
+    ".opencode/context/core/standards/code-quality.md"
   ],
   "reference_files": [
     "src/auth/token-utils.ts"
@@ -151,7 +151,7 @@ The enhanced schema adds powerful features while maintaining full backward compa
 
 ### When to Use Enhanced Schema
 
-Use `enhanced-task-schema.md` when you need:
+Use enhanced fields when you need:
 - **Line-number precision** - Point to specific sections of large files (reduces cognitive load)
 - **Domain modeling** - Track bounded contexts, modules, vertical slices
 - **Contract tracking** - Manage API/interface dependencies
@@ -193,9 +193,9 @@ Both formats work. Agents handle both automatically.
 
 ---
 
-## Related
+## Related Files
 
-- `enhanced-task-schema.md` - Extended schema with advanced features
+- `task-examples.md` - Field-level examples and enhanced features
 - `../guides/splitting-tasks.md` - How to decompose features
 - `../guides/managing-tasks.md` - Lifecycle workflow
 - `../lookup/task-commands.md` - CLI reference

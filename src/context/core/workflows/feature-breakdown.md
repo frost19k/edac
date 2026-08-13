@@ -1,4 +1,8 @@
-<!-- Context: workflows/task-breakdown | Priority: high | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: Framework for breaking down complex tasks into manageable, sequential subtasks.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Task Breakdown Guidelines
 

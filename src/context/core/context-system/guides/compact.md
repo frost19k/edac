@@ -1,10 +1,10 @@
-<!-- Context: core/compact | Priority: high | Version: 1.1 | Updated: 2026-02-15 -->
+---
+description: Compress verbose content into minimal viable information
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Compaction (Minimization)
-
-**Purpose**: Compress verbose content into minimal viable information
-
-**Last Updated**: 2026-02-15
 
 ---
 
@@ -115,8 +115,10 @@ res.cookie('auth', token, { httpOnly: true })
 
 ---
 
-## Related
+## Related Files
 
 - mvi.md - MVI principle
 - harvest.md - When to compact
-- templates.md - Standard formats
+- templates-concept-example.md - Concept and example formats
+- templates-guide-lookup.md - Guide and lookup formats
+- templates-error-navigation.md - Error and navigation formats

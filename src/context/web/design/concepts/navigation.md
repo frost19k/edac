@@ -1,8 +1,10 @@
-<!-- Context: web/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Core concepts for modern web design
+version: 1.0
+updated: 2026-08-13
+---
 
 # Web Design Concepts
-
-**Purpose**: Core concepts for modern web design
 
 ---
 
@@ -32,7 +34,7 @@ concepts/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Web Design** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

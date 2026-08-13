@@ -1,10 +1,10 @@
-<!-- Context: web/react-patterns | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Modern React patterns, hooks usage, and component design principles
+version: 1.0
+updated: 2026-08-13
+---
 
 # React Patterns & Best Practices
-
-**Category**: development  
-**Purpose**: Modern React patterns, hooks usage, and component design principles  
-**Used by**: frontend-specialist
 
 ---
 

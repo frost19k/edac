@@ -1,8 +1,10 @@
-<!-- Context: intl/technical | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+---
+description: Document the technical foundation, architecture, and key decisions.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Technical Domain
-
-> Document the technical foundation, architecture, and key decisions.
 
 ## Quick Reference
 

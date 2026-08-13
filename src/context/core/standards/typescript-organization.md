@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Import ordering, naming conventions, file structure, testing principles, and variable naming.
+version: 1.0
+updated: 2026-08-13
+---
 
 # TypeScript Code Organization
-
-**Purpose**: Import ordering, naming conventions, file structure, testing principles, and variable naming.
 
 ---
 
@@ -119,7 +121,7 @@ const [language, cfg, provider] = await Promise.all([...])
 
 ---
 
-## Related
+## Related Files
 
 - [Function Patterns](./typescript-functions.md) — Naming, purity, composition
 - [Type Safety](./typescript-type-safety.md) — Types, inference, and type guards

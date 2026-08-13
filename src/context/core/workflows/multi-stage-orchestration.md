@@ -1,4 +1,8 @@
-<!-- Context: workflows/orchestration | Priority: critical | Version: 1.0 | Updated: 2026-02-14 -->
+---
+description: The Multi-Stage Orchestration Workflow is a comprehensive framework for managing complex software development from initial requirements through to release. It coordinates multiple specialized agents, enables parallel execution, and ensures systematic integration and validation.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Multi-Stage Orchestration Workflow
 

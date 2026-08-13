@@ -1,4 +1,8 @@
-<!-- Context: standards/project-intelligence | Priority: high | Version: 1.1 | Updated: 2026-08-08 -->
+---
+description: Living documentation that bridges business domain and technical implementation.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Project Intelligence
 

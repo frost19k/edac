@@ -1,10 +1,10 @@
-<!-- Context: core/managing-tasks | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Step-by-step workflow for JSON-driven task management
+version: 1.0
+updated: 2026-08-13
+---
 
 # Guide: Managing Task Lifecycle
-
-**Purpose**: Step-by-step workflow for JSON-driven task management
-
-**Last Updated**: 2026-01-11
 
 ---
 
@@ -122,7 +122,7 @@ When `completed_count == subtask_count`:
 
 ---
 
-## Related
+## Related Files
 
 - `../standards/task-schema.md` - JSON field reference
 - `splitting-tasks.md` - How to create subtasks

@@ -1,10 +1,10 @@
-<!-- Context: core/creation | Priority: high | Version: 1.1 | Updated: 2026-02-15 -->
+---
+description: Ensure all context files follow the same format and structure
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context File Creation Standards
-
-**Purpose**: Ensure all context files follow the same format and structure
-
-**Last Updated**: 2026-02-15
 
 ---
 
@@ -26,7 +26,7 @@ Ask: Is this a concept, example, guide, lookup, or error?
 → Place in correct folder
 
 ### 2. Apply Template
-Use standard template for file type (see templates.md)
+Use standard template for file type (see templates-concept-example.md, templates-guide-lookup.md, templates-error-navigation.md)
 
 ### 3. Apply MVI
 - Core: 1-3 sentences
@@ -64,17 +64,17 @@ Add entry to navigation.md in parent directory
 
 ## Standard Metadata (Frontmatter)
 
-```html
-<!-- Context: {path} | Priority: {level} | Version: {X.Y} | Updated: {YYYY-MM-DD} -->
+```yaml
+---
+description: {one-line purpose}
+version: {X.Y}
+updated: {YYYY-MM-DD}
+---
 ```
 
-**Priority levels**: critical, high, medium, low
-
-**When to use**:
-- critical: Core system files, always needed
-- high: Frequently referenced, important patterns
-- medium: Useful but not essential
-- low: Nice-to-have, rarely needed
+**When to update version**:
+- Increment minor (1.0 → 1.1) for content revisions
+- Increment major (1.0 → 2.0) for structural rewrites
 
 ---
 
@@ -161,13 +161,15 @@ When creating a file, update parent `navigation.md`:
 | Lookup | Lookup template | Quick reference data |
 | Error | Error template | Troubleshooting issues |
 
-See templates.md for full templates.
+See the template files (templates-concept-example.md, templates-guide-lookup.md, templates-error-navigation.md) for full templates.
 
 ---
 
-## Related
+## Related Files
 
-- templates.md - File templates
+- templates-concept-example.md - Concept and example templates
+- templates-guide-lookup.md - Guide and lookup templates
+- templates-error-navigation.md - Error and navigation templates
 - mvi.md - MVI principle
 - compact.md - Compression techniques
 - structure.md - Directory structure

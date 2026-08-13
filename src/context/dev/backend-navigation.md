@@ -1,15 +1,17 @@
-<!-- Context: dev/navigation | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Server-side, APIs, databases, auth
+version: 1.0
+updated: 2026-08-13
+---
 
 # Backend Development Navigation
-
-**Scope**: Server-side, APIs, databases, auth
 
 ---
 
 ## Structure
 
 ```
-development/backend/           # [future]
+dev/backend/           # [future]
 ├── navigation.md
 │
 ├── api-patterns/              # Approach-based
@@ -72,7 +74,7 @@ development/backend/           # [future]
 
 ---
 
-## Related Context
+## Related Files
 
 - **API Design Principles** → `principles/api-design.md`
 - **Core Standards** → `../core/standards/code-quality.md`

@@ -1,4 +1,9 @@
-<!-- Context: dev/design-systems | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: This context file provides reusable design system patterns, theme templates, and color systems for frontend design work. Use these as starting points for creating cohesive, professional UI designs.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Design Systems
 
 ## Overview

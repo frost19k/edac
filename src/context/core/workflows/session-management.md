@@ -1,4 +1,9 @@
-<!-- Context: workflows/sessions | Priority: medium | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: "Session management: lazy initialization, session IDs, and safe cleanup for temporary context files"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Session Management
 
 ## Quick Reference

@@ -1,10 +1,10 @@
-<!-- Context: core/task-commands | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Quick reference for task-cli.ts commands
+version: 1.0
+updated: 2026-08-13
+---
 
 # Lookup: Task CLI Commands
-
-**Purpose**: Quick reference for task-cli.ts commands
-
-**Last Updated**: 2026-02-14
 
 ---
 
@@ -174,31 +174,21 @@ The CLI fully supports the enhanced task schema (v2.0) with:
 - **ADR references** - Architecture decision records
 - **Prioritization** - RICE/WSJF scores
 
-All enhanced fields are optional and backward compatible. See `../standards/enhanced-task-schema.md` for details.
+All enhanced fields are optional and backward compatible. See `../standards/task-examples.md` for details.
 
 ---
 
 ## Planning Workflow Integration
 
-For multi-stage orchestration workflows, use these planning agents before task creation:
+For multi-stage orchestration workflows, use TaskManager to decompose features into subtasks before task creation. ContextScout can discover relevant context files, and the orchestrator persists them into the task's context_files array.
 
-| Agent | Purpose | Output |
-|-------|---------|--------|
-| **ArchitectureAnalyzer** | DDD bounded context identification | `.tmp/architecture/contexts.json` |
-| **StoryMapper** | User journey and story mapping | `.tmp/story-maps/map.json` |
-| **PrioritizationEngine** | RICE/WSJF scoring | `.tmp/backlog/prioritized.json` |
-| **ContractManager** | API contract definition | `.tmp/contracts/{service}.json` |
-| **ADRManager** | Architecture decision records | `docs/adr/` |
-
-These agents populate enhanced schema fields (bounded_context, contracts, related_adrs, rice_score, etc.) automatically.
-
-See `.opencode/context/core/workflows/multi-stage-orchestration.md` for the complete workflow.
+See `../workflows/multi-stage-orchestration.md` for the complete workflow.
 
 ---
 
-## Related
+## Related Files
 
 - `../standards/task-schema.md` - Base JSON schema reference
-- `../standards/enhanced-task-schema.md` - Extended schema with advanced features
+- `../standards/task-examples.md` - Field-level examples and enhanced features
 - `../guides/managing-tasks.md` - Workflow guide
 - `../workflows/multi-stage-orchestration.md` - Planning workflow

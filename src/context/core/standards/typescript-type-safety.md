@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: "Type system usage patterns — explicit types, inference, guards, and avoiding `any`."
+version: 1.0
+updated: 2026-08-13
+---
 
 # TypeScript Type Safety
-
-**Purpose**: Type system usage patterns — explicit types, inference, guards, and avoiding `any`.
 
 ---
 
@@ -90,7 +92,7 @@ function processData(data: any) {
 
 ---
 
-## Related
+## Related Files
 
 - [Function Patterns](./typescript-functions.md) — Naming, purity, composition
 - [Array Operations](./typescript-arrays.md) — Functional array methods

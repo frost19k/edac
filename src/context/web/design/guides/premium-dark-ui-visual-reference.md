@@ -1,4 +1,8 @@
-<!-- Context: web/premium-dark-ui-visual-reference | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Quick visual guide for the premium dark aesthetic.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Premium Dark UI - Visual Reference
 

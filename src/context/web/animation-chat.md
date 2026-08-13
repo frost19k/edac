@@ -1,4 +1,9 @@
-<!-- Context: web/animation-chat | Priority: medium | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Animation patterns for message entrances, typing indicators, and chat interactions.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Chat UI Animation Patterns
 
 Animation patterns for message entrances, typing indicators, and chat interactions.

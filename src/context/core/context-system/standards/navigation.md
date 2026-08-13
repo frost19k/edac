@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standards and templates for context files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System Standards
-
-**Purpose**: Standards and templates for context files
 
 ---
 
@@ -15,7 +17,6 @@ standards/
 ├── frontmatter.md
 ├── mvi.md
 ├── structure.md
-├── templates.md
 ├── templates-concept-example.md
 ├── templates-guide-lookup.md
 └── templates-error-navigation.md
@@ -30,7 +31,6 @@ standards/
 | **MVI principle** | `mvi.md` |
 | **Frontmatter format** | `frontmatter.md` |
 | **File structure** | `structure.md` |
-| **File templates** | `templates.md` |
 | **Concept/Example templates** | `templates-concept-example.md` |
 | **Guide/Lookup templates** | `templates-guide-lookup.md` |
 | **Error/Navigation templates** | `templates-error-navigation.md` |
@@ -47,7 +47,7 @@ standards/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Context System** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

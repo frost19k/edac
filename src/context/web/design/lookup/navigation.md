@@ -1,8 +1,10 @@
-<!-- Context: web/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Quick reference for web design patterns and prompts
+version: 1.0
+updated: 2026-08-13
+---
 
 # Web Design Lookup
-
-**Purpose**: Quick reference for web design patterns and prompts
 
 ---
 
@@ -32,7 +34,7 @@ lookup/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Web Design** → `../navigation.md`
 - **Concepts** → `../concepts/navigation.md`

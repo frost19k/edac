@@ -1,65 +1,74 @@
-<!-- Context: core/context-system/standards | Priority: critical | Version: 1.1 | Updated: 2026-07-28 -->
+---
+description: YAML frontmatter format for all context files
+version: 1.0
+updated: 2026-08-13
+---
+
 # Frontmatter Format
-
-**Purpose**: HTML comment frontmatter format for all context files
-
-**Last Updated**: 2026-07-28
 
 ---
 
 ## Format
 
 <rule id="frontmatter_required" enforcement="strict">
-  ALL context files MUST start with:
-  
-  ```markdown
-  <!-- Context: {category}/{function} | Priority: {level} | Version: X.Y | Updated: YYYY-MM-DD -->
+  ALL context files MUST start with YAML frontmatter:
+
+  ```yaml
+  ---
+  description: <one-line purpose>
+  version: 1.0
+  updated: YYYY-MM-DD
+  ---
   ```
 </rule>
 
 ---
 
-## Components
+## Fields
 
-**Category/Function**: `{category}/{function}`
-- Examples: `ecommerce/concepts`, `development/examples`, `core/standards`
-- Category = domain (ecommerce, payments, development)
-- Function = file type (concepts, examples, guides, lookup, errors)
+**description**: One-line purpose statement. Subsumes the former body `**Purpose**:` line — do not duplicate it in the body.
 
-**Priority**: `critical` | `high` | `medium` | `low`
-- critical: 80% of use cases (business logic, core concepts)
-- high: 15% of use cases (common workflows, examples)
-- medium: 4% of use cases (edge cases)
-- low: 1% of use cases (rare scenarios)
+**version**: `X.Y` (start 1.0, increment on changes).
 
-**Version**: `X.Y` (start 1.0, increment on changes)
-
-**Updated**: `YYYY-MM-DD` (ISO 8601, must match metadata section)
+**updated**: `YYYY-MM-DD` (ISO 8601). This is the single source of truth for the file's last-modified date — do not duplicate it as a body `**Last Updated**` line.
 
 ---
 
 ## Examples
 
-```markdown
-<!-- Context: ecommerce/concepts | Priority: critical | Version: 1.0 | Updated: 2026-01-27 -->
-<!-- Context: payments/guides | Priority: high | Version: 1.2 | Updated: 2026-01-27 -->
-<!-- Context: dev/examples | Priority: medium | Version: 1.0 | Updated: 2026-01-27 -->
+```yaml
+---
+description: Consistent naming across agents, context files, and registry entries
+version: 1.0
+updated: 2026-08-13
+---
+```
+
+```yaml
+---
+description: REST API design principles, GraphQL patterns, and API versioning strategies
+version: 1.2
+updated: 2026-08-13
+---
 ```
 
 ---
 
 ## Validation
 
-- [ ] Frontmatter is first line?
-- [ ] Format exact: `<!-- Context: ... -->`?
-- [ ] Priority is critical|high|medium|low?
-- [ ] Version is X.Y?
-- [ ] Date is YYYY-MM-DD?
+- [ ] Frontmatter is the first block in the file (before the H1)?
+- [ ] Has `description` (one-line purpose)?
+- [ ] Has `version` (X.Y format)?
+- [ ] Has `updated` (YYYY-MM-DD)?
+- [ ] No body-level `**Purpose**:` line (subsumed into `description`)?
+- [ ] No body-level `**Last Updated**` line (subsumed into `updated`)?
 
 ---
 
-## Related
+## Related Files
 
-- structure.md - File organization
-- templates.md - File templates
-- codebase-references.md - Linking to code
+- [structure.md](./structure.md) — File organization
+- [templates-concept-example.md](./templates-concept-example.md) — Concept & Example templates
+- [templates-guide-lookup.md](./templates-guide-lookup.md) — Guide & Lookup templates
+- [templates-error-navigation.md](./templates-error-navigation.md) — Error, Navigation & Specialized templates
+- [codebase-references.md](./codebase-references.md) — Linking to code

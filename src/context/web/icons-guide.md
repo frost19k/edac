@@ -1,7 +1,10 @@
-<!-- Context: web/icons | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# Icon Systems
+---
+description: Guidelines for using icon libraries
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Guidelines for using icon libraries
+# Icon Systems
 
 ---
 
@@ -137,7 +140,7 @@ Status: check, x, alert-circle, info, help-circle
 
 ---
 
-## Related
+## Related Files
 
 - `images-guide.md` - Image guidelines
 - `fonts-guide.md` - Font loading

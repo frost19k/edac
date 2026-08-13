@@ -1,4 +1,8 @@
-<!-- Context: core/task-management/standards | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: "Line-number precision, backward compatibility, and adoption guide. See `task-fields.md` for field definitions and `task-examples.md` for value examples."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Enhanced Task Schema — Migration Guide
 
@@ -84,7 +88,7 @@ When reading tasks:
       "reason": "Pure function patterns for auth service"
     },
     {
-      "path": ".opencode/context/core/standards/security-patterns.md",
+      "path": ".opencode/context/core/standards/code-quality.md",
       "lines": "120-145,200-220",
       "reason": "JWT validation and token refresh patterns"
     }
@@ -155,7 +159,7 @@ When reading tasks:
 
 ---
 
-## Related
+## Related Files
 
 - `task-fields.md` — Field definitions and TypeScript interfaces
 - `task-examples.md` — Field value examples and common patterns

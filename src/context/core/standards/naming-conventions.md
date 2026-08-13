@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Consistent naming across agents, context files, registry entries, and eval tests
+version: 1.0
+updated: 2026-08-13
+---
 
 # Naming Conventions
-
-**Purpose**: Consistent naming across agents, context files, registry entries, and eval tests
 
 ---
 
@@ -97,6 +99,6 @@ open-agent.md     → OpenAgent
 
 ---
 
-## Related
+## Related Files
 
 - `navigation.md` — Core standards index

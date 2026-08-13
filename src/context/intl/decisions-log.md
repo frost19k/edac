@@ -1,8 +1,10 @@
-<!-- Context: intl/decisions | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+---
+description: "Record major architectural and business decisions with full context. This prevents \"why was this done?\" debates."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Decisions Log
-
-> Record major architectural and business decisions with full context. This prevents "why was this done?" debates.
 
 ## Quick Reference
 

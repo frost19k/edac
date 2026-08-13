@@ -1,8 +1,10 @@
-<!-- Context: intl/notes | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+---
+description: "Active issues, technical debt, open questions, and insights that don't fit elsewhere. Keep this alive."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Living Notes
-
-> Active issues, technical debt, open questions, and insights that don't fit elsewhere. Keep this alive.
 
 ## Quick Reference
 

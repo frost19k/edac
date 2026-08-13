@@ -1,4 +1,8 @@
-<!-- Context: workflows/session-context | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: "Session context pattern: persistent context file for sharing state across stateless agents in multi-agent orchestration"
+version: 1.0
+updated: 2026-08-13
+---
 
 # Session Context Pattern
 
@@ -9,7 +13,7 @@
 When orchestrating complex features across multiple agents (TaskManager → CoderAgent → TestEngineer), each agent is stateless and loses context between delegations:
 
 - **TaskManager** creates subtasks but doesn't know what ContextScout discovered
-- **CoderAgent** doesn't see what ArchitectureAnalyzer decided
+- **CoderAgent** doesn't see what ContextScout decided
 - **TestEngineer** doesn't know what files CoderAgent created
 - **Orchestrator** has to manually pass context in every delegation
 
@@ -39,7 +43,7 @@ This file acts as the **shared memory** for the entire orchestration session.
 ```
 1. Orchestrator creates session → context.md initialized
 2. ContextScout updates → adds context_files
-3. ArchitectureAnalyzer updates → adds bounded_context, module
+3. ContextScout updates → adds bounded_context, module
 4. TaskManager reads context → creates subtasks with full context
 5. CoderAgent reads context → knows all decisions, files, contracts
 6. TestEngineer reads context → knows what to test
@@ -69,18 +73,18 @@ Status: in_progress | completed | blocked
 
 ## Architecture
 
-- Bounded Context: {DDD context from ArchitectureAnalyzer}
+- Bounded Context: {DDD context from ContextScout}
 - Module: {Package/module name}
-- Vertical Slice: {Feature slice from StoryMapper}
+- Vertical Slice: {Feature slice from TaskManager}
 
 ## User Stories
 
-- {Story 1 from StoryMapper}
+- {Story 1 from TaskManager}
 - {Story 2}
 
 ## Priorities
 
-- RICE Score: {score from PrioritizationEngine}
+- RICE Score: {score from TaskManager}
 - WSJF Score: {score}
 - Release Slice: {v1.0.0, Q1-2026, MVP}
 
@@ -173,11 +177,11 @@ import { updateSession, markStageComplete } from "./session-context-manager";
 updateSession(sessionId, {
   contextFiles: [
     ".opencode/context/core/standards/code-quality.md",
-    ".opencode/context/core/standards/security-patterns.md",
+    ".opencode/context/core/standards/code-quality.md",
   ],
 });
 
-// After ArchitectureAnalyzer completes
+// After ContextScout completes
 updateSession(sessionId, {
   architecture: {
     boundedContext: "authentication",
@@ -291,7 +295,7 @@ import { updateSession } from "./session-context-manager";
 updateSession(sessionId, {
   contextFiles: [
     ".opencode/context/core/standards/code-quality.md",
-    ".opencode/context/core/standards/security-patterns.md",
+    ".opencode/context/core/standards/code-quality.md",
     "(example: .opencode/context/core/standards/naming-conventions.md)",
   ],
   referenceFiles: [
@@ -301,7 +305,7 @@ updateSession(sessionId, {
 });
 ```
 
-### ArchitectureAnalyzer
+### ContextScout
 
 **After Analysis: Update Session**
 
@@ -323,7 +327,7 @@ addDecision(sessionId, {
 });
 ```
 
-### ContractManager
+### CodeReviewer
 
 **After Contract Definition: Update Session**
 
@@ -630,7 +634,7 @@ updateSession(sessionId, {
 });
 markStageComplete(sessionId, "Stage 0: Context Loading", []);
 
-// Stage 1: ArchitectureAnalyzer analyzes
+// Stage 1: ContextScout analyzes
 updateSession(sessionId, {
   architecture: { boundedContext: "authentication", module: "@app/auth" },
 });
@@ -659,7 +663,7 @@ markStageComplete(sessionId, "Stage 3: Implementation", [
 updateSession(sessionId, { status: "completed" });
 ```
 
-## Related
+## Related Files
 
 - `.opencode/skills/task-management/scripts/session-context-manager.ts` - Implementation
 - `.opencode/context/core/task-management/standards/task-schema.md` - Task JSON schema

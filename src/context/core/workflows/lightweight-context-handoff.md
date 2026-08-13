@@ -1,4 +1,9 @@
-<!-- Context: workflows/lightweight-context-handoff | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: "Lightweight context handoff pattern: context index for efficient multi-agent orchestration without context bloat"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Lightweight Context Handoff Pattern
 
 ## Problem
@@ -44,7 +49,7 @@ Orchestrator → Agent: "Here's the entire session context with everything from 
   created: "2026-02-15T10:00:00Z",
   updated: "2026-02-15T10:30:00Z",
   agents: {
-    "ArchitectureAnalyzer": {
+    "ContextScout": {
       outputs: [".tmp/architecture/auth-system/contexts.json"],
       metadata: { 
         boundedContext: "authentication", 
@@ -52,7 +57,7 @@ Orchestrator → Agent: "Here's the entire session context with everything from 
       },
       timestamp: "2026-02-15T10:05:00Z"
     },
-    "StoryMapper": {
+    "TaskManager": {
       outputs: [".tmp/story-maps/auth-system/map.json"],
       metadata: { 
         verticalSlice: "user-login" 
@@ -119,10 +124,10 @@ Track what each agent produced.
 ```typescript
 import { addAgentOutput } from './context-index';
 
-// After ArchitectureAnalyzer completes
+// After ContextScout completes
 addAgentOutput(
   'auth-system',
-  'ArchitectureAnalyzer',
+  'ContextScout',
   '.tmp/architecture/auth-system/contexts.json',
   { 
     boundedContext: 'authentication',
@@ -130,10 +135,10 @@ addAgentOutput(
   }
 );
 
-// After StoryMapper completes
+// After TaskManager completes
 addAgentOutput(
   'auth-system',
-  'StoryMapper',
+  'TaskManager',
   '.tmp/story-maps/auth-system/map.json',
   { 
     verticalSlice: 'user-login'
@@ -148,15 +153,15 @@ Get ONLY the files needed for a specific agent type.
 ```typescript
 import { getContextForAgent } from './context-index';
 
-// StoryMapper needs: ArchitectureAnalyzer output + story context
-const result = getContextForAgent('auth-system', 'StoryMapper');
+// TaskManager needs: ContextScout output + story context
+const result = getContextForAgent('auth-system', 'TaskManager');
 
 // Returns:
 {
   success: true,
   context: {
     feature: "auth-system",
-    agentType: "StoryMapper",
+    agentType: "TaskManager",
     contextFiles: [
       "(example: .opencode/context/core/story-mapping/guide.md)"
     ],
@@ -190,7 +195,7 @@ const result = getFullContext('auth-system');
 
 Each agent type gets a minimal, focused context:
 
-### ArchitectureAnalyzer
+### ContextScout
 **Needs:**
 - Architecture patterns context files
 - Reference files (existing code)
@@ -209,9 +214,9 @@ Each agent type gets a minimal, focused context:
 }
 ```
 
-### StoryMapper
+### TaskManager
 **Needs:**
-- ArchitectureAnalyzer output
+- ContextScout output
 - Story mapping context files
 
 **Gets:**
@@ -231,9 +236,9 @@ Each agent type gets a minimal, focused context:
 }
 ```
 
-### PrioritizationEngine
+### TaskManager
 **Needs:**
-- StoryMapper output
+- TaskManager output
 - Prioritization context files
 
 **Gets:**
@@ -271,8 +276,8 @@ Each agent type gets a minimal, focused context:
     ".tmp/planning/prioritized.json"
   ],
   metadata: {
-    ArchitectureAnalyzer: { boundedContext: "authentication" },
-    StoryMapper: { verticalSlice: "user-login" }
+    ContextScout: { boundedContext: "authentication" },
+    TaskManager: { verticalSlice: "user-login" }
   }
 }
 ```
@@ -322,37 +327,37 @@ createContextIndex('auth-system', {
   ]
 });
 
-// 2. Delegate to ArchitectureAnalyzer
-const archContext = getContextForAgent('auth-system', 'ArchitectureAnalyzer');
+// 2. Delegate to ContextScout
+const archContext = getContextForAgent('auth-system', 'ContextScout');
 // Pass ONLY: archContext.contextFiles + archContext.referenceFiles
 
-// 3. ArchitectureAnalyzer completes → Read output and update index
+// 3. ContextScout completes → Read output and update index
 addAgentOutput(
   'auth-system',
-  'ArchitectureAnalyzer',
+  'ContextScout',
   '.tmp/architecture/auth-system/contexts.json',
   { boundedContext: 'authentication', module: 'auth-service' }
 );
 
-// 4. Delegate to StoryMapper
-const storyContext = getContextForAgent('auth-system', 'StoryMapper');
+// 4. Delegate to TaskManager
+const storyContext = getContextForAgent('auth-system', 'TaskManager');
 // Pass ONLY: 
 //   - storyContext.contextFiles (story mapping guide)
-//   - storyContext.agentOutputs (ArchitectureAnalyzer output path)
+//   - storyContext.agentOutputs (ContextScout output path)
 
-// 5. StoryMapper completes → Update index
+// 5. TaskManager completes → Update index
 addAgentOutput(
   'auth-system',
-  'StoryMapper',
+  'TaskManager',
   '.tmp/story-maps/auth-system/map.json',
   { verticalSlice: 'user-login' }
 );
 
-// 6. Delegate to PrioritizationEngine
-const prioContext = getContextForAgent('auth-system', 'PrioritizationEngine');
+// 6. Delegate to TaskManager
+const prioContext = getContextForAgent('auth-system', 'TaskManager');
 // Pass ONLY:
 //   - prioContext.contextFiles (prioritization guide)
-//   - prioContext.agentOutputs (StoryMapper output path)
+//   - prioContext.agentOutputs (TaskManager output path)
 
 // 7. Continue pattern through all agents...
 ```
@@ -474,7 +479,7 @@ createContextIndex('auth-system', {
 ```typescript
 // BAD: Agent gets everything
 const index = getFullContext('auth-system');
-task(subagent_type="StoryMapper", prompt=JSON.stringify(index));
+task(subagent_type="TaskManager", prompt=JSON.stringify(index));
 ```
 
 **Why bad:** Agent wastes time parsing irrelevant data
@@ -483,7 +488,7 @@ task(subagent_type="StoryMapper", prompt=JSON.stringify(index));
 
 ```typescript
 // BAD: Storing full file contents
-addAgentOutput('auth-system', 'ArchitectureAnalyzer', outputPath, {
+addAgentOutput('auth-system', 'ContextScout', outputPath, {
   fullContent: fs.readFileSync(outputPath, 'utf-8') // DON'T DO THIS
 });
 ```
@@ -494,7 +499,7 @@ addAgentOutput('auth-system', 'ArchitectureAnalyzer', outputPath, {
 
 ```typescript
 // BAD: Agent completes but orchestrator doesn't update index
-task(subagent_type="ArchitectureAnalyzer", ...);
+task(subagent_type="ContextScout", ...);
 // ... agent completes ...
 // (orchestrator forgets to call addAgentOutput)
 ```
@@ -519,12 +524,12 @@ console.log("Review this:", JSON.stringify(index));
 
 ```typescript
 // Agent completes
-const result = await task(subagent_type="ArchitectureAnalyzer", ...);
+const result = await task(subagent_type="ContextScout", ...);
 
 // Immediately update index
 addAgentOutput(
   'auth-system',
-  'ArchitectureAnalyzer',
+  'ContextScout',
   '.tmp/architecture/auth-system/contexts.json',
   { boundedContext: 'authentication' }
 );
@@ -534,14 +539,14 @@ addAgentOutput(
 
 ```typescript
 // GOOD: Small metadata that helps next agent
-addAgentOutput('auth-system', 'ArchitectureAnalyzer', outputPath, {
+addAgentOutput('auth-system', 'ContextScout', outputPath, {
   boundedContext: 'authentication',
   module: 'auth-service',
   complexity: 'medium'
 });
 
 // BAD: Large data that should stay in files
-addAgentOutput('auth-system', 'ArchitectureAnalyzer', outputPath, {
+addAgentOutput('auth-system', 'ContextScout', outputPath, {
   fullAnalysis: { /* 1000 lines of JSON */ }
 });
 ```
@@ -550,16 +555,16 @@ addAgentOutput('auth-system', 'ArchitectureAnalyzer', outputPath, {
 
 ```typescript
 // GOOD: Agent reads the file
-const context = getContextForAgent('auth-system', 'StoryMapper');
+const context = getContextForAgent('auth-system', 'TaskManager');
 task(
-  subagent_type="StoryMapper",
+  subagent_type="TaskManager",
   prompt=`Read architecture analysis: ${context.agentOutputs[0]}`
 );
 
 // BAD: Orchestrator reads and passes content
 const archOutput = fs.readFileSync('.tmp/architecture/...', 'utf-8');
 task(
-  subagent_type="StoryMapper",
+  subagent_type="TaskManager",
   prompt=`Here's the full architecture: ${archOutput}`
 );
 ```
@@ -598,19 +603,19 @@ npx ts-node context-index.ts create auth-system
 ```bash
 npx ts-node context-index.ts add-output \
   auth-system \
-  ArchitectureAnalyzer \
+  ContextScout \
   .tmp/architecture/auth-system/contexts.json \
   '{"boundedContext":"authentication","module":"auth-service"}'
-# ✅ Added ArchitectureAnalyzer output: .tmp/architecture/auth-system/contexts.json
+# ✅ Added ContextScout output: .tmp/architecture/auth-system/contexts.json
 ```
 
 ### Get Context for Agent
 
 ```bash
-npx ts-node context-index.ts get-context auth-system StoryMapper
+npx ts-node context-index.ts get-context auth-system TaskManager
 # {
 #   "feature": "auth-system",
-#   "agentType": "StoryMapper",
+#   "agentType": "TaskManager",
 #   "contextFiles": ["(example: .opencode/context/core/story-mapping/guide.md)"],
 #   "agentOutputs": [".tmp/architecture/auth-system/contexts.json"],
 #   "metadata": {"boundedContext":"authentication"}

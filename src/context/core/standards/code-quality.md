@@ -1,4 +1,9 @@
-<!-- Context: standards/code | Priority: critical | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: "Code quality standards: modular, functional, and maintainable patterns for all development"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Code Standards
 
 ## Quick Reference
@@ -12,10 +17,12 @@
 - ✅ Composition (build complex from simple)
 - ✅ Small functions (< 50 lines)
 - ✅ Explicit dependencies (dependency injection)
+- ✅ Error handling, input validation, secure secrets
 
 **Anti-Patterns** (avoid these):
 - ❌ Mutation, side effects, deep nesting
 - ❌ God modules, global state, large functions
+- ❌ Hardcoded credentials, unvalidated input
 
 ---
 
@@ -162,3 +169,93 @@ function createUser(userData) { return db.insert('users', userData); }
 ✅ Test in isolation
 
 **Golden Rule**: If you can't easily test it, refactor it.
+
+---
+
+## Validation
+
+**ALWAYS** validate input data:
+- Check for null/nil/None values
+- Validate data types and ranges
+- Sanitize user input
+- Return clear validation error messages
+
+## Security
+
+**NEVER** expose sensitive information:
+- Don't log passwords, tokens, or API keys
+- Don't expose internal error details to users
+- Use environment variables for secrets
+- Follow principle of least privilege
+- Use parameterized queries (prevent SQL injection)
+- Validate and escape output (prevent XSS)
+
+## Logging
+
+**USE** consistent logging levels:
+- **Debug**: Detailed information (development only)
+- **Info**: Important events and milestones
+- **Warning**: Potential issues that don't stop execution
+- **Error**: Failures and exceptions
+
+## File System Safety
+
+**ALWAYS** validate file paths:
+- Prevent path traversal attacks
+- Check file permissions before operations
+- Use absolute paths when possible
+- Handle file not found errors gracefully
+
+## Configuration
+
+**ALWAYS** use environment variables for configuration:
+- Never hardcode secrets or credentials
+- Provide sensible defaults
+- Validate required configuration on startup
+- Use different configs for dev/staging/production
+
+## Performance
+
+**AVOID** unnecessary operations:
+- Don't repeat expensive calculations
+- Cache results when appropriate
+- Use efficient data structures
+- Profile before optimizing
+
+## Dependency Management
+
+**MANAGE** dependencies carefully:
+- Pin dependency versions for reproducibility
+- Regularly update dependencies for security
+- Minimize number of dependencies
+- Audit dependencies for security vulnerabilities
+
+## Version Control
+
+**FOLLOW** git best practices:
+- Write clear, descriptive commit messages
+- Make atomic commits (one logical change per commit)
+- Use feature branches for development
+- Review code before merging
+
+## Code Review Checklist
+
+**REVIEW** for these common issues:
+- [ ] Error handling is comprehensive
+- [ ] Input validation is present
+- [ ] No hardcoded secrets or credentials
+- [ ] Tests cover new functionality
+- [ ] Documentation is updated
+- [ ] No obvious security vulnerabilities
+
+## Quick Checklist
+
+Before committing code, verify:
+- ✅ Pure functions (no side effects)
+- ✅ Input validation
+- ✅ Error handling
+- ✅ No hardcoded secrets
+- ✅ Tests written and passing
+- ✅ Documentation updated
+- ✅ No security vulnerabilities
+- ✅ Code is modular and maintainable

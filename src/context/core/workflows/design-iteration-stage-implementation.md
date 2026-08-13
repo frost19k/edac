@@ -1,7 +1,10 @@
-<!-- Context: workflows/design-iteration-stage-implementation | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
-# Stage 4: Implementation
+---
+description: Generate complete HTML file with all components
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Generate complete HTML file with all components
+# Stage 4: Implementation
 
 ## Process
 

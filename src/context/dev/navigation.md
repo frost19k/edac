@@ -1,8 +1,10 @@
-<!-- Context: dev/navigation | Priority: critical | Version: 1.0 | Updated: 2026-07-27 -->
+---
+description: Software development across all stacks
+version: 1.0
+updated: 2026-08-13
+---
 
 # Development Navigation
-
-**Purpose**: Software development across all stacks
 
 ---
 
@@ -11,7 +13,6 @@
 ```
 dev/
 ├── navigation.md
-├── ui-navigation.md           # Specialized
 ├── backend-navigation.md      # Specialized
 ├── fullstack-navigation.md    # Specialized
 │
@@ -31,7 +32,6 @@ dev/
 
 | Task | Path |
 |------|------|
-| **UI/Frontend** | `ui-navigation.md` |
 | **When to delegate frontend** | `frontend/when-to-delegate.md` |
 | **Backend/API** | `backend-navigation.md` |
 | **Full-stack** | `fullstack-navigation.md` |
@@ -47,7 +47,7 @@ dev/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Core Standards** → `../core/standards/navigation.md`
 - **UI Patterns** → `../web/navigation.md`

@@ -1,10 +1,10 @@
-<!-- Context: core/structure | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Function-based folder organization for easy discovery
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Structure
-
-**Purpose**: Function-based folder organization for easy discovery
-
-**Last Updated**: 2026-07-28
 
 ---
 
@@ -149,7 +149,7 @@ When organizing a file, ask:
 
 ### ❌ Flat Structure
 ```
-development/
+dev/
 ├── authentication.md
 ├── jwt-example.md
 ├── setting-up-auth.md
@@ -160,7 +160,7 @@ development/
 
 ### ✅ Function-Based
 ```
-development/
+dev/
 ├── navigation.md
 ├── concepts/authentication.md
 ├── examples/jwt-example.md
@@ -184,7 +184,7 @@ Before committing context structure:
 
 ---
 
-## Related
+## Related Files
 
 - [mvi.md](./mvi.md) - What to extract
 - [../guides/creation.md](../guides/creation.md) - How to create files

@@ -1,7 +1,10 @@
-<!-- Context: workflows/design-iteration-stage-layout | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
-# Stage 1: Layout Design
+---
+description: Define the structure and component hierarchy before visual design
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Define the structure and component hierarchy before visual design
+# Stage 1: Layout Design
 
 ## Process
 

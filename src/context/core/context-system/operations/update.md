@@ -1,10 +1,10 @@
-<!-- Context: core/update | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Update context when APIs, frameworks, or contracts change
+version: 1.0
+updated: 2026-08-13
+---
 
 # Update Operation
-
-**Purpose**: Update context when APIs, frameworks, or contracts change
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -230,7 +230,7 @@ Rollback available if needed.
 
 ---
 
-## Related
+## Related Files
 
 - guides/workflows.md - Interactive diff examples
 - standards/mvi.md - Maintain MVI format

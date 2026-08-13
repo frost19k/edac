@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: JSON schemas and standards for task definitions
+version: 1.0
+updated: 2026-08-13
+---
 
 # Task Management Standards
-
-**Purpose**: JSON schemas and standards for task definitions
 
 ---
 
@@ -41,7 +43,7 @@ standards/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Task Management** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

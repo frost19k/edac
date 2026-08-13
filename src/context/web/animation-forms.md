@@ -1,4 +1,9 @@
-<!-- Context: web/animation-forms | Priority: medium | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Animation patterns for form inputs, validation states, and scroll animations.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Form Animation Patterns
 
 Animation patterns for form inputs, validation states, and scroll animations.

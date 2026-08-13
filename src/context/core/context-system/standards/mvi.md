@@ -1,10 +1,10 @@
-<!-- Context: core/mvi | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Extract only core concepts, not verbose explanations
+version: 1.0
+updated: 2026-08-13
+---
 
 # MVI Principle (Minimal Viable Information)
-
-**Purpose**: Extract only core concepts, not verbose explanations
-
-**Last Updated**: 2026-07-28
 
 ---
 
@@ -143,9 +143,11 @@ If any answer is "no", apply more compression.
 
 ---
 
-## Related
+## Related Files
 
 - structure.md - Where files go
 - [../guides/compact.md](../guides/compact.md) - How to minimize
-- templates.md - Standard formats
+- templates-concept-example.md - Concept and example formats
+- templates-guide-lookup.md - Guide and lookup formats
+- templates-error-navigation.md - Error and navigation formats
 - [../guides/creation.md](../guides/creation.md) - File creation rules

@@ -1,10 +1,10 @@
-<!-- Context: core/migrate | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: "Copy context files from global (`~/.config/opencode/context/`) to local (`.opencode/context/`) so they're project-specific and git-committed."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Migrate Operation
-
-**Purpose**: Copy context files from global (`~/.config/opencode/context/`) to local (`.opencode/context/`) so they're project-specific and git-committed.
-
-**Last Updated**: 2026-02-06
 
 ---
 
@@ -216,7 +216,7 @@ If you installed to a custom location, set EDAC_INSTALL_DIR:
 
 ---
 
-## Related
+## Related Files
 
 - `/add-context` — Create new project intelligence (interactive wizard)
 - `/context harvest` — Extract knowledge from summaries

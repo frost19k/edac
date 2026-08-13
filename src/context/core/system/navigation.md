@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: System guides and paths for core operations
+version: 1.0
+updated: 2026-08-13
+---
 
 # Core System
-
-**Purpose**: System guides and paths for core operations
 
 ---
 
@@ -33,7 +35,7 @@ core/system/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Core Navigation** → `../navigation.md`
 - **Context System** → `../context-system/navigation.md`

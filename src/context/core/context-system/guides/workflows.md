@@ -1,10 +1,10 @@
-<!-- Context: core/workflows | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Detailed interactive workflows for all context operations
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Operation Workflows
-
-**Purpose**: Detailed interactive workflows for all context operations
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -43,7 +43,7 @@ Found 3 workflows:
 ### Stage 3: Select Category (APPROVAL REQUIRED)
 ```
 Agent: "Which category should this go in?
-  [1] development/
+  [1] dev/
   [2] core/
   [3] Create new category: ___
 
@@ -71,7 +71,7 @@ User: "all 1"
 
 ### Stage 4: Preview (APPROVAL REQUIRED)
 ```
-Agent: "Would create in development/:
+Agent: "Would create in dev/:
 
   concepts/use-state.md (45 lines)
   concepts/use-effect.md (52 lines)
@@ -100,14 +100,14 @@ User: "yes"
 ### Stage 5-7: Create, Update, Report
 ```
 Agent: "Creating files...
-✅ Extracted 20 items into development/
+✅ Extracted 20 items into dev/
 📄 Created 15 files
-📊 Updated development/README.md
+📊 Updated dev/README.md
 
 Files created:
-  - development/concepts/ (12 files)
-  - development/errors/react-hooks-errors.md
-  - development/guides/ (3 files)"
+  - dev/concepts/ (12 files)
+  - dev/errors/react-hooks-errors.md
+  - dev/guides/ (3 files)"
 ```
 
 ---
@@ -116,9 +116,9 @@ Files created:
 
 ### Stage 1-2: Scan & Categorize
 ```
-/context organize development/
+/context organize dev/
   ↓
-Agent: "Scanning development/ (23 files, flat structure)...
+Agent: "Scanning dev/ (23 files, flat structure)...
 
 Categorizing by function..."
 ```
@@ -190,11 +190,11 @@ User: "A D G J M"
 Agent: "Preview of changes:
 
 CREATE directories:
-  development/concepts/
-  development/examples/
-  development/guides/
-  development/lookup/
-  development/errors/
+  dev/concepts/
+  dev/examples/
+  dev/guides/
+  dev/lookup/
+  dev/errors/
 
 MOVE files (18):
   authentication.md → concepts/authentication.md
@@ -219,7 +219,7 @@ MERGE files (2):
   jwt-example.md → examples/jwt.md (merge content)
 
 UPDATE:
-  development/README.md (create navigation tables)
+  dev/README.md (create navigation tables)
   Fix 47 internal references
 
 Dry-run? (yes/no/show-diff):"
@@ -241,7 +241,7 @@ Executing changes...
 📁 Created 5 new folders
 🔀 Split 3 ambiguous files
 🔗 Fixed 47 references
-📊 Updated development/README.md
+📊 Updated dev/README.md
 
 Rollback available at: .tmp/backup/organize-development-2026-01-06-143022/"
 ```
@@ -403,13 +403,13 @@ Rollback available at: .tmp/backup/update-nextjs-2026-01-06-143530/"
 Agent: "Searching existing errors for similar issues...
 
 Found 1 similar error:
-  📄 development/errors/react-errors.md (Line 45)
+  📄 dev/errors/react-errors.md (Line 45)
      ## Error: Cannot read property 'X' of undefined
      Covers: General undefined property access in React
      Frequency: common
 
 Found 2 related errors:
-  📄 development/errors/react-errors.md
+  📄 dev/errors/react-errors.md
      ## Error: Cannot read property 'length' of undefined
      ## Error: Undefined is not an object"
 ```
@@ -438,7 +438,7 @@ User: "B 1"
 
 ### Stage 3: Preview (APPROVAL REQUIRED)
 ```
-Agent: "Would update development/errors/react-errors.md:
+Agent: "Would update dev/errors/react-errors.md:
 
 Current (Line 45):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -518,9 +518,9 @@ User: "yes"
 
 ### Stage 4-6: Add, Update, Report
 ```
-Agent: "Updating development/errors/react-errors.md...
+Agent: "Updating dev/errors/react-errors.md...
 
-✅ Updated error in development/errors/react-errors.md
+✅ Updated error in dev/errors/react-errors.md
 🔗 Cross-referenced with 2 related errors
 📊 File size: 105 lines (under 150 limit)
 
@@ -565,9 +565,9 @@ Operations that modify files MUST:
 
 ---
 
-## Related
+## Related Files
 
 - context.md - Main command interface
 - harvest.md - Harvest workflow details
-- mvi-principle.md - What to extract
+- mvi.md - What to extract
 - compact.md - How to minimize

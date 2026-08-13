@@ -1,7 +1,10 @@
-<!-- Context: workflows/design-iteration-stage-theme | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
-# Stage 2: Theme Design
+---
+description: Define colors, typography, spacing, and visual style
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Define colors, typography, spacing, and visual style
+# Stage 2: Theme Design
 
 ## Process
 

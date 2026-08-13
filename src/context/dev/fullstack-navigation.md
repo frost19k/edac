@@ -1,8 +1,10 @@
-<!-- Context: dev/navigation | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: End-to-end application development
+version: 1.0
+updated: 2026-08-13
+---
 
 # Full-Stack Development Navigation
-
-**Scope**: End-to-end application development
 
 ---
 
@@ -10,25 +12,25 @@
 
 ### MERN (MongoDB, Express, React, Node)
 ```
-Frontend: development/frontend/react/ [future]
-Backend:  development/backend/nodejs/express-patterns.md [future]
-Data:     development/data/nosql-patterns/mongodb.md [future]
-API:      development/backend/api-patterns/rest-design.md [future]
+Frontend: dev/frontend/react/ [future]
+Backend:  dev/backend/nodejs/express-patterns.md [future]
+Data:     dev/data/nosql-patterns/mongodb.md [future]
+API:      dev/backend/api-patterns/rest-design.md [future]
 ```
 
 ### T3 Stack (Next.js, tRPC, Prisma, Tailwind)
 ```
-Frontend: development/frontend/react/ + ui/web/ui-styling-standards.md [future]
-Backend:  development/backend/nodejs/ + api-patterns/trpc-patterns.md [future]
-Data:     development/data/orm-patterns/prisma.md [future]
+Frontend: dev/frontend/react/ + ui/web/ui-styling-standards.md [future]
+Backend:  dev/backend/nodejs/ + api-patterns/trpc-patterns.md [future]
+Data:     dev/data/orm-patterns/prisma.md [future]
 ```
 
 ### Python Full-Stack (FastAPI + React)
 ```
-Frontend: development/frontend/react/ [future]
-Backend:  development/backend/python/fastapi-patterns.md [future]
-Data:     development/data/sql-patterns/ or nosql-patterns/ [future]
-API:      development/backend/api-patterns/rest-design.md [future]
+Frontend: dev/frontend/react/ [future]
+Backend:  dev/backend/python/fastapi-patterns.md [future]
+Data:     dev/data/sql-patterns/ or nosql-patterns/ [future]
+API:      dev/backend/api-patterns/rest-design.md [future]
 ```
 
 ---
@@ -37,7 +39,7 @@ API:      development/backend/api-patterns/rest-design.md [future]
 
 | Layer | Navigate To |
 |-------|-------------|
-| **Frontend** | `ui-navigation.md` |
+| **Frontend** | `frontend/navigation.md` |
 | **Backend** | `backend-navigation.md` |
 | **Data** | `data/navigation.md` [future] |
 | **Integration** | `integration/navigation.md` [future] |
@@ -68,7 +70,7 @@ API:      development/backend/api-patterns/rest-design.md [future]
 
 ---
 
-## Related Context
+## Related Files
 
 - **Clean Code** → `principles/clean-code.md`
 - **API Design** → `principles/api-design.md`

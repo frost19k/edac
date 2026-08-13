@@ -1,10 +1,10 @@
-<!-- Context: core/context-system | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Minimal, concern-based knowledge organization for AI agents
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System
-
-**Purpose**: Minimal, concern-based knowledge organization for AI agents
-
-**Last Updated**: 2026-01-08
 
 ---
 
@@ -43,12 +43,12 @@ category/
 │   │   └── {files}.md
 ```
 
-**Use when**: Content spans multiple technologies (e.g., `development/`)
+**Use when**: Content spans multiple technologies (e.g., `dev/`)
 
 **Examples**:
-- `development/backend/api-patterns/` - Concern: backend, Approach: API patterns
-- `development/backend/nodejs/` - Concern: backend, Tech: Node.js
-- `development/frontend/react/` - Concern: frontend, Tech: React
+- `dev/backend/api-patterns/` - Concern: backend, Approach: API patterns
+- `dev/backend/nodejs/` - Concern: backend, Tech: Node.js
+- `dev/frontend/react/` - Concern: frontend, Tech: React
 
 ### 3. Token-Efficient Navigation
 Every category/subcategory has `navigation.md` with:
@@ -61,9 +61,8 @@ Every category/subcategory has `navigation.md` with:
 
 ### 4. Specialized Navigation Files
 For cross-cutting concerns, create specialized navigation:
-- `development/ui-navigation.md` - Spans frontend/ + ui/
-- `development/backend-navigation.md` - Covers APIs, auth, middleware
-- `development/fullstack-navigation.md` - Common tech stacks
+- `dev/backend-navigation.md` - Covers APIs, auth, middleware
+- `dev/fullstack-navigation.md` - Common tech stacks
 
 **Why**: Real workflows don't fit neat categories
 
@@ -84,14 +83,14 @@ Extract valuable context from AI summaries/overviews, then delete them. Workspac
 
 **Frameworks vs Architectural Layers**:
 
-- **Full-Stack Frameworks** (e.g., Tanstack Start, Next.js): Add under `development/frameworks/{tech}/`. These are "meta-frameworks" that span multiple layers.
-- **Specialized Concerns** (e.g., AI, Data): Add under `development/{concern}/{tech}/`.
-- **Layer-Specific Tech** (e.g., React, Node.js): Add under `development/{frontend|backend}/{tech}/`.
+- **Full-Stack Frameworks** (e.g., Tanstack Start, Next.js): Add under `dev/frameworks/{tech}/`. These are "meta-frameworks" that span multiple layers.
+- **Specialized Concerns** (e.g., AI, Data): Add under `dev/{concern}/{tech}/`.
+- **Layer-Specific Tech** (e.g., React, Node.js): Add under `dev/{frontend|backend}/{tech}/`.
 
 **Decision Process**:
-1. Is it a full-stack framework? → `development/frameworks/`
-2. Is it a specialized domain (AI, Data)? → `development/{domain}/`
-3. Is it layer-specific? → `development/{frontend|backend}/`
+1. Is it a full-stack framework? → `dev/frameworks/`
+2. Is it a specialized domain (AI, Data)? → `dev/{domain}/`
+3. Is it layer-specific? → `dev/{frontend|backend}/`
 
 ---
 
@@ -135,7 +134,7 @@ Extract valuable context from AI summaries/overviews, then delete them. Workspac
 
 ### Pattern B: Concern-Based (Development Context)
 
-**Use for**: Multi-technology development context (e.g., `development/`)
+**Use for**: Multi-technology development context (e.g., `dev/`)
 
 ```
 .opencode/context/{category}/
@@ -160,9 +159,8 @@ Extract valuable context from AI summaries/overviews, then delete them. Workspac
 
 **Example**:
 ```
-development/
+dev/
 ├── navigation.md
-├── ui-navigation.md                    # Specialized
 ├── backend-navigation.md               # Specialized
 ├── fullstack-navigation.md             # Specialized
 │
@@ -249,12 +247,10 @@ Location: `.opencode/context/core/standards/`
 - Security patterns
 - Code analysis approaches
 
-**Used by**: All agents, all projects
-
 **Effect on other categories**: 
 - Other categories can reference these standards
 - Users can edit core standards to affect context flow globally
-- Development-specific standards go in `development/principles/`
+- Development-specific standards go in `dev/principles/`
 
 ---
 
@@ -263,7 +259,7 @@ Location: `.opencode/context/core/standards/`
 | Location | Scope | Examples |
 |----------|-------|----------|
 | `core/standards/` | **Universal** (all projects, all languages) | Code quality, testing, docs, security |
-| `development/principles/` | **Development-specific** (software engineering) | Clean code, API design, error handling |
+| `dev/principles/` | **Development-specific** (software engineering) | Clean code, API design, error handling |
 
 **Both exist**: Core standards are universal, development principles are domain-specific
 
@@ -271,13 +267,13 @@ Location: `.opencode/context/core/standards/`
 
 ### 3. Data Context Location
 
-**Decision**: Data patterns live in `development/data/` (not top-level)
+**Decision**: Data patterns live in `dev/data/` (not top-level)
 
 **Rationale**: Data layer is part of development workflow
 
 **Structure**:
 ```
-development/data/
+dev/data/
 ├── navigation.md
 ├── sql-patterns/
 ├── nosql-patterns/
@@ -299,14 +295,14 @@ development/data/
 ## Quick Routes
 | Task | Path |
 |------|------|
-| **Frontend** | `ui-navigation.md` |
+| **Frontend** | `frontend/navigation.md` |
 
 ## Common Stacks
 
 ### MERN Stack
-Frontend: development/frontend/react/
-Backend:  development/backend/nodejs/
-Data:     development/data/nosql-patterns/mongodb.md
+Frontend: dev/frontend/react/
+Backend:  dev/backend/nodejs/
+Data:     dev/data/nosql-patterns/mongodb.md
 ```
 
 ---
@@ -424,10 +420,12 @@ Data:     development/data/nosql-patterns/mongodb.md
 
 ## Related Documentation
 
-- `context-system/guides/navigation-design.md` - How to create navigation files
+- `context-system/guides/navigation-design-basics.md` - How to create navigation files
 - `context-system/guides/organizing-context.md` - How to choose organizational pattern
 - `context-system/examples/navigation-examples.md` - Good navigation examples
-- `context-system/standards/templates.md` - File templates
+- `context-system/standards/templates-concept-example.md` - Concept and example templates
+- `context-system/standards/templates-guide-lookup.md` - Guide and lookup templates
+- `context-system/standards/templates-error-navigation.md` - Error and navigation templates
 
 ---
 

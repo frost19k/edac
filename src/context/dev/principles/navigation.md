@@ -1,8 +1,10 @@
-<!-- Context: dev/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Universal development principles (language-agnostic)
+version: 1.0
+updated: 2026-08-13
+---
 
 # Development Principles Navigation
-
-**Purpose**: Universal development principles (language-agnostic)
 
 ---
 
@@ -35,12 +37,12 @@
 | Location | Scope | Examples |
 |----------|-------|----------|
 | `core/standards/` | **Universal** (all projects) | Code quality, testing, docs, security |
-| `development/principles/` | **Development-specific** | Clean code, API design, error handling |
+| `dev/principles/` | **Development-specific** | Clean code, API design, error handling |
 
 ---
 
-## Related
+## Related Files
 
 - **Core Standards** → `../../core/standards/navigation.md`
 - **Backend Patterns** → `../backend-navigation.md`
-- **Frontend Patterns** → `../ui-navigation.md`
+- **Frontend Patterns** → `../frontend/navigation.md`

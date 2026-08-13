@@ -1,4 +1,9 @@
-<!-- Context: workflows/lightweight-context-handoff-example | Priority: reference | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: "Worked example of the lightweight context handoff pattern for JWT authentication implementation"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Lightweight Context Handoff - Orchestrator Example
 
 ## Complete Feature Implementation Using Context Index
@@ -55,17 +60,17 @@ const result = createContextIndex('auth-system', {
 
 ## Stage 1: Architecture Analysis
 
-### Step 2: Get Context for ArchitectureAnalyzer
+### Step 2: Get Context for ContextScout
 
 ```typescript
 import { getContextForAgent } from './.opencode/skills/task-management/scripts/context-index';
 
-const archContext = getContextForAgent('auth-system', 'ArchitectureAnalyzer');
+const archContext = getContextForAgent('auth-system', 'ContextScout');
 
 // Returns:
 {
   feature: "auth-system",
-  agentType: "ArchitectureAnalyzer",
+  agentType: "ContextScout",
   contextFiles: [
     "(example: .opencode/context/architecture/ddd-patterns.md)"
   ],
@@ -78,17 +83,17 @@ const archContext = getContextForAgent('auth-system', 'ArchitectureAnalyzer');
 }
 ```
 
-**Key Point:** ArchitectureAnalyzer gets ONLY:
+**Key Point:** ContextScout gets ONLY:
 - Architecture patterns context
 - Reference files to analyze
 - NO story mapping guide (not needed yet)
 - NO previous agent outputs (it's first)
 
-### Step 3: Delegate to ArchitectureAnalyzer
+### Step 3: Delegate to ContextScout
 
 ```typescript
 task(
-  subagent_type="ArchitectureAnalyzer",
+  subagent_type="ContextScout",
   description="Analyze authentication system architecture",
   prompt=`
     Analyze the architecture for implementing JWT authentication.
@@ -110,12 +115,12 @@ task(
 );
 ```
 
-### Step 4: ArchitectureAnalyzer Completes → Update Index
+### Step 4: ContextScout Completes → Update Index
 
 ```typescript
 import { addAgentOutput } from './.opencode/skills/task-management/scripts/context-index';
 
-// Read ArchitectureAnalyzer output
+// Read ContextScout output
 const archOutput = JSON.parse(
   fs.readFileSync('.tmp/architecture/auth-system/contexts.json', 'utf-8')
 );
@@ -123,7 +128,7 @@ const archOutput = JSON.parse(
 // Update index with output path and metadata
 addAgentOutput(
   'auth-system',
-  'ArchitectureAnalyzer',
+  'ContextScout',
   '.tmp/architecture/auth-system/contexts.json',
   {
     boundedContext: archOutput.primary_context,  // "authentication"
@@ -138,7 +143,7 @@ addAgentOutput(
 {
   "feature": "auth-system",
   "agents": {
-    "ArchitectureAnalyzer": {
+    "ContextScout": {
       "outputs": [".tmp/architecture/auth-system/contexts.json"],
       "metadata": {
         "boundedContext": "authentication",
@@ -156,15 +161,15 @@ addAgentOutput(
 
 ## Stage 2: Story Mapping
 
-### Step 5: Get Context for StoryMapper
+### Step 5: Get Context for TaskManager
 
 ```typescript
-const storyContext = getContextForAgent('auth-system', 'StoryMapper');
+const storyContext = getContextForAgent('auth-system', 'TaskManager');
 
 // Returns:
 {
   feature: "auth-system",
-  agentType: "StoryMapper",
+  agentType: "TaskManager",
   contextFiles: [
     "(example: .opencode/context/core/story-mapping/guide.md)"
   ],
@@ -180,17 +185,17 @@ const storyContext = getContextForAgent('auth-system', 'StoryMapper');
 }
 ```
 
-**Key Point:** StoryMapper gets:
+**Key Point:** TaskManager gets:
 - Story mapping guide (filtered from contextFiles)
-- ArchitectureAnalyzer output path (NOT full content)
-- Metadata from ArchitectureAnalyzer (small, useful data)
+- ContextScout output path (NOT full content)
+- Metadata from ContextScout (small, useful data)
 - NO reference files (doesn't need source code)
 
-### Step 6: Delegate to StoryMapper
+### Step 6: Delegate to TaskManager
 
 ```typescript
 task(
-  subagent_type="StoryMapper",
+  subagent_type="TaskManager",
   description="Create user story map for authentication",
   prompt=`
     Create a user story map for JWT authentication system.
@@ -201,7 +206,7 @@ task(
     Previous agent outputs to read:
     - ${storyContext.agentOutputs[0]}
     
-    Metadata from ArchitectureAnalyzer:
+    Metadata from ContextScout:
     - Bounded Context: ${storyContext.metadata.boundedContext}
     - Module: ${storyContext.metadata.module}
     
@@ -215,7 +220,7 @@ task(
 );
 ```
 
-### Step 7: StoryMapper Completes → Update Index
+### Step 7: TaskManager Completes → Update Index
 
 ```typescript
 const storyOutput = JSON.parse(
@@ -224,7 +229,7 @@ const storyOutput = JSON.parse(
 
 addAgentOutput(
   'auth-system',
-  'StoryMapper',
+  'TaskManager',
   '.tmp/story-maps/auth-system/map.json',
   {
     verticalSlice: storyOutput.primary_slice,  // "user-login"
@@ -237,15 +242,15 @@ addAgentOutput(
 
 ## Stage 3: Prioritization
 
-### Step 8: Get Context for PrioritizationEngine
+### Step 8: Get Context for TaskManager
 
 ```typescript
-const prioContext = getContextForAgent('auth-system', 'PrioritizationEngine');
+const prioContext = getContextForAgent('auth-system', 'TaskManager');
 
 // Returns:
 {
   feature: "auth-system",
-  agentType: "PrioritizationEngine",
+  agentType: "TaskManager",
   contextFiles: [],  // No prioritization context file in index
   referenceFiles: [],
   agentOutputs: [
@@ -258,16 +263,16 @@ const prioContext = getContextForAgent('auth-system', 'PrioritizationEngine');
 }
 ```
 
-**Key Point:** PrioritizationEngine gets:
-- StoryMapper output path (to read stories)
-- Metadata from StoryMapper
-- NO ArchitectureAnalyzer output (not needed)
+**Key Point:** TaskManager gets:
+- TaskManager output path (to read stories)
+- Metadata from TaskManager
+- NO ContextScout output (not needed)
 
-### Step 9: Delegate to PrioritizationEngine
+### Step 9: Delegate to TaskManager
 
 ```typescript
 task(
-  subagent_type="PrioritizationEngine",
+  subagent_type="TaskManager",
   description="Prioritize authentication stories",
   prompt=`
     Prioritize user stories for authentication system.
@@ -287,7 +292,7 @@ task(
 );
 ```
 
-### Step 10: PrioritizationEngine Completes → Update Index
+### Step 10: TaskManager Completes → Update Index
 
 ```typescript
 const prioOutput = JSON.parse(
@@ -296,7 +301,7 @@ const prioOutput = JSON.parse(
 
 addAgentOutput(
   'auth-system',
-  'PrioritizationEngine',
+  'TaskManager',
   '.tmp/planning/auth-system/prioritized.json',
   {
     releaseSlice: prioOutput.release_slice,  // "v1.0.0"
@@ -328,15 +333,15 @@ const taskContext = getContextForAgent('auth-system', 'TaskManager');
     ".tmp/planning/auth-system/prioritized.json"
   ],
   metadata: {
-    ArchitectureAnalyzer: {
+    ContextScout: {
       boundedContext: "authentication",
       module: "auth-service"
     },
-    StoryMapper: {
+    TaskManager: {
       verticalSlice: "user-login",
       storyCount: 8
     },
-    PrioritizationEngine: {
+    TaskManager: {
       releaseSlice: "v1.0.0",
       avgRiceScore: 6750
     }
@@ -453,7 +458,7 @@ for (let seq = 1; seq <= taskJson.subtask_count; seq++) {
 
 ## Summary: What Each Agent Received
 
-### ArchitectureAnalyzer
+### ContextScout
 ```
 Context Files: 1 (architecture patterns)
 Reference Files: 2 (existing code)
@@ -461,19 +466,19 @@ Agent Outputs: 0
 Total Files to Read: 3
 ```
 
-### StoryMapper
+### TaskManager
 ```
 Context Files: 1 (story mapping guide)
 Reference Files: 0
-Agent Outputs: 1 (ArchitectureAnalyzer)
+Agent Outputs: 1 (ContextScout)
 Total Files to Read: 2
 ```
 
-### PrioritizationEngine
+### TaskManager
 ```
 Context Files: 0
 Reference Files: 0
-Agent Outputs: 1 (StoryMapper)
+Agent Outputs: 1 (TaskManager)
 Total Files to Read: 1
 ```
 
@@ -515,9 +520,9 @@ Total: 15+ files, 5000+ lines per agent
 
 **Each agent receives:**
 ```
-ArchitectureAnalyzer: 3 files
-StoryMapper: 2 files
-PrioritizationEngine: 1 file
+ContextScout: 3 files
+TaskManager: 2 files
+TaskManager: 1 file
 TaskManager: 4 files
 CoderAgent: 3 files
 
@@ -564,9 +569,9 @@ createContextIndex(feature, { contextFiles, referenceFiles });
 
 // 2. For each agent in pipeline
 const agentTypes = [
-  'ArchitectureAnalyzer',
-  'StoryMapper',
-  'PrioritizationEngine',
+  'ContextScout',
+  'TaskManager',
+  'TaskManager',
   'TaskManager',
   'CoderAgent'
 ];

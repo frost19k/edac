@@ -1,4 +1,9 @@
-<!-- Context: web/animation-components | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Animation patterns for buttons, cards, modals, dropdowns, and sidebars.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Component Animation Patterns
 
 Animation patterns for buttons, cards, modals, dropdowns, and sidebars.

@@ -1,4 +1,9 @@
-<!-- Context: dev/frontend/when-to-delegate | Priority: high | Version: 1.0 | Updated: 2026-01-30 -->
+---
+description: "Clear decision criteria for when to delegate frontend/UI work to the **frontend-specialist** subagent vs. handling it directly."
+version: 1.0
+updated: 2026-08-13
+---
+
 # When to Delegate to Frontend Specialist
 
 ## Overview
@@ -288,7 +293,7 @@ The frontend-specialist will automatically load these via ContextScout:
 
 **Patterns**:
 - `web/animation-patterns.md` - Animation syntax, micro-interactions
-- `development/frontend/react/react-patterns.md` - React patterns (if React project)
+- `dev/frontend/react/react-patterns.md` - React patterns (if React project)
 
 **Workflows**:
 - `core/workflows/design-iteration-overview.md` - Design iteration workflow
@@ -455,9 +460,9 @@ task(
 
 ---
 
-## Related Context
+## Related Files
 
-- **Frontend Specialist Agent** → `../../../agent/subagents/development/frontend-specialist.md`
+- **Frontend Specialist Agent** → `../../../agent/subagents/dev/frontend-specialist.md`
 - **Design Systems** → `../../web/design-systems.md`
 - **UI Styling Standards** → `../../web/ui-styling-standards.md`
 - **Animation Patterns** → `../../web/animation-patterns.md`

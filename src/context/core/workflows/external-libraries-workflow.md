@@ -1,7 +1,10 @@
-<!-- Context: workflows/external-libraries | Priority: high | Version: 2.1 | Updated: 2026-02-05 -->
-# Workflow: External Libraries
+---
+description: Fetch current documentation for external packages before implementation
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Fetch current documentation for external packages before implementation
+# Workflow: External Libraries
 
 ---
 
@@ -131,7 +134,7 @@ STEP 1: ContextScout → Search internal context
 
 ---
 
-## Related
+## Related Files
 
 - `external-libraries-scenarios.md` - Common scenarios and examples
 - `external-libraries-faq.md` - Troubleshooting FAQ

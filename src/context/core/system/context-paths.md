@@ -1,8 +1,7 @@
-<!-- Context: core/context-paths | Priority: low | Version: 1.1 | Updated: 2026-08-08 -->
-
 ---
-id: context-paths
-name: Context File Path Resolution
+description: "Context file path resolution: global vs. local lookup order and merging behavior"
+version: 1.0
+updated: 2026-08-13
 ---
 
 # Context File Path Resolution

@@ -1,4 +1,8 @@
-<!-- Context: web/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Requirements for responsive design, breakpoints, and common layout approaches using Tailwind CSS.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Responsive Design & Layout Patterns
 
@@ -131,7 +135,7 @@ Requirements for responsive design, breakpoints, and common layout approaches us
 
 ---
 
-## Related
+## Related Files
 
 - [css-framework.md](css-framework.md) — Framework loading and setup
 - [typography-colors.md](typography-colors.md) — Colors, contrast, and typography

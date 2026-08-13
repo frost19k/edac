@@ -1,4 +1,9 @@
-<!-- Context: web/animation-basics | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Standards and patterns for UI animations, micro-interactions, and transitions. Animations should feel natural, purposeful, and enhance user experience without causing distraction.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Animation Basics
 
 ## Overview

@@ -1,7 +1,10 @@
-<!-- Context: web/fonts | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# Font Loading
+---
+description: Guidelines for loading and using web fonts
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Guidelines for loading and using web fonts
+# Font Loading
 
 ---
 
@@ -111,7 +114,7 @@ code, pre {
 
 ---
 
-## Related
+## Related Files
 
 - `images-guide.md` - Image guidelines
 - `icons-guide.md` - Icon systems

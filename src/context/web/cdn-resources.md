@@ -1,7 +1,10 @@
-<!-- Context: web/cdn | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# CDN Resources
+---
+description: Common CDN libraries for frontend development
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Common CDN libraries for frontend development
+# CDN Resources
 
 ---
 
@@ -142,7 +145,7 @@ design_iterations/
 
 ---
 
-## Related
+## Related Files
 
 - `images-guide.md` - Image guidelines
 - `icons-guide.md` - Icon systems

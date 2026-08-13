@@ -1,10 +1,10 @@
-<!-- Context: dev/api-design | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: REST API design principles, GraphQL patterns, and API versioning strategies
+version: 1.0
+updated: 2026-08-13
+---
 
 # API Design Patterns
-
-**Category**: development  
-**Purpose**: REST API design principles, GraphQL patterns, and API versioning strategies  
-**Used by**: open-coder
 
 ---
 
@@ -280,7 +280,6 @@ function UsersList() {
     </div>
   );
 }
-
 
 ## API Versioning
 

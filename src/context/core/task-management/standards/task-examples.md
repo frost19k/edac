@@ -1,4 +1,8 @@
-<!-- Context: core/task-management/standards | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: DDD bounded context for domain modeling.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Enhanced Task Schema — Field Examples
 
@@ -7,8 +11,6 @@ Practical examples for each enhanced field. See `task-fields.md` for interface d
 ---
 
 ### bounded_context
-
-**Purpose**: DDD bounded context for domain modeling.
 
 ```json
 { "bounded_context": "authentication" }
@@ -163,7 +165,7 @@ Common values: `"v1.2.0"` (semver), `"Q1-2026"` (quarterly), `"MVP"`, `"Phase-2"
 
 ---
 
-## Related
+## Related Files
 
 - `task-fields.md` — Field definitions and TypeScript interfaces
 - `task-migration.md` — Line-number precision, backward compatibility, and migration guide

@@ -1,8 +1,10 @@
-<!-- Context: web/navigation | Priority: critical | Version: 1.2 | Updated: 2026-07-28 -->
+---
+description: Web-based UI patterns, animations, styling standards, and React component design
+version: 1.0
+updated: 2026-08-13
+---
 
 # Web UI Context
-
-**Purpose**: Web-based UI patterns, animations, styling standards, and React component design
 
 ---
 

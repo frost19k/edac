@@ -1,10 +1,10 @@
-<!-- Context: core/navigation-examples | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Real-world examples of good navigation files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Examples: Navigation Files
-
-**Purpose**: Real-world examples of good navigation files
-
-**Last Updated**: 2026-01-08
 
 ---
 
@@ -81,7 +81,7 @@ dev/
 
 ## Example 2: Category Navigation (Concern-Based)
 
-**File**: `development/navigation.md`
+**File**: `dev/navigation.md`
 
 **Pattern**: Concern-Based (multi-technology)
 
@@ -97,9 +97,8 @@ dev/
 ## Structure
 
 ```
-development/
+dev/
 ├── navigation.md
-├── ui-navigation.md           # Specialized
 ├── backend-navigation.md      # Specialized
 │
 ├── principles/
@@ -126,7 +125,6 @@ development/
 
 | Task | Path |
 |------|------|
-| **UI/Frontend** | `ui-navigation.md` |
 | **Backend/API** | `backend-navigation.md` |
 | **Clean code** | `principles/clean-code.md` |
 | **API design** | `principles/api-design.md` |
@@ -151,7 +149,7 @@ development/
 
 ## Example 3: Specialized Navigation
 
-**File**: `development/ui-navigation.md`
+**File**: `dev/backend-navigation.md`
 
 **Pattern**: Cross-cutting (spans multiple categories)
 
@@ -167,7 +165,7 @@ development/
 ## Structure
 
 ```
-Frontend Code (development/frontend/):
+Frontend Code (dev/frontend/):
 ├── react/
 │   ├── hooks-patterns.md
 │   ├── component-architecture.md
@@ -203,13 +201,13 @@ Visual Design (ui/web/):
 
 ## By Concern
 
-**Code patterns** → `development/frontend/`
+**Code patterns** → `dev/frontend/`
 **Visual design** → `ui/web/`
 ```
 
 **Why this works**:
 - ✅ Token-efficient (~270 tokens)
-- ✅ Spans multiple categories (development/ + ui/)
+- ✅ Spans multiple categories (dev/ + ui/)
 - ✅ Task-focused (UI development)
 - ✅ Shows both code and design paths
 
@@ -217,7 +215,7 @@ Visual Design (ui/web/):
 
 ## Example 4: Subcategory Navigation
 
-**File**: `development/backend/navigation.md`
+**File**: `dev/backend/navigation.md`
 
 **Pattern**: Concern-based subcategory
 
@@ -287,7 +285,7 @@ backend/
 
 ## Example 5: Full-Stack Navigation
 
-**File**: `development/fullstack-navigation.md`
+**File**: `dev/fullstack-navigation.md`
 
 **Pattern**: Workflow-focused
 
@@ -304,17 +302,17 @@ backend/
 
 ### MERN (MongoDB, Express, React, Node)
 ```
-Frontend: development/frontend/react/
-Backend:  development/backend/nodejs/express-patterns.md
-Data:     development/data/nosql-patterns/mongodb.md
-API:      development/backend/api-patterns/rest-design.md
+Frontend: dev/frontend/react/
+Backend:  dev/backend/nodejs/express-patterns.md
+Data:     dev/data/nosql-patterns/mongodb.md
+API:      dev/backend/api-patterns/rest-design.md
 ```
 
 ### T3 Stack (Next.js, tRPC, Prisma, Tailwind)
 ```
-Frontend: development/frontend/react/ + ui/web/ui-styling-standards.md
-Backend:  development/backend/nodejs/ + api-patterns/trpc-patterns.md
-Data:     development/data/orm-patterns/prisma.md
+Frontend: dev/frontend/react/ + ui/web/ui-styling-standards.md
+Backend:  dev/backend/nodejs/ + api-patterns/trpc-patterns.md
+Data:     dev/data/orm-patterns/prisma.md
 ```
 
 ---
@@ -323,7 +321,7 @@ Data:     development/data/orm-patterns/prisma.md
 
 | Layer | Navigate To |
 |-------|-------------|
-| **Frontend** | `ui-navigation.md` |
+| **Frontend** | `frontend/navigation.md` |
 | **Backend** | `backend-navigation.md` |
 | **Data** | `data/navigation.md` |
 
@@ -486,8 +484,8 @@ React hooks allow you to use state and lifecycle features in functional componen
 
 ---
 
-## Related
+## Related Files
 
-- `../guides/navigation-design.md` - How to create navigation files
+- `../guides/navigation-design-basics.md` - How to create navigation files
 - `../guides/organizing-context.md` - How to choose organizational pattern
 - `../standards/mvi.md` - Minimal Viable Information principle

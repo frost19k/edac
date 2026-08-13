@@ -1,14 +1,10 @@
-<!-- Context: web/building-scrollytelling-pages | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
-
 ---
-description: "Step-by-step implementation of scroll-linked image sequence animations"
+description: Step-by-step implementation of scroll-linked image sequence animations
+version: 1.0
+updated: 2026-08-13
 ---
 
 # Guide: Building Scrollytelling Pages
-
-**Purpose**: Step-by-step implementation of scroll-linked image sequence animations
-
-**Last Updated**: 2026-01-07
 
 ---
 
@@ -259,11 +255,11 @@ Show spinner while frames load:
 
 ---
 
-## Related
+## Related Files
 
 - concepts/scroll-linked-animations.md - Understanding the technique
-- examples/headphone-scrollytelling.md - Full code example
-- lookup/animation-image-prompts.md - Prompts for frame generation
+- examples/scrollytelling-headphone.md - Full code example
+- lookup/scroll-animation-prompts.md - Prompts for frame generation
 
 ---
 

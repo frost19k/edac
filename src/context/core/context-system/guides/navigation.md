@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Step-by-step guides for working with the context system
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System Guides
-
-**Purpose**: Step-by-step guides for working with the context system
 
 ---
 
@@ -43,7 +45,7 @@ guides/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Context System** → `../navigation.md`
 - **Operations** → `../operations/navigation.md`

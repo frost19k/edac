@@ -1,4 +1,9 @@
-<!-- Context: workflows/external-context | Priority: high | Version: 1.0 | Updated: 2026-01-28 -->
+---
+description: "External context is live documentation fetched from external libraries and frameworks (via Context7 API or official docs). Instead of re-fetching on every task, we **persist external context** to `.tmp/external-context/` so main agents can pass it to subagents."
+version: 1.0
+updated: 2026-08-13
+---
+
 # External Context Management
 
 ## Overview

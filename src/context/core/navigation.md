@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Universal standards and workflows for all development
+version: 1.0
+updated: 2026-08-13
+---
 
 # Core Context Navigation
-
-**Purpose**: Universal standards and workflows for all development
 
 ---
 
@@ -12,14 +14,12 @@
 core/
 ├── navigation.md
 ├── context-system.md
-├── essential-patterns.md
 │
 ├── standards/
 │   ├── navigation.md
 │   ├── code-quality.md
 │   ├── test-coverage.md
 │   ├── documentation.md
-│   ├── security-patterns.md
 │   └── code-analysis.md
 │
 ├── workflows/
@@ -67,7 +67,6 @@ core/
 | **Write code** | `standards/code-quality.md` |
 | **Write tests** | `standards/test-coverage.md` |
 | **Write docs** | `standards/documentation.md` |
-| **Security patterns** | `standards/security-patterns.md` |
 | **Review code** | `workflows/code-review.md` |
 | **Delegate task** | `workflows/task-delegation-basics.md` |
 | **Break down feature** | `workflows/feature-breakdown.md` |
@@ -87,7 +86,7 @@ core/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Development** → `../dev/navigation.md`
 - **Project Intelligence** → `../intl/navigation.md`

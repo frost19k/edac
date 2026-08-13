@@ -1,10 +1,10 @@
-<!-- Context: core/extract | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Extract context from docs, code, or URLs into organized context files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Extract Operation
-
-**Purpose**: Extract context from docs, code, or URLs into organized context files
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -63,7 +63,7 @@ Errors (4):
   ... (2 more)
 
 Which category?
-  [1] development/
+  [1] dev/
   [2] core/
   [3] Create new category: ___
 
@@ -80,7 +80,7 @@ Select items (A B I or 'all') + category (1/2/3):
 **Format**:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Extraction Plan: development/
+Extraction Plan: dev/
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CREATE (new files):
@@ -104,7 +104,7 @@ ADD TO (existing files):
     Choose [A/B/C]: _
 
 NAVIGATION UPDATE:
-  development/navigation.md
+  dev/navigation.md
     + 9 new entries in Concepts table
     + 2 new entries in Guides table
     + 1 updated entry in Errors table
@@ -189,13 +189,13 @@ Files created:
 - [ ] All files <200 lines?
 - [ ] MVI format applied (1-3 sentences, 3-5 points, example, reference)?
 - [ ] Files in correct function folders?
-- [ ] README.md updated?
+- [ ] navigation.md updated?
 - [ ] Cross-references added?
 - [ ] User approved before creation?
 
 ---
 
-## Related
+## Related Files
 
 - standards/mvi.md - What to extract
 - guides/compact.md - How to minimize

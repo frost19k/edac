@@ -320,7 +320,7 @@ WHY THIS MATTERS:
                   "reason": "Pure function patterns for service layer"
                 },
                 {
-                  "path": ".opencode/context/core/standards/security-patterns.md",
+                  "path": ".opencode/context/core/standards/code-quality.md",
                   "lines": "120-145,200-220",
                   "reason": "JWT validation and token refresh patterns"
                 }
@@ -467,7 +467,7 @@ Before any status update or file modification:
           "reason": "Pure function patterns for service layer"
         },
         {
-          "path": ".opencode/context/core/standards/security-patterns.md",
+          "path": ".opencode/context/core/standards/code-quality.md",
           "lines": "120-145,200-220",
           "reason": "JWT validation and token refresh patterns"
         }
@@ -570,7 +570,7 @@ Before any status update or file modification:
           "reason": "Pure function patterns for auth service"
         },
         {
-          "path": ".opencode/context/core/standards/security-patterns.md",
+          "path": ".opencode/context/core/standards/code-quality.md",
           "lines": "120-145",
           "reason": "JWT validation rules"
         }
@@ -628,7 +628,7 @@ Before any status update or file modification:
           "reason": "Pure function patterns"
         },
         {
-          "path": ".opencode/context/core/standards/security-patterns.md",
+          "path": ".opencode/context/core/standards/code-quality.md",
           "lines": "120-145",
           "reason": "JWT signing and validation rules"
         }

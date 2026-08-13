@@ -1,4 +1,8 @@
-<!-- Context: standards/analysis | Priority: high | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: Framework for analyzing code, patterns, and technical issues systematically.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Analysis Guidelines
 
@@ -148,5 +152,3 @@ Reference this when:
 - Prioritize findings
 - Explain rationale
 - Suggest next steps
-
-

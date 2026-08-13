@@ -1,4 +1,8 @@
-<!-- Context: standards/docs | Priority: critical | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: "Documentation standards: what to document, how to write it, and keeping it current"
+version: 1.0
+updated: 2026-08-13
+---
 
 # Documentation Standards
 

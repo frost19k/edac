@@ -1,10 +1,10 @@
-<!-- Context: core/harvest | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Extract knowledge from AI summaries → permanent context, then clean workspace
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context Harvest Operation
-
-**Purpose**: Extract knowledge from AI summaries → permanent context, then clean workspace
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -101,7 +101,7 @@ Found 3 summary documents:
     Preview: "Organize by function (concepts/, examples/...)..."
 
 ✓ [B] Pattern: Minimal Viable Information
-    → Would add to: core/concepts/mvi-principle.md
+    → Would add to: core/concepts/mvi.md
     Preview: "Extract core only (1-3 sentences), 3-5 key points..."
 
 ✓ [C] Workflow: Harvesting summary documents
@@ -115,18 +115,18 @@ Found 3 summary documents:
 ### SESSION-auth-work.md (1.8 KB)
 
 ✓ [E] Error: JWT token expiration not handled
-    → Would add to: development/errors/auth-errors.md
+    → Would add to: dev/errors/auth-errors.md
     Preview: "Symptom: 401 after 1 hour. Cause: No refresh flow..."
 
 ✓ [F] Example: JWT refresh token implementation
-    → Would create: development/examples/jwt-refresh.md
+    → Would create: dev/examples/jwt-refresh.md
     Preview: "Store refresh token → Check expiry → Request new..."
 
 ---
 
 ### .tmp/IMPLEMENTATION-NOTES.md (800 bytes)
 
-✗ [G] Skip: Duplicate info (already in development/concepts/api-design.md)
+✗ [G] Skip: Duplicate info (already in dev/concepts/api-design.md)
 
 ---
 
@@ -181,7 +181,7 @@ Extraction Preview
 │ ...                                                     │
 └─────────────────────────────────────────────────────────┘
 
-[E] → development/errors/auth-errors.md (ADD to existing, 98 → 112 lines)
+[E] → dev/errors/auth-errors.md (ADD to existing, 98 → 112 lines)
 ┌─────────────────────────────────────────────────────────┐
 │ + ## Error: JWT Token Expiration Not Handled             │
 │ +                                                       │
@@ -249,10 +249,10 @@ Choose [1/2/3] (default: 1): _
 ```
 ✅ Harvested 5 items into permanent context:
    - Added to core/concepts/context-organization.md
-   - Added to core/concepts/mvi-principle.md
+   - Added to core/concepts/mvi.md
    - Created core/guides/harvesting.md
-   - Added to development/errors/auth-errors.md
-   - Created development/examples/jwt-refresh.md
+   - Added to dev/errors/auth-errors.md
+   - Created dev/examples/jwt-refresh.md
 
 🗑️ Cleaned up workspace:
    - Archived: CONTEXT-SYSTEM-OVERVIEW.md → .tmp/archive/harvested/2026-01-06/
@@ -334,9 +334,9 @@ After harvest operation:
 
 ---
 
-## Related
+## Related Files
 
 - compact.md - How to minimize extracted content
-- mvi-principle.md - What to extract
+- mvi.md - What to extract
 - structure.md - Where files go
 - creation.md - File creation rules

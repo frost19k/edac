@@ -1,8 +1,10 @@
-<!-- Context: core/navigation-design-basics | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: How to create token-efficient, scannable navigation files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Guide: Designing Navigation Files
-
-**Purpose**: How to create token-efficient, scannable navigation files
 
 ---
 
@@ -48,7 +50,7 @@
 |------|------|---------|
 | Category-level | `{category}/navigation.md` | Overview of category |
 | Subcategory-level | `{category}/{sub}/navigation.md` | Files in subcategory |
-| Specialized | `{category}/{domain}-navigation.md` | Cross-cutting (e.g., ui-navigation.md) |
+| Specialized | `{category}/{domain}-navigation.md` | Cross-cutting (e.g., backend-navigation.md) |
 
 ### 2. Create Structure Section
 
@@ -96,10 +98,10 @@ dev/
 **Errors** → Troubleshooting
 ```
 
-### 5. Add Related Context (Optional)
+### 5. Add Related Files (Optional)
 
 ```markdown
-## Related Context
+## Related Files
 
 - **Core Standards** → `../core/standards/navigation.md`
 ```
@@ -126,7 +128,7 @@ wc -w navigation.md  # Multiply by 1.3 for token estimate
 
 ---
 
-## Related
+## Related Files
 
 - `navigation-templates.md` - Ready-to-use templates
 - `../standards/mvi.md` - MVI principle

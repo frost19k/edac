@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Functional array methods, for-loop usage, and type guard patterns on filter.
+version: 1.0
+updated: 2026-08-13
+---
 
 # TypeScript Array Operations
-
-**Purpose**: Functional array methods, for-loop usage, and type guard patterns on filter.
 
 ---
 
@@ -87,7 +89,7 @@ const patches = messages
 
 ---
 
-## Related
+## Related Files
 
 - [Function Patterns](./typescript-functions.md) — Naming, purity, composition
 - [Type Safety](./typescript-type-safety.md) — Types, inference, and type guards

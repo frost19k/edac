@@ -1,10 +1,10 @@
-<!-- Context: core/organizing-context | Priority: high | Version: 1.1 | Updated: 2026-02-15 -->
+---
+description: How to choose and apply the right organizational pattern
+version: 1.0
+updated: 2026-08-13
+---
 
 # Guide: Organizing Context by Concern
-
-**Purpose**: How to choose and apply the right organizational pattern
-
-**Last Updated**: 2026-02-15
 
 ---
 
@@ -37,7 +37,7 @@
 └── {tech}/       # What you're using
 ```
 
-**Example**: `development/frontend/react/`, `ui/web/design/`
+**Example**: `dev/frontend/react/`, `ui/web/design/`
 
 ---
 
@@ -97,9 +97,9 @@ dev/
 └── errors/tool-errors.md
 ```
 
-### Concern-Based (development/)
+### Concern-Based (dev/)
 ```
-development/
+dev/
 ├── frontend/
 │   ├── react/
 │   └── vue/
@@ -145,7 +145,7 @@ ui/
 
 ---
 
-## Related
+## Related Files
 
 - structure.md - Directory structure standards
 - navigation-templates.md - Navigation file templates

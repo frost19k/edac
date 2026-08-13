@@ -1,10 +1,10 @@
-<!-- Context: core/splitting-tasks | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: How to decompose features into atomic subtasks
+version: 1.0
+updated: 2026-08-13
+---
 
 # Guide: Splitting Features into Tasks
-
-**Purpose**: How to decompose features into atomic subtasks
-
-**Last Updated**: 2026-01-11
 
 ---
 
@@ -106,7 +106,7 @@ Don't embed descriptions. Reference paths:
 
 ---
 
-## Related
+## Related Files
 
 - `../standards/task-schema.md` - JSON field reference
 - `managing-tasks.md` - Lifecycle workflow

@@ -1,8 +1,10 @@
-<!-- Context: intl/nav | Priority: high | Version: 1.2 | Updated: 2026-08-08 -->
+---
+description: Start here for quick project understanding. These files bridge business and technical domains.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Project Intelligence
-
-> Start here for quick project understanding. These files bridge business and technical domains.
 
 ## Structure
 

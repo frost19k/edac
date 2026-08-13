@@ -1,8 +1,10 @@
-<!-- Context: intl/business | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+---
+description: Document the business context, problems solved, and value created.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Business Domain
-
-> Document the business context, problems solved, and value created.
 
 ## Quick Reference
 

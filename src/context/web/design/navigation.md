@@ -1,14 +1,10 @@
-<!-- Context: web/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
-
 ---
-description: "Advanced web UI patterns - scroll animations, visual effects, and interactive design"
+description: Advanced web UI patterns - scroll animations, visual effects, and interactive design
+version: 1.0
+updated: 2026-08-13
 ---
 
 # Web Design Patterns
-
-**Purpose**: Advanced web UI patterns - scroll animations, visual effects, and interactive design
-
-**Last Updated**: 2026-01-31
 
 ---
 
@@ -78,7 +74,7 @@ This subcategory covers:
 
 - `ui/web/` - Core web UI patterns (parent directory)
 - `ui/web/animation-patterns.md` - CSS animations and transitions
-- `development/` - General development patterns
+- `dev/` - General development patterns
 
 ---
 

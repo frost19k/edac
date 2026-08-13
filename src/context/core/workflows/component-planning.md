@@ -1,4 +1,8 @@
-<!-- Context: workflows/component-planning | Priority: high | Version: 1.0 -->
+---
+description: "This workflow replaces \"Monolithic Planning\" (planning everything at once) with \"Iterative Component Planning\". It is designed for complex features that require breaking down into functional units."
+version: 1.0
+updated: 2026-08-13
+---
 
 # Component-Based Planning Workflow
 

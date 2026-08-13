@@ -1,17 +1,23 @@
-<!-- Context: core/navigation-templates | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Ready-to-use templates for navigation files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Navigation File Templates
-
-**Purpose**: Ready-to-use templates for navigation files
 
 ---
 
 ## Category Navigation Template
 
 ```markdown
-# {Category} Navigation
+---
+description: Index of {category} context files
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: [1 sentence]
+# {Category} Navigation
 
 ---
 
@@ -45,7 +51,7 @@
 
 ---
 
-## Related Context
+## Related Files
 
 - **{Category}** → `../{category}/navigation.md`
 ```
@@ -57,9 +63,13 @@
 ## Specialized Navigation Template
 
 ```markdown
-# {Domain} Navigation
+---
+description: [What this covers]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Scope**: [What this covers]
+# {Domain} Navigation
 
 ---
 
@@ -101,22 +111,24 @@
 ## Good Example (Token-Efficient)
 
 ```markdown
-# Development Navigation
+---
+description: Software development across all stacks
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Software development across all stacks
+# Development Navigation
 
 ---
 
 ## Structure
 
 ```
-development/
+dev/
 ├── navigation.md
-├── ui-navigation.md
 ├── principles/
 ├── frontend/
-├── backend/
-└── data/
+└── backend/
 ```
 
 ---
@@ -125,8 +137,8 @@ development/
 
 | Task | Path |
 |------|------|
-| **UI/Frontend** | `ui-navigation.md` |
-| **Backend/API** | `backend-navigation.md` |
+| **Frontend** | `frontend/navigation.md` |
+| **Backend** | `backend-navigation.md` |
 | **Clean code** | `principles/clean-code.md` |
 
 ---
@@ -136,34 +148,33 @@ development/
 **Principles** → Universal practices
 **Frontend** → React, Vue, state
 **Backend** → APIs, Node, auth
-**Data** → SQL, NoSQL, ORMs
 ```
 
-**Token count**: ~180 tokens ✅
+**Token count**: ~180 tokens
 
 ---
 
 ## Bad Example (Too Verbose)
 
 ```markdown
-# Development Navigation
-
-**Purpose**: This navigation file helps you find software development 
-patterns, standards, and best practices across all technology stacks 
-including frontend, backend, databases, and infrastructure.
-
 ---
+description: This navigation file helps you find software development patterns, standards, and best practices across all technology stacks including frontend, backend, databases, and infrastructure.
+version: 1.0
+updated: 2026-08-13
+---
+
+# Development Navigation
 
 ## Introduction
 
-The development category contains comprehensive guides and patterns 
-for building modern applications. Whether you're working on frontend 
+The development category contains comprehensive guides and patterns
+for building modern applications. Whether you're working on frontend
 user interfaces, backend APIs, database integrations...
 
 [... continues for 500+ tokens]
 ```
 
-**Token count**: 500+ tokens ❌
+**Token count**: 500+ tokens — description is too long, body is too verbose
 
 ---
 
@@ -178,8 +189,8 @@ user interfaces, backend APIs, database integrations...
 
 ---
 
-## Related
+## Related Files
 
-- `navigation-design-basics.md` - Core principles and steps
-- `../standards/mvi.md` - MVI principle
-- `../examples/navigation-examples.md` - More examples
+- [navigation-design-basics.md](./navigation-design-basics.md) — Core principles and steps
+- [../standards/mvi.md](../standards/mvi.md) — MVI principle
+- [../examples/navigation-examples.md](../examples/navigation-examples.md) — More examples

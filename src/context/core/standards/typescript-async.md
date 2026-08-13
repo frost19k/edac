@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Promise handling — parallel execution, sequential chains, and error handling patterns.
+version: 1.0
+updated: 2026-08-13
+---
 
 # TypeScript Async Patterns
-
-**Purpose**: Promise handling — parallel execution, sequential chains, and error handling patterns.
 
 ---
 
@@ -101,7 +103,7 @@ const result = await operation().catch((error) => {
 
 ---
 
-## Related
+## Related Files
 
 - [Function Patterns](./typescript-functions.md) — Naming, purity, composition
 - [Type Safety](./typescript-type-safety.md) — Types, inference, and type guards

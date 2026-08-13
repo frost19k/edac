@@ -1,4 +1,8 @@
-<!-- Context: web/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standards for loading and using Tailwind CSS + Flowbite component library.
+version: 1.0
+updated: 2026-08-13
+---
 
 # CSS Framework Conventions
 
@@ -114,7 +118,7 @@ npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify
 
 ---
 
-## Related
+## Related Files
 
 - [responsive-layout.md](responsive-layout.md) — Breakpoints and layout patterns
 - [typography-colors.md](typography-colors.md) — Colors, contrast, and typography

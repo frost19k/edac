@@ -1,14 +1,10 @@
-<!-- Context: web/scrollytelling-headphone | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
-
 ---
-description: "Full Next.js implementation of scroll-linked image sequence animation"
+description: Full Next.js implementation of scroll-linked image sequence animation
+version: 1.0
+updated: 2026-08-13
 ---
 
 # Example: Scrollytelling Headphone Animation
-
-**Purpose**: Full Next.js implementation of scroll-linked image sequence animation
-
-**Last Updated**: 2026-01-07
 
 ---
 
@@ -251,10 +247,10 @@ export default function HeadphoneScroll() {
 
 ---
 
-## Related
+## Related Files
 
 - concepts/scroll-linked-animations.md - Understanding the technique
-- guides/scrollytelling-setup.md - Getting started
+- guides/building-scrollytelling-pages.md - Getting started
 - lookup/scroll-animation-prompts.md - Generating image sequences
 
 ---

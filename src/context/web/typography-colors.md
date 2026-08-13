@@ -1,4 +1,8 @@
-<!-- Context: web/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standards for color palette, contrast, typography hierarchy, and CSS override strategies.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Typography, Colors & CSS Specificity
 
@@ -140,7 +144,7 @@ body { font-family: 'Inter', sans-serif !important; color: var(--foreground) !im
 
 ---
 
-## Related
+## Related Files
 
 - [css-framework.md](css-framework.md) — Framework loading and setup
 - [responsive-layout.md](responsive-layout.md) — Breakpoints and layout patterns

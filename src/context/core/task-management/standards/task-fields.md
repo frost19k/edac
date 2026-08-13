@@ -1,4 +1,8 @@
-<!-- Context: core/task-management/standards | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Extended JSON schema for multi-stage orchestration with line-number precision, domain modeling, and prioritization. All enhanced fields are optional and backward compatible.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Enhanced Task Schema — Field Definitions
 
@@ -156,7 +160,7 @@ interface EnhancedSubtask {
 
 ---
 
-## Related
+## Related Files
 
 - `task-examples.md` — Field value examples and common patterns
 - `task-migration.md` — Line-number precision, backward compatibility, and migration guide

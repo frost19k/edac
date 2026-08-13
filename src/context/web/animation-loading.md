@@ -1,4 +1,9 @@
-<!-- Context: web/animation-loading | Priority: medium | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Animation patterns for skeleton screens, spinners, progress bars, and status indicators.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Loading State Animations
 
 Animation patterns for skeleton screens, spinners, progress bars, and status indicators.

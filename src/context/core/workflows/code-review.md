@@ -1,4 +1,8 @@
-<!-- Context: workflows/review | Priority: high | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: "Code review guidelines: checklist, report format, and review principles"
+version: 1.0
+updated: 2026-08-13
+---
 
 # Code Review Guidelines
 

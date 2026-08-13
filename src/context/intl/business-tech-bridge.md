@@ -1,8 +1,10 @@
-<!-- Context: intl/bridge | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+---
+description: Document how business needs translate to technical solutions. This is the critical connection point.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Business ↔ Tech Bridge
-
-> Document how business needs translate to technical solutions. This is the critical connection point.
 
 ## Quick Reference
 

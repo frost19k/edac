@@ -1,10 +1,10 @@
-<!-- Context: core/error | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Add recurring errors to knowledge base with deduplication
+version: 1.0
+updated: 2026-08-13
+---
 
 # Error Operation
-
-**Purpose**: Add recurring errors to knowledge base with deduplication
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -32,13 +32,13 @@
 Searching for: "Cannot read property 'map' of undefined"
 
 Found 1 similar error:
-  📄 development/errors/react-errors.md (Line 45)
+  📄 dev/errors/react-errors.md (Line 45)
      ## Error: Cannot read property 'X' of undefined
      Covers: General undefined property access
      Frequency: common
 
 Found 2 related errors:
-  📄 development/errors/react-errors.md
+  📄 dev/errors/react-errors.md
      ## Error: Cannot read property 'length' of undefined
      ## Error: Undefined is not an object
 ```
@@ -77,7 +77,7 @@ Select option + category (e.g., 'B 1'):
 
 **Format**:
 ```
-Would update development/errors/react-errors.md:
+Would update dev/errors/react-errors.md:
 
 Current (Line 45):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -180,10 +180,10 @@ Approve? (yes/no/edit):
 ---
 
 ### Stage 5: Update Navigation
-**Action**: Update README.md and add cross-references
+**Action**: Update navigation.md and add cross-references
 
 **Process**:
-1. Update README.md if new file created
+1. Update navigation.md if new file created
 2. Add cross-references to related errors
 3. Link from related concepts/examples
 
@@ -265,11 +265,11 @@ Group errors by framework/topic in single file:
 - [ ] Error follows template format?
 - [ ] File size <150 lines?
 - [ ] Cross-references added?
-- [ ] README.md updated (if new file)?
+- [ ] navigation.md updated (if new file)?
 
 ---
 
-## Related
+## Related Files
 
-- standards/templates.md - Error template format
+- standards/templates-error-navigation.md - Error template format
 - guides/workflows.md - Interactive examples

@@ -1,4 +1,9 @@
-<!-- Context: workflows/delegation | Priority: high | Version: 3.1 | Updated: 2026-02-05 -->
+---
+description: "Delegation workflow: discover, propose, approve, init session, persist context, delegate, and cleanup"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Delegation Context Template
 
 ## Quick Reference
@@ -131,7 +136,7 @@ task(
 
 ---
 
-## Related
+## Related Files
 
 - `task-delegation-specialists.md` - When to delegate to which specialist
 - `task-delegation-caching.md` - Context caching for repeated patterns

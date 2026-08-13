@@ -1,10 +1,10 @@
-<!-- Context: core/codebase-references | Priority: critical | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Link context files to actual code implementation
+version: 1.0
+updated: 2026-08-13
+---
 
 # Codebase References
-
-**Purpose**: Link context files to actual code implementation
-
-**Last Updated**: 2026-07-28
 
 ---
 
@@ -137,8 +137,10 @@
 
 ---
 
-## Related
+## Related Files
 
 - frontmatter.md - Frontmatter format
-- templates.md - File templates
+- templates-concept-example.md - Concept and example templates
+- templates-guide-lookup.md - Guide and lookup templates
+- templates-error-navigation.md - Error and navigation templates
 - structure.md - File organization

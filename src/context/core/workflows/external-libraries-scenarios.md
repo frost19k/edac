@@ -1,7 +1,10 @@
-<!-- Context: workflows/external-libraries-scenarios | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# External Libraries: Common Scenarios
+---
+description: Real-world examples of using ExternalScout
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Real-world examples of using ExternalScout
+# External Libraries: Common Scenarios
 
 ---
 
@@ -93,7 +96,7 @@ task(
   description="Find auth standards",
   prompt="Find context files: Auth patterns | Security standards"
 )
-// Returns: security-patterns.md, code-quality.md
+// Returns: code-quality.md
 
 // 2. ExternalScout: Better Auth docs (MANDATORY)
 task(
@@ -124,7 +127,7 @@ task(
 
 ---
 
-## Related
+## Related Files
 
 - `external-libraries-workflow.md` - Core workflow
 - `external-libraries-faq.md` - Troubleshooting FAQ

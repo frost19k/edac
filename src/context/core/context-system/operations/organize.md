@@ -1,10 +1,10 @@
-<!-- Context: core/organize | Priority: medium | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Restructure flat context files into function-based folder structure
+version: 1.0
+updated: 2026-08-13
+---
 
 # Organize Operation
-
-**Purpose**: Restructure flat context files into function-based folder structure
-
-**Last Updated**: 2026-01-06
 
 ---
 
@@ -137,7 +137,7 @@ Dry-run? (yes/no/show-diff):
 **Action**: Update navigation and fix references
 
 **Process**:
-1. Update README.md with navigation tables
+1. Update navigation.md with navigation tables
 2. Fix all internal references to moved files
 3. Validate all links work
 4. Update "Last Updated" dates
@@ -190,17 +190,17 @@ Agent suggests best option based on:
 
 ### Organize Flat Directory
 ```bash
-/context organize development/
+/context organize dev/
 ```
 
 ### Dry-Run First
 ```bash
-/context organize development/ --dry-run
+/context organize dev/ --dry-run
 ```
 
 ### Organize Multiple
 ```bash
-/context organize development/
+/context organize dev/
 /context organize core/
 ```
 
@@ -211,14 +211,14 @@ Agent suggests best option based on:
 - [ ] All files in function folders (not flat)?
 - [ ] Ambiguous files resolved?
 - [ ] Conflicts handled?
-- [ ] README.md created/updated?
+- [ ] navigation.md created/updated?
 - [ ] All references fixed?
 - [ ] Backup created?
 - [ ] User approved changes?
 
 ---
 
-## Related
+## Related Files
 
 - standards/structure.md - Folder organization rules
 - guides/workflows.md - Interactive examples

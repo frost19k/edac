@@ -1,4 +1,8 @@
-<!-- Context: core/context-guide | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Context files provide guidelines and templates for specific tasks. Use the index system for efficient discovery and lazy loading to keep prompts lean.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System Guide
 
@@ -35,10 +39,9 @@ The index provides:
 All files are in `.opencode/context/core/` with organized subfolders:
 
 ### Standards (Quality Guidelines + Analysis)
-- `standards/code-quality.md` - Modular, functional code principles [critical]
+- `standards/code-quality.md` - Code quality, security, and essential patterns [critical]
 - `standards/documentation.md` - Documentation standards [critical]
 - `standards/test-coverage.md` - Testing standards [critical]
-- `standards/security-patterns.md` - Core patterns (error handling, security) [high]
 - `standards/code-analysis.md` - Analysis framework [high]
 
 ### Workflows (Process Templates + Review)
@@ -75,6 +78,7 @@ All files are in `.opencode/context/core/` with organized subfolders:
 - Writing new code
 - Modifying existing code
 - Following modular/functional patterns
+- Error handling and security patterns
 - Making architectural decisions
 
 ### .opencode/context/core/standards/documentation.md
@@ -86,11 +90,6 @@ All files are in `.opencode/context/core/` with organized subfolders:
 - Writing new tests
 - Running test suites
 - Debugging test failures
-
-### .opencode/context/core/standards/security-patterns.md
-- Error handling
-- Security patterns
-- Common code patterns
 
 ### .opencode/context/core/standards/code-analysis.md
 - Analyzing codebase patterns

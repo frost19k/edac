@@ -1,4 +1,8 @@
-<!-- Context: web/premium-dark-ui-layouts | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Common layout patterns for premium dark UI.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Premium Dark UI - Layouts
 

@@ -1,4 +1,9 @@
-<!-- Context: workflows/design-iteration-plan-iterations | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: "Handling user edits to design plan files: detecting changes, proposing updates, and managing iterations"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Handling Plan File Edits and Iterations
 
 ## User Edits Plan File Directly

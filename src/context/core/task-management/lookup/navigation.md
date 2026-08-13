@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Quick reference for task management commands and patterns
+version: 1.0
+updated: 2026-08-13
+---
 
 # Task Management Lookup
-
-**Purpose**: Quick reference for task management commands and patterns
 
 ---
 
@@ -32,7 +34,7 @@ lookup/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Task Management** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

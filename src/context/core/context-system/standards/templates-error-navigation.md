@@ -1,21 +1,23 @@
-<!-- Context: core/context-system/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standard formats for error, navigation, and specialized context files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context File Templates — Error, Navigation & Specialized
-
-**Purpose**: Standard formats for error, navigation, and specialized context files
-
-**Last Updated**: 2026-07-28
 
 ---
 
 ## 5. Error Template
 
 ```markdown
-<!-- Context: {category}/errors | Priority: {high|medium} | Version: 1.0 | Updated: YYYY-MM-DD -->
-# Errors: {Framework}
+---
+description: Common errors for {framework}
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: Common errors for {framework}
-**Last Updated**: {YYYY-MM-DD}
+# Errors: {Framework}
 
 ## Error: {Name}
 
@@ -32,10 +34,10 @@
 
 **Code**:
 ```lang
-// ❌ Before
+// Before
 {bad}
 
-// ✅ After
+// After
 {fixed}
 ```
 
@@ -46,22 +48,24 @@
 
 [Repeat for 5-10 errors]
 
-## Related
+## Related Files
 - concepts/x.md
 ```
 
 ---
 
-## 6. Navigation Template (Replaces README.md)
-
-**Note**: Use `navigation.md` instead of `README.md` for better discoverability
+## 6. Navigation Template
 
 **Target**: 200-300 tokens
 
 ```markdown
-# {Category} Navigation
+---
+description: Index of {category} context files
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: [1 sentence]
+# {Category} Navigation
 
 ---
 
@@ -95,7 +99,7 @@
 
 ---
 
-## Related Context
+## Related Files
 
 - **{Category}** → `../{category}/navigation.md`
 ```
@@ -104,14 +108,18 @@
 
 ## 7. Specialized Navigation Template
 
-**Use for**: Cross-cutting concerns (e.g., `ui-navigation.md`)
+**Use for**: Cross-cutting concerns spanning multiple categories
 
 **Target**: 250-300 tokens
 
 ```markdown
-# {Domain} Navigation
+---
+description: [What this covers]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Scope**: [What this covers]
+# {Domain} Navigation
 
 ---
 
@@ -150,10 +158,9 @@
 
 ## All Templates Must Have
 
-1. Title with type prefix (# Concept:, # Example:, etc.)
-2. **Purpose** (1 sentence)
-3. **Last Updated** (YYYY-MM-DD)
-4. **Related** section (cross-references)
+1. YAML frontmatter with `description`, `version`, `updated`
+2. Title with type prefix (# Concept:, # Example:, etc.)
+3. **Related Files** section (cross-references)
 
 ---
 
@@ -167,7 +174,7 @@
 
 ---
 
-## Related
+## Related Files
 
 - [templates-concept-example.md](./templates-concept-example.md) — Concept & Example templates
 - [templates-guide-lookup.md](./templates-guide-lookup.md) — Guide & Lookup templates

@@ -1,7 +1,10 @@
-<!-- Context: workflows/delegation-caching | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# Context Caching for Delegation
+---
+description: Cache discovered context to avoid re-discovery overhead in repeated tasks
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Cache discovered context to avoid re-discovery overhead in repeated tasks
+# Context Caching for Delegation
 
 ---
 
@@ -137,7 +140,7 @@ Track metrics:
 
 ---
 
-## Related
+## Related Files
 
 - `task-delegation-basics.md` - Core delegation workflow
 - `task-delegation-specialists.md` - When to delegate

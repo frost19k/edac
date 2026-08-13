@@ -1,8 +1,10 @@
-<!-- Context: core/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Function naming, purity, and composition patterns for TypeScript projects.
+version: 1.0
+updated: 2026-08-13
+---
 
 # TypeScript Function Patterns
-
-**Purpose**: Function naming, purity, and composition patterns for TypeScript projects.
 
 ---
 
@@ -73,7 +75,7 @@ export function withRetry<T>(fn: () => Promise<T>, maxRetries: number): Promise<
 
 ---
 
-## Related
+## Related Files
 
 - [Type Safety](./typescript-type-safety.md) — Types, inference, and type guards
 - [Array Operations](./typescript-arrays.md) — Functional array methods

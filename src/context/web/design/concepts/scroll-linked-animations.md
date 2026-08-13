@@ -1,10 +1,10 @@
-<!-- Context: web/scroll-linked-animations | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Sync image sequences to scroll position for cinematic product reveals
+version: 1.0
+updated: 2026-08-13
+---
 
 # Concept: Scroll-Linked Animations
-
-**Purpose**: Sync image sequences to scroll position for cinematic product reveals
-
-**Last Updated**: 2026-01-07
 
 ---
 
@@ -41,7 +41,7 @@ useEffect(() => {
 
 ---
 
-## Related
+## Related Files
 
 - examples/scrollytelling-headphone.md - Full code
 - guides/building-scrollytelling-pages.md - Implementation

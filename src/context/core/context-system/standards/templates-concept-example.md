@@ -1,10 +1,10 @@
-<!-- Context: core/context-system/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standard formats for concept and example context files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context File Templates — Concept & Example
-
-**Purpose**: Standard formats for concept and example context files
-
-**Last Updated**: 2026-07-28
 
 ---
 
@@ -12,23 +12,25 @@
 
 | Type | Max Lines | Required Sections |
 |------|-----------|-------------------|
-| Concept | 100 | Purpose, Core Idea (1-3 sentences), Key Points (3-5), Example (<10 lines), Reference, Related |
-| Example | 80 | Purpose, Use Case, Code (10-30 lines), Explanation, Related |
-| Guide | 150 | Purpose, Prerequisites, Steps (4-7), Verification, Related |
-| Lookup | 100 | Purpose, Tables/Lists, Commands, Related |
-| Error | 150 | Purpose, Per-error: Symptom, Cause, Solution, Prevention, Reference, Related |
-| README | 100 | Purpose, Navigation tables (all 5 folders), Loading Strategy, Statistics |
+| Concept | 100 | Core Idea (1-3 sentences), Key Points (3-5), Example (<10 lines), Reference, Related Files |
+| Example | 80 | Use Case, Code (10-30 lines), Explanation, Related Files |
+| Guide | 150 | Prerequisites, Steps (4-7), Verification, Related Files |
+| Lookup | 100 | Tables/Lists, Commands, Related Files |
+| Error | 150 | Per-error: Symptom, Cause, Solution, Prevention, Reference, Related Files |
+| Navigation | 100 | Navigation tables (all 5 folders), Loading Strategy, Statistics |
 
 ---
 
 ## 1. Concept Template
 
 ```markdown
-<!-- Context: {category}/concepts | Priority: {critical|high|medium|low} | Version: 1.0 | Updated: YYYY-MM-DD -->
-# Concept: {Name}
+---
+description: [one-line purpose]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: [1 sentence]
-**Last Updated**: {YYYY-MM-DD}
+# Concept: {Name}
 
 ## Core Idea
 [1-3 sentences]
@@ -50,7 +52,7 @@
 ## Deep Dive
 **Reference**: [Link or "See implementation above"]
 
-## Related
+## Related Files
 - concepts/x.md
 - examples/y.md
 ```
@@ -60,11 +62,13 @@
 ## 2. Example Template
 
 ```markdown
-<!-- Context: {category}/examples | Priority: {high|medium} | Version: 1.0 | Updated: YYYY-MM-DD -->
-# Example: {What It Shows}
+---
+description: [one-line purpose]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: [1 sentence]
-**Last Updated**: {YYYY-MM-DD}
+# Example: {What It Shows}
 
 ## Use Case
 [2-3 sentences]
@@ -83,13 +87,13 @@
 - Detail 1
 - Detail 2
 
-## Related
+## Related Files
 - concepts/x.md
 ```
 
 ---
 
-## Related
+## Related Files
 
 - [templates-guide-lookup.md](./templates-guide-lookup.md) — Guide & Lookup templates
 - [templates-error-navigation.md](./templates-error-navigation.md) — Error, Navigation & Specialized templates

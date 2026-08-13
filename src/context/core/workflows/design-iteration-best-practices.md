@@ -1,4 +1,9 @@
-<!-- Context: workflows/design-iteration-best-practices | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: "Best practices for iterating on design files: when to create new iterations vs. new designs"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Design Iteration Best Practices
 
 ## Iteration Process

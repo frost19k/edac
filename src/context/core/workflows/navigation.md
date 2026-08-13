@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Process workflows for common development tasks
+version: 1.0
+updated: 2026-08-13
+---
 
 # Core Workflows Navigation
-
-**Purpose**: Process workflows for common development tasks
 
 ---
 
@@ -34,7 +36,7 @@
 
 **For code review**:
 1. Load `code-review.md` (high)
-2. Depends on: `../standards/code-quality.md`, `../standards/security-patterns.md`
+2. Depends on: `../standards/code-quality.md`
 
 **For task delegation**:
 1. Load `task-delegation-basics.md` (high)
@@ -53,6 +55,6 @@
 
 ---
 
-## Related
+## Related Files
 
 - **Standards** → `../standards/navigation.md`

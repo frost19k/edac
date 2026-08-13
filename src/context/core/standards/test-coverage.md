@@ -1,4 +1,8 @@
-<!-- Context: standards/tests | Priority: critical | Version: 2.0 | Updated: 2025-01-21 -->
+---
+description: "Testing standards: AAA pattern, coverage targets, and what to test vs. skip"
+version: 1.0
+updated: 2026-08-13
+---
 
 # Testing Standards
 

@@ -1,4 +1,8 @@
-<!-- Context: web/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Patterns for styling components, accessibility requirements, performance optimization, and alternative frameworks.
+version: 1.0
+updated: 2026-08-13
+---
 
 # Components, Accessibility & Performance
 
@@ -114,7 +118,7 @@ If the user requests a different framework:
 
 ---
 
-## Related
+## Related Files
 
 - [css-framework.md](css-framework.md) — Framework loading and setup
 - [responsive-layout.md](responsive-layout.md) — Breakpoints and layout patterns

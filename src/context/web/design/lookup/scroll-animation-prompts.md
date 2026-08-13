@@ -1,14 +1,10 @@
-<!-- Context: web/scroll-animation-prompts | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
-
 ---
-description: "AI prompts for generating start/end frames and video sequences for scrollytelling"
+description: AI prompts for generating start/end frames and video sequences for scrollytelling
+version: 1.0
+updated: 2026-08-13
 ---
 
 # Lookup: Scroll Animation Image Generation Prompts
-
-**Purpose**: AI prompts for generating start/end frames and video sequences for scrollytelling
-
-**Last Updated**: 2026-01-07
 
 ---
 
@@ -199,11 +195,11 @@ ffmpeg -i animation.mp4 -vf fps=30 -quality 90 frame_%04d.webp
 
 ---
 
-## Related
+## Related Files
 
 - concepts/scroll-linked-animations.md - Understanding the technique
 - examples/scrollytelling-headphone.md - Full implementation
-- guides/scrollytelling-setup.md - Setup instructions
+- guides/building-scrollytelling-pages.md - Setup instructions
 
 ---
 

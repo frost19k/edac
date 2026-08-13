@@ -1,21 +1,23 @@
-<!-- Context: core/context-system/standards | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: Standard formats for guide and lookup context files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context File Templates — Guide & Lookup
-
-**Purpose**: Standard formats for guide and lookup context files
-
-**Last Updated**: 2026-07-28
 
 ---
 
 ## 3. Guide Template
 
 ```markdown
-<!-- Context: {category}/guides | Priority: {critical|high|medium} | Version: 1.0 | Updated: YYYY-MM-DD -->
-# Guide: {Action}
+---
+description: [one-line purpose]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: [1 sentence]
-**Last Updated**: {YYYY-MM-DD}
+# Guide: {Action}
 
 ## Prerequisites
 - Requirement 1
@@ -44,7 +46,7 @@
 |-------|----------|
 | Problem | Fix |
 
-## Related
+## Related Files
 - concepts/x.md
 ```
 
@@ -53,11 +55,13 @@
 ## 4. Lookup Template
 
 ```markdown
-<!-- Context: {category}/lookup | Priority: {high|medium} | Version: 1.0 | Updated: YYYY-MM-DD -->
-# Lookup: {Reference Type}
+---
+description: Quick reference for {desc}
+version: 1.0
+updated: YYYY-MM-DD
+---
 
-**Purpose**: Quick reference for {desc}
-**Last Updated**: {YYYY-MM-DD}
+# Lookup: {Reference Type}
 
 ## {Section}
 | Item | Value | Desc | Code |
@@ -75,13 +79,13 @@
 {path} - {desc}
 ```
 
-## Related
+## Related Files
 - concepts/x.md
 ```
 
 ---
 
-## Related
+## Related Files
 
 - [templates-concept-example.md](./templates-concept-example.md) — Concept & Example templates
 - [templates-error-navigation.md](./templates-error-navigation.md) — Error, Navigation & Specialized templates

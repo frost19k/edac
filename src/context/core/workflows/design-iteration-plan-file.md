@@ -1,4 +1,9 @@
-<!-- Context: workflows/design-iteration-plan-file | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: "Mandatory design plan file: structure, creation timing, and template for preserving design decisions across stages"
+version: 1.0
+updated: 2026-08-13
+---
+
 # Design Plan File (MANDATORY)
 
 **CRITICAL**: Before starting any design work, create a persistent design plan file.

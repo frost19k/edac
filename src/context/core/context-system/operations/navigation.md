@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Operational procedures for maintaining the context system
+version: 1.0
+updated: 2026-08-13
+---
 
 # Context System Operations
-
-**Purpose**: Operational procedures for maintaining the context system
 
 ---
 
@@ -43,7 +45,7 @@ operations/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Context System** → `../navigation.md`
 - **Guides** → `../guides/navigation.md`

@@ -1,4 +1,9 @@
-<!-- Context: workflows/design-iteration-overview | Priority: high | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: A structured 4-stage workflow for creating and iterating on UI designs. This process ensures thoughtful design decisions with user approval at each stage.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Design Iteration Workflow - Overview
 
 ## Overview

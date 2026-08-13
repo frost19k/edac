@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Step-by-step guides for task management workflows
+version: 1.0
+updated: 2026-08-13
+---
 
 # Task Management Guides
-
-**Purpose**: Step-by-step guides for task management workflows
 
 ---
 
@@ -35,7 +37,7 @@ guides/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Task Management** → `../navigation.md`
 - **Standards** → `../standards/navigation.md`

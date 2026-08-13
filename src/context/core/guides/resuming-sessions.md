@@ -1,10 +1,10 @@
-<!-- Context: core/guides | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: How to resume work from previous sessions using session context and task files
+version: 1.0
+updated: 2026-08-13
+---
 
 # Guide: Resuming Multi-Session Tasks
-
-**Purpose**: How to resume work from previous sessions using session context and task files
-
-**Last Updated**: 2026-02-04
 
 ---
 
@@ -318,5 +318,4 @@ After completing a session:
 - **Session Template**: `.tmp/sessions/{YYYY-MM-DD}-{task-slug}/`
 - **Task Template**: `.tmp/tasks/{task-slug}/`
 - **Related**:
-  - guides/compatibility-layer-workflow.md (example session)
   - standards/code-quality.md (what to follow)

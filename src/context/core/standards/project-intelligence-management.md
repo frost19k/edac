@@ -1,4 +1,8 @@
-<!-- Context: standards/intl-mgmt | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+---
+description: How to manage project intelligence files and folders
+version: 1.0
+updated: 2026-08-13
+---
 
 # Project Intelligence Management
 
@@ -29,8 +33,12 @@
 **Process**:
 1. Edit the file
 2. Update frontmatter:
-   ```html
-   <!-- Context: {category} | Priority: {level} | Version: {X.Y} | Updated: {YYYY-MM-DD} -->
+   ```yaml
+   ---
+   description: {one-line purpose}
+   version: {X.Y}
+   updated: {YYYY-MM-DD}
+   ---
    ```
 3. Keep under 200 lines
 4. Commit with message like: `docs: Update business-domain.md with new market focus`
@@ -49,16 +57,17 @@
 - Descriptive: filename tells you what's inside
 
 **Template**:
-```html
-<!-- Context: intl/{filename} | Priority: {high|medium} | Version: 1.0 | Updated: {YYYY-MM-DD} -->
+```markdown
+---
+description: [one-line purpose]
+version: 1.0
+updated: YYYY-MM-DD
+---
 
 # File Title
 
-> One-line purpose statement
-
 ## Quick Reference
 
-- **Purpose**: [What this covers]
 - **Update When**: [Triggers]
 - **Related Files**: [Links]
 
@@ -73,7 +82,7 @@
 
 **Process**:
 1. Create file in `intl/`
-2. Add frontmatter with `intl/{filename}`
+2. Add YAML frontmatter
 3. Follow existing file patterns
 4. Keep under 200 lines
 5. Add to `navigation.md`
@@ -100,15 +109,17 @@ intl/
 **Process**:
 1. Create folder: `mkdir intl/{name}/`
 2. Create `navigation.md` inside:
-   ```html
-   <!-- Context: intl/{name}/nav | Priority: medium | Version: 1.0 | Updated: {YYYY-MM-DD} -->
-   
+   ```markdown
+   ---
+   description: Index of {name} context files
+   version: 1.0
+   updated: YYYY-MM-DD
+   ---
+
    # {Name} Navigation
-   
-   > Quick overview
-   
+
    ## Files
-   
+
    | File | Purpose |
    |------|---------|
    | `file-1.md` | [Desc] |
@@ -129,13 +140,16 @@ intl/
 
 **Process**:
 1. Rename: `filename.md` → `filename.deprecated.md`
-2. Add frontmatter:
-   ```html
-   <!-- DEPRECATED: {YYYY-MM-DD} - {Reason} -->
-   <!-- REPLACED BY: {new-file.md} -->
+2. Add deprecation frontmatter:
+   ```yaml
+   ---
+   description: DEPRECATED — see {new-file.md}
+   version: 1.0
+   updated: YYYY-MM-DD
+   ---
    ```
 3. Add banner at top:
-   > ⚠️ **DEPRECATED**: See `new-file.md` for current info
+   > **DEPRECATED**: See `new-file.md` for current info
 4. Mark as deprecated in `navigation.md`
 
 **Never Delete**:
@@ -148,8 +162,12 @@ intl/
 ## Version Tracking
 
 **Frontmatter**:
-```html
-<!-- Context: {category} | Priority: {level} | Version: {MAJOR.MINOR} | Updated: {YYYY-MM-DD} -->
+```yaml
+---
+description: {one-line purpose}
+version: {MAJOR.MINOR}
+updated: {YYYY-MM-DD}
+---
 ```
 
 **Version Rules**:
@@ -186,7 +204,7 @@ See [mvi.md](../context-system/standards/mvi.md) for file size limits, required 
 
 ### Add New Intelligence File
 - [ ] Follow naming convention
-- [ ] Add complete frontmatter
+- [ ] Add complete YAML frontmatter
 - [ ] Include Quick Reference
 - [ ] Keep under 200 lines
 - [ ] Add to navigation.md

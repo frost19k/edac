@@ -1,4 +1,9 @@
-<!-- Context: web/animation-advanced | Priority: medium | Version: 1.0 | Updated: 2025-12-09 -->
+---
+description: Recipes, best practices, micro-interactions, and accessibility considerations.
+version: 1.0
+updated: 2026-08-13
+---
+
 # Advanced Animation Patterns
 
 Recipes, best practices, micro-interactions, and accessibility considerations.

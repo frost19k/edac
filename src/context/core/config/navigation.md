@@ -1,8 +1,10 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+---
+description: Configuration standards and patterns for the context system
+version: 1.0
+updated: 2026-08-13
+---
 
 # Core Configuration
-
-**Purpose**: Configuration standards and patterns for the context system
 
 ---
 
@@ -32,7 +34,7 @@ core/config/
 
 ---
 
-## Related Context
+## Related Files
 
 - **Core Standards** → `../standards/navigation.md`
 - **Core System** → `../system/navigation.md`

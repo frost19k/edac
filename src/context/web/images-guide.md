@@ -1,7 +1,10 @@
-<!-- Context: web/images | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# Image Guidelines
+---
+description: Guidelines for placeholder and responsive images
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Guidelines for placeholder and responsive images
+# Image Guidelines
 
 ---
 
@@ -120,7 +123,7 @@
 
 ---
 
-## Related
+## Related Files
 
 - `icons-guide.md` - Icon systems
 - `fonts-guide.md` - Font loading

@@ -1,7 +1,10 @@
-<!-- Context: workflows/external-libraries-faq | Priority: medium | Version: 1.0 | Updated: 2026-02-05 -->
-# External Libraries: FAQ
+---
+description: Troubleshooting and common questions about ExternalScout
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Troubleshooting and common questions about ExternalScout
+# External Libraries: FAQ
 
 ---
 
@@ -158,7 +161,7 @@ Not listed? ExternalScout can still fetch from official docs.
 
 ---
 
-## Related
+## Related Files
 
 - `external-libraries-workflow.md` - Core workflow
 - `external-libraries-scenarios.md` - Common scenarios

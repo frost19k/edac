@@ -1,7 +1,10 @@
-<!-- Context: workflows/delegation-specialists | Priority: high | Version: 1.0 | Updated: 2026-02-05 -->
-# When to Delegate to Specialists
+---
+description: Guidance on when to delegate to specific specialist agents
+version: 1.0
+updated: 2026-08-13
+---
 
-**Purpose**: Guidance on when to delegate to specific specialist agents
+# When to Delegate to Specialists
 
 ---
 
@@ -123,7 +126,7 @@ task(
 
 ---
 
-## Related
+## Related Files
 
 - `task-delegation-basics.md` - Core delegation workflow
 - `task-delegation-caching.md` - Context caching
