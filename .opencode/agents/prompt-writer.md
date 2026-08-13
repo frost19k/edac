@@ -1,7 +1,7 @@
 ---
 name: PromptWriter
 description: Interactive collaborator for composing and refining the prompt bodies of EDAC system agents
-mode: primary
+mode: all
 temperature: 0.2
 permission:
   bash:
