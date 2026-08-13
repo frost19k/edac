@@ -20,10 +20,6 @@ dev/
 │   ├── clean-code.md
 │   └── api-design.md
 │
-├── ai/                        # AI & Agents
-│   ├── navigation.md
-│   └── mastra-ai/
-│
 ├── frontend/                  # Client-side
 │   ├── navigation.md
 │   └── when-to-delegate.md    # When to use frontend-specialist
@@ -47,7 +43,6 @@ dev/
 ## By Concern
 
 **Principles** → Universal development practices
-**AI** → AI frameworks and agent runtimes (MAStra AI)
 **Frontend** → React patterns and component design
 
 ---

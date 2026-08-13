@@ -78,7 +78,7 @@ Filenames should tell you what's inside:
 ### 6. Knowledge Harvesting
 Extract valuable context from AI summaries/overviews, then delete them. Workspace stays clean, knowledge persists.
 
-### 5. Technology Context Organization
+### 7. Technology Context Organization
 
 **Purpose**: Ensure consistent placement of new technologies (frameworks, libraries, tools) to maintain discoverability.
 
