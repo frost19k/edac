@@ -170,6 +170,7 @@ The harness injects the full tool schema (tool names, descriptions, parameters) 
 
 **Permission block**
 - [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
+- [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects — see [Permission Model](../harness/permission-model.md) §b "Granular vs shorthand keys".
 - [ ] No OAC metadata fields in frontmatter (belong in `registry.json` — see [Agent Frontmatter](../harness/agent-frontmatter.md) and [src/ Package Structure](./src-structure.md))
   - [ ] Sensitive files denied under `read` and `edit` (path globs) for all agents; `grep` restricted by search-term denies (see [Permission Model](../harness/permission-model.md) §d) — `grep` CANNOT be scoped by file path
 - [ ] Destructive commands denied

@@ -54,6 +54,29 @@ Use the 15-key list above; do not reintroduce `todoread` or `codesearch`.
 - There is **no `write` key.** The `edit` key covers both modifying existing files and creating new files. A `write:` entry in a `permission:` block is silently ignored by OpenCode — use `edit` instead.
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it from their frontmatter.
 
+**Granular vs shorthand keys (format spec):**
+
+Not all 15 keys accept the same value format. This distinction was verified against `opencode.ai/docs` (see [../research/opencode-permission-model.md](../research/opencode-permission-model.md) §"Granular vs shorthand") and is the authority on how each key must be declared.
+
+- **Granular keys** — accept either a shorthand action (`"allow"`) or an object of glob/pattern → action (`{"*": "deny", "git status *": "allow"}`):
+  `read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `external_directory`, `lsp`, `skill`
+- **Shorthand-only keys** — accept a single action string only (`"allow"`, `"ask"`, or `"deny"`). A glob-pattern object (`{"*": "allow"`) is **invalid** and causes a configuration error at load time:
+  `webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`
+
+```yaml
+# ✅ Correct — granular key with pattern object
+bash:
+  "*": "deny"
+  "git status *": "allow"
+
+# ✅ Correct — shorthand-only key with action string
+webfetch: "allow"
+
+# ❌ Invalid — shorthand-only key with pattern object (causes config error)
+webfetch:
+  "*": "allow"
+```
+
 ## (c) Agent-Type Patterns
 
 The four posture archetypes below are adapted from the OAC sources. All example frontmatter uses `temperature: 0.2-0.3` (EDAC convention, Decision D3) and only verified keys.
@@ -343,6 +366,7 @@ permission:
 - [ ] Using `permission:` (singular, not `permissions:`).
 - [ ] Catch-all rules (`"*"`) come **first**; specific overrides come **after** (last-match-wins).
 - [ ] Only verified keys used — no `todoread`, no `codesearch`, no `write`; `question` appears only on primary agents.
+- [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects — see §b "Granular vs shorthand keys".
 - [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see §d "Canonical grep search-term deny block") — `grep` CANNOT be scoped by file path. Omit only for a tool denied wholesale via `"*": "deny"`.
 - [ ] Dangerous commands denied (`sudo *`, `rm -rf /*`, `> /dev/*`, `chmod 777 *`); destructive operations set to `ask` (`rm -rf *`, `git push --force*`, `docker system prune*`, `npm publish*`).
 - [ ] Write-enabled agents declare explicit `read`, `grep`, `glob`, `list` permissions rather than relying on defaults.

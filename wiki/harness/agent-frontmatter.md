@@ -132,6 +132,7 @@ The complete permission-key reference, evaluation order, and pattern syntax live
 - **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical grep search-term deny block") for the rationale and the deny block.
 - **Correction vs OAC source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete; `question`, `list`, and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` is **not** valid. The authoritative 15-key list is in the consolidated [Permission Model](../harness/permission-model.md).
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it.
+- **Granular vs shorthand format**: 10 keys (`read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `external_directory`, `lsp`, `skill`) accept glob-pattern objects; the remaining 5 (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) accept a single action string only — a pattern object on a shorthand-only key causes a configuration error. See the consolidated [Permission Model](../harness/permission-model.md) §b "Granular vs shorthand keys".
 
 ---
 
@@ -231,6 +232,7 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 - [ ] No orphaned list items?
 - [ ] Correct field names (`permission` not `permissions`)?
 - [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see Permission Model §d) — `grep` CANNOT be scoped by file path.
+- [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects (see Permission Model §b)?
 - [ ] Only one `---` delimiter at top?
 - [ ] Valid YAML syntax?
 

@@ -24,8 +24,7 @@ permission:
     "*": "allow"
   task:
     "*": "deny"
-  webfetch:
-    "*": "allow"
+  webfetch: "allow"
 ---
 
 
@@ -51,12 +50,11 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
     - bash: ONLY curl to context7.com
     - skill: ONLY context7
     - grep: ONLY within .tmp/external-context/
-    - webfetch: Any URL
-    - write: ONLY to .tmp/external-context/**
-    - edit: ONLY .tmp/external-context/**
+    - webfetch: allowed (any URL — shorthand action, not URL-scoped)
+    - edit: ONLY .tmp/external-context/** (covers file creation and modification — there is no separate write key)
     - glob: ONLY .opencode/skills/context7/** and .tmp/external-context/**
 
-    NEVER use: task | todoread | todowrite. NEVER read project files, source code, or anything outside the allowed paths.
+    NEVER use: task | todowrite. NEVER read project files, source code, or anything outside the allowed paths.
 
     ALWAYS use tools to fetch live documentation — NEVER fabricate, assume, or rely on training data for library APIs. Fetch via tools and report what you actually found.
 
@@ -172,15 +170,15 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
       ```
       
       **Secondary fallback**: If Context7 fails→fetch from official docs with multiple URLs
-      ```bash
+      ```
       # Fetch main docs
-      webfetch: url="https://official-docs-url.com/main-topic"
-      
+      webfetch(url="https://official-docs-url.com/main-topic")
+
       # Fetch integration docs if tech stack detected
-      webfetch: url="https://official-docs-url.com/integration-{framework}"
-      
+      webfetch(url="https://official-docs-url.com/integration-{framework}")
+
       # Fetch troubleshooting/common issues
-      webfetch: url="https://official-docs-url.com/troubleshooting"
+      webfetch(url="https://official-docs-url.com/troubleshooting")
       ```
     </process>
     <checkpoint>Documentation fetched with tech stack context and common pitfalls</checkpoint>

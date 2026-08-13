@@ -14,7 +14,7 @@
 ## harness/
 - [Agent Frontmatter](harness/agent-frontmatter.md) — valid OpenCode frontmatter fields, display-name vs file-name, deprecated keys, common mistakes.
 - [Subagent Structure](harness/subagent-structure.md) — standard subagent file template, tiers, rules, validation checklist.
-- [Permission Model](harness/permission-model.md) — consolidated: verified 15-key set, evaluation order, agent-type patterns, security patterns.
+- [Permission Model](harness/permission-model.md) — consolidated: verified 15-key set, granular-vs-shorthand format spec, evaluation order, agent-type patterns, security patterns.
 
 ## research/
 - [OpenCode Permission Model](research/opencode-permission-model.md) — upstream-verified canonical permission keys; resolves the OAC source contradiction.
