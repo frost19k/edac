@@ -35,6 +35,8 @@ Agent prompts mix three distinct safeguard mechanisms. Structure them as separat
 
 Primary agents must embed all 7 principles from [../framework/epistemic-standards.md](../framework/epistemic-standards.md). The `uncertainty_is_information` principle must include **explicit permission to abstain**: *"You have explicit permission to say 'I don't know' or 'I cannot verify this' when evidence is absent."*
 
+This is the highest-leverage single addition to any agent prompt — cited impact: 71% reduction in confident wrong answers (BSWEN 2026, cited in [Anti-Fabrication Mechanisms](anti-fabrication.md)). The full tiered ranking of anti-fabrication techniques — from Tier 1 (permission to abstain, evidence-first scaffolding) through Tier 4 (defence-in-depth) — is documented in [Anti-Fabrication Mechanisms](anti-fabrication.md). The meta-principle: **mechanisms over declarations** — if a protocol is being violated, adding more declarations of the same type does not close the gap; convert principles into procedures, gates, and structural mechanisms.
+
 *Anti-pattern:* embedding only 5 of 7, or burying the pre-conclusion checkpoint inside a workflow stage instead of presenting it as a standalone principle.
 
 ## 4. Permission Blocks Are Not an Optimization Target
@@ -55,7 +57,10 @@ The granular permission block exists because every `"allow"` entry is one fewer 
 
 ## 6. Constraints: Positive Framing with Safety-Critical NEVERs
 
-The `<constraints>` section should be predominantly positive directives, reserving "NEVER" for genuinely safety-critical boundaries.
+The `<constraints>` section should be predominantly positive directives, reserving "NEVER" for genuinely safety-critical boundaries. This principle is backed by two empirical findings (cited in [Anti-Fabrication Mechanisms](anti-fabrication.md)):
+
+- **Deontological framing outperforms preference framing**: *"Your obligation is to X"* outperforms *"prefer to X"* by 27–64% in closing compliance gaps (Koorndijk 2025). Categorical duties create stronger behavioural anchors than advisory preferences.
+- **Negative instructions backfire**: "don't say X" inserts the forbidden concept into context and can *increase* the forbidden output; positive/allow-list framing beats negative framing.
 
 **Positive (reframe these):**
 - "Load required context before any write/edit operation."
@@ -67,7 +72,7 @@ The `<constraints>` section should be predominantly positive directives, reservi
 - Credential exposure: "NEVER surface command output that may contain credentials, keys, tokens, or secrets."
 - Destructive operations: "NEVER execute commands that would destroy the system."
 
-*Why:* positive framing gives the model a trajectory; "be concise" moves toward brevity with purpose, whereas "don't be verbose" abandons it in an infinite field of possible behaviours.
+*Why:* positive framing gives the model a trajectory; "be concise" moves toward brevity with purpose, whereas "don't be verbose" abandons it in an infinite field of possible behaviours. The deontological finding extends this: framing the duty as an obligation ("your duty is to X") closes compliance gaps that preference framing ("prefer to X") leaves open.
 
 ## 7. Execution Path Classification with Scope Boundary
 
@@ -187,6 +192,9 @@ permission:
 ## Related
 
 - [../framework/epistemic-standards.md](../framework/epistemic-standards.md) — the 7 reasoning principles that principle #3 embeds.
+- [Anti-Fabrication Mechanisms](../framework/anti-fabrication.md) — empirical backing for principle #3 (71% finding, tiered techniques) and principle #6 (deontological framing, 27–64% improvement).
+- [Research Completeness](../framework/research-completeness.md) — the "when to stop" failure class that principle #3's epistemic framework must also guard against.
+- [Mechanistic Framing](../framework/mechanistic-framing.md) — why agent files must be written as stateless contracts, not human-addressed documents; the anti-anthropomorphism discipline underlying all 13 principles.
 - [../harness/subagent-structure.md](../harness/subagent-structure.md) — standard subagent file template (principle #12).
 - [../harness/agent-frontmatter.md](../harness/agent-frontmatter.md) — valid YAML frontmatter keys.
 - [../harness/permission-model.md](../harness/permission-model.md) — consolidated permission allow/deny/ask model (principles #4, #5).

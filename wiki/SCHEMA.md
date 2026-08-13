@@ -29,7 +29,7 @@ Concretely:
 - **SystemBuilder's constitution** — the *how*: operational steps, tool translations, and conflict handling for every wiki workflow, performed inline under Wiki Stewardship. ExternalScout is spawned for external research fetch only; SystemBuilder ingests and files the results.
 
 ## Layout
-- `sources/` — raw, immutable primary data. SystemBuilder writes cited research docs here (from ExternalScout output or user-dropped material). Never modified after creation.
+- `sources/` — transient primary data. SystemBuilder writes cited research docs here (from ExternalScout output or user-dropped material) during research. Once ingested into `framework/`/`harness/`/`research/` pages, the source is removed — the ingested pages become the durable evidence base. Pages reference removed sources with the `(removed)` prefix in their `sources:` frontmatter.
 - `framework/` — generated pages on EDAC's conceptual architecture (agentic-system design, the layered model, registry/install model, component taxonomy).
 - `harness/` — generated pages on OpenCode harness specifics (agent frontmatter, permission model, tools, MCP, subagent spawning, context/`compress`).
 - `research/` — generated pages on external references, findings, comparisons (OpenAgentsControl lineage, upstream OpenCode docs, related projects).
@@ -57,7 +57,7 @@ status: draft | stable
 Body: markdown. Lead with the finding, then evidence. Cross-link to sibling pages with relative links (`../harness/permissions.md`). Note contradictions explicitly rather than silently overwriting.
 
 ## Source format (in `sources/`)
-One file per research stub, named `lower-case-stub.md`. Frontmatter:
+Sources are **transient** — they exist during research and ingestion, then are removed once their content is distilled into `framework/`/`harness/`/`research/` pages. One file per research stub, named `lower-case-stub.md`. Frontmatter:
 
 ```yaml
 ---
@@ -68,7 +68,7 @@ author: ...
 ---
 ```
 
-Body: structured notes + verbatim quotes where useful, with inline citations. SystemBuilder works in `.tmp/{stub}/external-research/` and writes the final cited doc to `sources/{stub}.md`.
+Body: structured notes + verbatim quotes where useful, with inline citations. SystemBuilder works in `.tmp/{stub}/external-research/` and writes the final cited doc to `sources/{stub}.md`. After ingestion, the source is deleted; pages mark provenance with `sources: ["(removed) sources/{stub}.md"]`.
 
 ## Procedures
 The workflows below are described conceptually — *what* each does. SystemBuilder performs all of them inline under Wiki Stewardship; the operational steps (*how*) live in SystemBuilder's constitution (see Authority & layering above).
@@ -77,7 +77,7 @@ The workflows below are described conceptually — *what* each does. SystemBuild
 Gather external data via ExternalScout (Context7, web search/fetch). SystemBuilder produces a structured, cited doc in `sources/` from the results. Scratch work stays in `.tmp/{stub}/external-research/` and is not committed.
 
 ### Ingest
-Given a source, create/update relevant pages across `framework/` `harness/` `research/`, add cross-references, then update `index.md` and append to `log.md`. A single source may touch many pages.
+Given a source, create/update relevant pages across `framework/` `harness/` `research/`, add cross-references, then update `index.md` and append to `log.md`. A single source may touch many pages. Once ingestion is complete, remove the source from `sources/` — the ingested pages are the durable record. Mark the `sources:` frontmatter with the `(removed)` prefix to preserve provenance.
 
 ### Query
 Read `index.md` to locate relevant pages, read them, synthesize an answer with citations. Good answers may be filed back as new pages.
@@ -104,7 +104,7 @@ Standalone health-check of the generated pages (`framework/`, `harness/`, `resea
        `framework/src-structure.md` "Packaging vs. runtime location".
 7. **Secret scan** — leaked secrets in ordinary files are flagged (never written into pages).
 
-Exempt from these checks: `sources/` (immutable upstream docs), `SCHEMA.md`, `TODO.md`, `log.md`, `AUDIT.md` (scratchpad), and `framework/src-structure.md` (legitimately quotes wrong forms to explain the fix).
+Exempt from these checks: `sources/` (transient — may be empty between ingests), `SCHEMA.md`, `TODO.md`, `log.md`, `AUDIT.md` (scratchpad), and `framework/src-structure.md` (legitimately quotes wrong forms to explain the fix).
 
 ### Audit capture (anyone)
 Ad-hoc, low-friction. While working on anything, if you spot a flaw in the wiki, append a bullet to `AUDIT.md` and return to the task — do not fix it inline. The recommended bullet shape is encoded as a comment in `AUDIT.md` itself:

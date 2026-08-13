@@ -85,6 +85,7 @@ The initial OAC-standards ingest copied OAC's `.opencode/` paths into the wiki (
 
 ## Related
 
+- [Mechanistic Framing](mechanistic-framing.md) — why agent definition and context files must describe present state only; the packaging-vs-runtime distinction below is the structural basis for that discipline.
 - [Versioning](versioning.md) — two coexisting versions and where each lives (`VERSION`/`package.json`, `registry.json`).
 - [Agent Frontmatter](harness/agent-frontmatter.md) — what belongs in frontmatter vs `registry.json`.
 - `wiki/SCHEMA.md` — the EDAC↔OAC relationship note.

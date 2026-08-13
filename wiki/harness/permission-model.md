@@ -221,7 +221,7 @@ Examples: ExternalScout, ContextScout.
 
 ### Canonical sensitive-file deny block (Always Deny Sensitive Files)
 
-Deny sensitive files under **`read` and `edit`** using path globs — these match file paths and work correctly. **`grep` is also a leak vector** (it returns matching lines, surfacing a secret in output), **but its permission matches the SEARCH QUERY, not the file path.** Path globs like `**/*.env` are therefore **inert** under `grep:`; restrict `grep:` with search-term denies instead (next subsection). Verified against `opencode.ai/docs` and an in-repo empirical test — see [../sources/grep-permission-semantics.md](../sources/grep-permission-semantics.md).
+Deny sensitive files under **`read` and `edit`** using path globs — these match file paths and work correctly. **`grep` is also a leak vector** (it returns matching lines, surfacing a secret in output), **but its permission matches the SEARCH QUERY, not the file path.** Path globs like `**/*.env` are therefore **inert** under `grep:`; restrict `grep:` with search-term denies instead (next subsection). Verified against `opencode.ai/docs` and an in-repo empirical test.
 
 ```yaml
 permission:

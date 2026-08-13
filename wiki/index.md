@@ -3,8 +3,11 @@
 <!-- Updated on every ingest by SystemBuilder. Group entries by directory. -->
 
 ## framework/
-- [Epistemic Standards](framework/epistemic-standards.md) — the 7-principle epistemic constitution for agents (probe, evidence gradients, intent-vs-reality, uncertainty, contradiction, sensitive output, pre-conclusion).
-- [Prompt Design Principles](framework/prompt-design-principles.md) — 13 agent-prompt design principles, anti-patterns, and three-tier approval gates.
+- [Epistemic Standards](framework/epistemic-standards.md) — the 7-principle epistemic constitution for agents (probe, evidence gradients, intent-vs-reality, uncertainty, contradiction, sensitive output, pre-conclusion). Now enriched with empirical citations from anti-fabrication and research-completeness research.
+- [Prompt Design Principles](framework/prompt-design-principles.md) — 13 agent-prompt design principles, anti-patterns, and three-tier approval gates. Now enriched with deontological-framing and mechanisms-over-declarations findings.
+- [Mechanistic Framing](framework/mechanistic-framing.md) — agents are stateless text-processing functions, not humans; anti-anthropomorphism discipline for agent definition and context files (anti-patterns, mechanistic framing, EDAC's identity-first position).
+- [Anti-Fabrication Mechanisms](framework/anti-fabrication.md) — the compliance gap, the G3 Cliff, and tiered anti-fabrication techniques ranked by production impact; the "mechanisms over declarations" meta-principle.
+- [Research Completeness](framework/research-completeness.md) — the "when to stop" failure class: illusory completion, satisfaction of search, premature confidence; distinguishing "I found X" from "X is all there is to find."
 - [Versioning](framework/versioning.md) — three coexisting versions: repo semver, registry schema_version, per-agent component version.
 - [src/ Package Structure](framework/src-structure.md) — EDAC's authoritative on-disk layout; the source of truth for all path assertions. **Includes "Packaging vs. runtime location"** — `src/context/` is packaging-only; agents' `.opencode/context/` strings are correct for the installed location, not stale.
 
@@ -17,7 +20,7 @@
 - [OpenCode Permission Model](research/opencode-permission-model.md) — upstream-verified canonical permission keys; resolves the OAC source contradiction.
 
 ## sources/
-<!-- one cited doc per stub under sources/; not catalogued here -->
+<!-- transient: cited docs live here during research, removed after ingestion; not catalogued -->
 
 ## Routing (folded from oac-standards/navigation.md)
 - **Creating new agents**: load `harness/agent-frontmatter.md` → `harness/subagent-structure.md` → reference existing agents in `.opencode/agents/`.

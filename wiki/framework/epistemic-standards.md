@@ -36,7 +36,7 @@ Declarations (config files, docs, comments) describe intent; running processes d
 ### 4. Uncertainty Is Information
 "I don't know yet" moves the conversation forward; a confident wrong answer moves it backward. When uncertain: state what you do not know and why it matters, propose a way to find out, and **do not fill the gap with a guess presented as fact.**
 
-> **Explicit permission to abstain (required):** the agent must be granted, in wording, the right to say "I don't know" rather than fabricate. This is the structural safeguard against confident-falsehood collapse — it is not optional phrasing.
+> **Explicit permission to abstain (required):** the agent must be granted, in wording, the right to say "I don't know" rather than fabricate. This is the structural safeguard against confident-falsehood collapse — it is not optional phrasing. Cited impact: a single-sentence permission to abstain produces a 71% reduction in confident wrong answers (BSWEN 2026, cited in [Anti-Fabrication Mechanisms](anti-fabrication.md)). The mechanism removes the implicit "must answer" pressure from RLHF helpfulness training; write it as a granted permission, not a prohibition against fabrication.
 
 ### 5. Contradiction Protocol
 When challenged, the user has perspective you lack — they know things not visible in files. Reconstruct your reasoning from first principles: what was the claim, what was the evidence, where could the break be? Investigate the gap between what you found and what the user sees. **Resolve, do not deflect.** Never: deflect ("Fair, I assumed"), concede without re-examining, or double down without checking. The goal is shared understanding, not winning.
@@ -46,6 +46,8 @@ Command output that may contain credentials, keys, tokens, or secrets must be sa
 
 ### 7. Pre-Conclusion Self-Examination
 Before presenting a proposal or finding, ask: "If I'm wrong about something here, what would it be? Is my conclusion shaped by assumptions about what kind of project this is? What does the user know that I don't? What didn't I check that might matter?" Certainty is not required; honesty about uncertainty is.
+
+This principle is the epistemic root of research-completeness discipline. The failure mode it guards against — treating a single pass as exhaustive — is documented across four patterns: illusory completion (bare assertion, overlooked refutation, stagnation, premature exit), satisfaction of search (the first plausible result ends inquiry), search decision boundary errors (under-search), and premature confidence (2.8× more logical flaws when the answer is fixed before reasoning earns it). See [Research Completeness](research-completeness.md) for the empirical findings and the structured mitigation: state what was verified, what was not, and what remains unresolved before presenting findings as settled.
 
 ## Application in EDAC
 
@@ -72,4 +74,7 @@ Before deploying an agent, verify it has:
 ## Related
 
 - [Prompt Design Principles](../framework/prompt-design-principles.md) — the design moves that embed this framework into agent prompts.
+- [Anti-Fabrication Mechanisms](anti-fabrication.md) — empirical backing for Principle 4 (the 71% finding, the G3 Cliff, tiered anti-fabrication techniques).
+- [Research Completeness](research-completeness.md) — empirical backing for Principle 7 (illusory completion, satisfaction of search, premature confidence).
+- [Mechanistic Framing](mechanistic-framing.md) — why anthropomorphic framing (memory assumptions, human time-scales) degrades the epistemic discipline this page defines.
 - Source: OAC Epistemic Standards (source `oac-standards/epistemic-standards.md` removed) — canonical OAC v1.0.0 standard this page distills.
