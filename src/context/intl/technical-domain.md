@@ -1,4 +1,4 @@
-<!-- Context: intelligence/technical | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+<!-- Context: intl/technical | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
 
 # Technical Domain
 

@@ -10,7 +10,7 @@
 
 ## Core Problem
 
-Users who installed OAC globally have project-intelligence files at `~/.config/opencode/context/intelligence/`. These files are project-specific patterns but aren't committed to git or shared with the team.
+Users who installed EDAC globally have project-intelligence files at `~/.config/opencode/context/intl/`. These files are project-specific patterns but aren't committed to git or shared with the team.
 
 **Solution**: Migrate project-intelligence from global → local, so patterns are version-controlled and team-shared.
 
@@ -30,14 +30,14 @@ Scanning global context...
 Global location: ~/.config/opencode/context/
 
 Found:
-  intelligence/
+  intl/
     technical-domain.md (1.2 KB, Version: 1.3)
     navigation.md (800 bytes, Version: 1.0)
     business-domain.md (1.5 KB, Version: 1.1)
 
 Local location: .opencode/context/
 
-Status: No local intelligence/ found
+Status: No local intl/ found
 ```
 
 **If no global context found:**
@@ -50,7 +50,7 @@ Nothing to migrate. Use /add-context to create project intelligence.
 
 **If no global project-intelligence found (but other global context exists):**
 ```
-Global context found at ~/.config/opencode/context/ but no intelligence/ directory.
+Global context found at ~/.config/opencode/context/ but no intl/ directory.
 
 Only project-intelligence files are migrated (project-specific patterns).
 Core standards stay in global (they're universal, not project-specific).
@@ -63,7 +63,7 @@ Nothing to migrate. Use /add-context to create project intelligence.
 
 ### Stage 2: Check for Conflicts
 
-If local `.opencode/context/intelligence/` already exists:
+If local `.opencode/context/intl/` already exists:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -125,8 +125,8 @@ If no conflicts → proceed directly to Stage 3.
 Migration Plan
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Will copy from: ~/.config/opencode/context/intelligence/
-Will copy to:   .opencode/context/intelligence/
+Will copy from: ~/.config/opencode/context/intl/
+Will copy to:   .opencode/context/intl/
 
 Files to copy:
   ✓ technical-domain.md (1.2 KB)
@@ -142,7 +142,7 @@ Proceed? [y/n]: _
 ```
 
 **Actions on approval:**
-1. Create `.opencode/context/intelligence/` if it doesn't exist
+1. Create `.opencode/context/intl/` if it doesn't exist
 2. Copy each file from global → local
 3. Validate copied files (frontmatter, MVI compliance)
 
@@ -155,7 +155,7 @@ Proceed? [y/n]: _
 Migration Complete
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Copied 3 files to .opencode/context/intelligence/
+Copied 3 files to .opencode/context/intl/
 
   ✓ technical-domain.md
   ✓ navigation.md
@@ -169,13 +169,13 @@ The global files are no longer needed for THIS project (local takes priority).
 Keeping them means they still apply as fallback to other projects.
 
   1. Keep global files (safe default)
-  2. Remove global intelligence/ (only affects this user)
+  2. Remove global intl/ (only affects this user)
 
 Choose [1/2] (default: 1): _
 ```
 
 **If user chooses 2 (Remove):**
-- Delete `~/.config/opencode/context/intelligence/` only
+- Delete `~/.config/opencode/context/intl/` only
 - Do NOT touch `~/.config/opencode/context/core/` or any other global context
 
 </workflow>
@@ -186,12 +186,12 @@ Choose [1/2] (default: 1): _
 
 | Migrated (project-specific) | NOT Migrated (universal) |
 |---|---|
-| `intelligence/` | `core/standards/` |
-| `intelligence/technical-domain.md` | `core/context-system/` |
-| `intelligence/business-domain.md` | `core/workflows/` |
-| `intelligence/navigation.md` | `core/guides/` |
-| `intelligence/decisions-log.md` | Any other `core/` files |
-| `intelligence/living-notes.md` | |
+| `intl/` | `core/standards/` |
+| `intl/technical-domain.md` | `core/context-system/` |
+| `intl/business-domain.md` | `core/workflows/` |
+| `intl/navigation.md` | `core/guides/` |
+| `intl/decisions-log.md` | Any other `core/` files |
+| `intl/living-notes.md` | |
 
 **Rationale**: Project intelligence is project-specific (YOUR tech stack, YOUR patterns). Core standards are universal (code quality, documentation standards) and should stay global.
 
@@ -201,7 +201,7 @@ Choose [1/2] (default: 1): _
 
 **Permission denied:**
 ```
-Error: Cannot write to .opencode/context/intelligence/
+Error: Cannot write to .opencode/context/intl/
 Check directory permissions and try again.
 ```
 
@@ -209,8 +209,8 @@ Check directory permissions and try again.
 ```
 No global OpenCode config found at ~/.config/opencode/
 
-If you installed to a custom location, set OPENCODE_INSTALL_DIR:
-  export OPENCODE_INSTALL_DIR=/your/custom/path
+If you installed to a custom location, set EDAC_INSTALL_DIR:
+  export EDAC_INSTALL_DIR=/your/custom/path
   /context migrate
 ```
 

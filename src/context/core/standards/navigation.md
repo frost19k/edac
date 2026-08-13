@@ -52,7 +52,7 @@
 
 **For project onboarding/understanding**:
 1. Load `project-intelligence.md` (high)
-2. Then load: `../../intelligence/` folder for full project context
+2. Then load: `../../intl/` folder for full project context
 
 ---
 
@@ -60,4 +60,4 @@
 
 - **Workflows** → `../workflows/navigation.md`
 - **Development Principles** → `../../dev/principles/`
-- **Project Intelligence** → `../../intelligence/navigation.md` (full project context)
+- **Project Intelligence** → `../../intl/navigation.md` (full project context)

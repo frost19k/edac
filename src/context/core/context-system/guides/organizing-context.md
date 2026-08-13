@@ -23,7 +23,7 @@
 └── errors/       # Troubleshooting
 ```
 
-**Example**: `repo/`
+**Example**: `dev/`
 
 ---
 
@@ -87,9 +87,9 @@ mkdir -p {category}/{subcategory}
 
 ## Pattern Examples
 
-### Function-Based (repo/)
+### Function-Based (dev/)
 ```
-repo/
+dev/
 ├── concepts/agents.md
 ├── examples/subagent-example.md
 ├── guides/creating-agents.md

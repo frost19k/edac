@@ -1,4 +1,4 @@
-<!-- Context: intelligence/bridge | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+<!-- Context: intl/bridge | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
 
 # Business ↔ Tech Bridge
 

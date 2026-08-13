@@ -1,4 +1,4 @@
-<!-- Context: standards/intelligence-mgmt | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
+<!-- Context: standards/intl-mgmt | Priority: high | Version: 1.0 | Updated: 2026-07-28 -->
 
 # Project Intelligence Management
 
@@ -50,7 +50,7 @@
 
 **Template**:
 ```html
-<!-- Context: intelligence/{filename} | Priority: {high|medium} | Version: 1.0 | Updated: {YYYY-MM-DD} -->
+<!-- Context: intl/{filename} | Priority: {high|medium} | Version: 1.0 | Updated: {YYYY-MM-DD} -->
 
 # File Title
 
@@ -72,8 +72,8 @@
 ```
 
 **Process**:
-1. Create file in `intelligence/`
-2. Add frontmatter with `intelligence/{filename}`
+1. Create file in `intl/`
+2. Add frontmatter with `intl/{filename}`
 3. Follow existing file patterns
 4. Keep under 200 lines
 5. Add to `navigation.md`
@@ -89,7 +89,7 @@
 
 **Structure**:
 ```
-intelligence/
+intl/
 ├── navigation.md           # Root nav
 ├── [new-subfolder]/        # Create this
 │   ├── navigation.md       # Subfolder nav required
@@ -98,10 +98,10 @@ intelligence/
 ```
 
 **Process**:
-1. Create folder: `mkdir intelligence/{name}/`
+1. Create folder: `mkdir intl/{name}/`
 2. Create `navigation.md` inside:
    ```html
-   <!-- Context: intelligence/{name}/nav | Priority: medium | Version: 1.0 | Updated: {YYYY-MM-DD} -->
+   <!-- Context: intl/{name}/nav | Priority: medium | Version: 1.0 | Updated: {YYYY-MM-DD} -->
    
    # {Name} Navigation
    
@@ -116,7 +116,7 @@ intelligence/
 3. Add content files
 4. Update root `navigation.md` with subfolder entry
 
-**Rule**: Every subfolder MUST have `navigation.md`. Avoid nesting deeper than 2 levels (e.g., `intelligence/domain/subdomain/`) to prevent context fragmentation.
+**Rule**: Every subfolder MUST have `navigation.md`. Avoid nesting deeper than 2 levels (e.g., `intl/domain/subdomain/`) to prevent context fragmentation.
 
 ---
 
@@ -219,5 +219,5 @@ See [mvi.md](../context-system/standards/mvi.md) for file size limits, required 
 ## Related Files
 
 - **Standard**: `project-intelligence.md`
-- **Project Intelligence**: `../../intelligence/navigation.md`
+- **Project Intelligence**: `../../intl/navigation.md`
 - **Context System**: `../context-system.md`

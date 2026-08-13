@@ -1,10 +1,10 @@
-<!-- Context: standards/intelligence | Priority: high | Version: 1.0 | Updated: 2025-01-12 -->
+<!-- Context: standards/project-intelligence | Priority: high | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Project Intelligence
 
 > **What**: Living documentation that bridges business domain and technical implementation.
 > **Why**: Quick project understanding and onboarding for developers, agents, and stakeholders.
-> **Where**: `.opencode/context/intelligence/` (dedicated folder)
+> **Where**: `.opencode/context/intl/` (dedicated folder)
 
 ## Quick Reference
 
@@ -30,7 +30,7 @@ This ensures **business and technical domains speak the same language**.
 
 ```
 .opencode/context/
-├── intelligence/              # Project-specific context
+├── intl/                     # Project-specific context
 │   ├── navigation.md                  # Quick overview & routes
 │   ├── business-domain.md             # Business context, problems solved
 │   ├── technical-domain.md            # Stack, architecture, decisions

@@ -56,7 +56,7 @@
 ## Structure
 
 ```
-repo/
+dev/
 ├── navigation.md
 ├── quick-start.md
 ├── concepts/

@@ -1,4 +1,4 @@
-<!-- Context: intelligence/nav | Priority: high | Version: 1.1 | Updated: 2026-07-27 -->
+<!-- Context: intl/nav | Priority: high | Version: 1.2 | Updated: 2026-08-08 -->
 
 # Project Intelligence
 
@@ -7,7 +7,7 @@
 ## Structure
 
 ```
-.opencode/context/intelligence/
+.opencode/context/intl/
 ├── navigation.md              # This file - quick overview
 ├── business-domain.md         # Business context and problem statement
 ├── technical-domain.md        # Stack, architecture, technical decisions

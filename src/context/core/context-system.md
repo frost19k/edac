@@ -30,7 +30,7 @@ category/
 └── errors/                # Common issues
 ```
 
-**Use when**: Content is repository-specific (e.g., `repo/`)
+**Use when**: Content is repository-specific (e.g., `dev/`)
 
 #### Pattern B: Concern-Based (for development context)
 ```
@@ -99,7 +99,7 @@ Extract valuable context from AI summaries/overviews, then delete them. Workspac
 
 ### Pattern A: Function-Based (Repository-Specific)
 
-**Use for**: Repository-specific context (e.g., `repo/`)
+**Use for**: Repository-specific context (e.g., `dev/`)
 
 ```
 .opencode/context/{category}/

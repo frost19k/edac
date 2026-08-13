@@ -1,4 +1,4 @@
-<!-- Context: core/context-paths | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/context-paths | Priority: low | Version: 1.1 | Updated: 2026-08-08 -->
 
 ---
 id: context-paths
@@ -20,9 +20,9 @@ This mirrors OpenCode's own config merging behavior (see [OpenCode Config Docs](
 
 | Content Type | Recommended Location | Why |
 |---|---|---|
-| **Project Intelligence** (tech stack, patterns, naming) | Local `.opencode/context/intelligence/` | Project-specific, committed to git, shared with team |
-| **Core Standards** (code-quality, docs, tests) | Wherever OAC was installed | Universal standards, same across projects |
-| **Personal Defaults** (your preferred patterns) | Global `~/.config/opencode/context/intelligence/` | Personal coding style across all projects |
+| **Project Intelligence** (tech stack, patterns, naming) | Local `.opencode/context/intl/` | Project-specific, committed to git, shared with team |
+| **Core Standards** (code-quality, docs, tests) | Wherever EDAC was installed | Universal standards, same across projects |
+| **Personal Defaults** (your preferred patterns) | Global `~/.config/opencode/context/intl/` | Personal coding style across all projects |
 
 ## How Merging Works
 
@@ -30,7 +30,7 @@ This mirrors OpenCode's own config merging behavior (see [OpenCode Config Docs](
 - If a file exists **only** in global, it's still loaded (acts as a fallback)
 - If a file exists **only** in local, it's loaded normally
 
-**Example**: User installs OAC globally (core standards at `~/.config/opencode/context/core/`), then runs `/add-context` in a project (creates `.opencode/context/intelligence/` locally). The agent loads both: core standards from global, project intelligence from local.
+**Example**: User installs EDAC globally (core standards at `~/.config/opencode/context/core/`), then runs `/add-context` in a project (creates `.opencode/context/intl/` locally). The agent loads both: core standards from global, project intelligence from local.
 
 ## Path Configuration
 
@@ -47,11 +47,11 @@ Set `"global": false` to disable global context loading.
 
 ## Environment Variable Override
 
-The installer supports `OPENCODE_INSTALL_DIR` to override the install location:
+The installer supports `EDAC_INSTALL_DIR` to override the install location:
 
 ```bash
-export OPENCODE_INSTALL_DIR=~/custom/path
-bash install.sh developer
+export EDAC_INSTALL_DIR=~/custom/path
+bash install.sh
 ```
 
 OpenCode itself supports `OPENCODE_CONFIG_DIR` for a custom config directory (see [OpenCode docs](https://opencode.ai/docs/config/)). If set, context files in that directory are loaded alongside global and local configs.
@@ -64,19 +64,19 @@ If you installed globally but want project-specific context:
 /context migrate
 ```
 
-This copies `intelligence/` from global (`~/.config/opencode/context/`) to local (`.opencode/context/`), so your project patterns are committed to git and shared with your team. See `/context migrate` for details.
+This copies `intl/` from global (`~/.config/opencode/context/`) to local (`.opencode/context/`), so your project patterns are committed to git and shared with your team. See `/context migrate` for details.
 
 ## Common Scenarios
 
 ### Scenario 1: Everything Local (Development / Repo Maintainer)
-- OAC installed locally via `bash install.sh developer`
+- EDAC installed locally via `bash install.sh --install-dir .opencode`
 - All context in `.opencode/context/`
 - Committed to git, team shares everything
 
 ### Scenario 2: Global Install + Local Project Intelligence
-- OAC installed globally via `bash install.sh developer --install-dir ~/.config/opencode`
+- EDAC installed globally via `bash install.sh` (default → `~/.config/opencode`)
 - Core standards at `~/.config/opencode/context/core/`
-- Run `/add-context` in project → creates `.opencode/context/intelligence/` locally
+- Run `/add-context` in project → creates `.opencode/context/intl/` locally
 - Project intelligence committed to git, core standards come from global
 
 ### Scenario 3: Global Personal Defaults

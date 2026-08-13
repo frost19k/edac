@@ -10,23 +10,23 @@
 
 ## Example 1: Category Navigation (Function-Based)
 
-**File**: `repo/navigation.md`
+**File**: `dev/navigation.md`
 
 **Pattern**: Function-Based (repository-specific)
 
 **Token count**: ~250 tokens
 
 ```markdown
-# OpenAgents Control Repository Navigation
+# Project Repository Navigation
 
-**Purpose**: Navigate OpenAgents Control repository context
+**Purpose**: Navigate project repository context
 
 ---
 
 ## Structure
 
 ```
-repo/
+dev/
 ├── navigation.md
 ├── quick-start.md
 │

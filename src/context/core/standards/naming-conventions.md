@@ -48,7 +48,7 @@
 | `Lookup:` | Lookup | 100 | Quick reference tables |
 | `Error:` | Error | 150 | Troubleshooting |
 
-**Profile directories**: `core/`, `repo/`, `dev/`, `web/`, `intelligence/`
+**Profile directories**: `core/`, `dev/`, `web/`, `intl/`
 
 ---
 
@@ -100,5 +100,3 @@ open-agent.md     → OpenAgent
 ## Related
 
 - `navigation.md` — Core standards index
-- `../../repo/standards/agent-frontmatter.md` — Frontmatter format rules
-- `../../repo/guides/adding-agent-basics.md` — Agent creation workflow
