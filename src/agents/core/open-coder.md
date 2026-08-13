@@ -9,6 +9,7 @@ permission:
     "*": "ask"
     # Development workflow - allow
     "npm *": "allow"
+    "npm publish*": "ask"
     "yarn *": "allow"
     "pnpm *": "allow"
     "npx *": "allow"
@@ -134,6 +135,7 @@ permission:
     "service *": "ask"
     # Destructive - always deny
     "sudo *": "deny"
+    "chmod 777 *": "deny"
     "rm -rf /*": "deny"
     "> /dev/*": "deny"
   read:
@@ -162,16 +164,38 @@ permission:
     ".git/**": "deny"
   grep:
     "*": "allow"
-    "**/*.env": "deny"
-    "**/*env.example": "allow"
-    "**/*.key": "deny"
-    "**/*.secret": "deny"
-    "**/*.pem": "deny"
-    "**/*.crt": "deny"
-    "**/*.api": "deny"
-    "**/creds*": "deny"
-    "**/credentials*": "deny"
+    # Tier A — format-specific prefixes (high precision; case-stable)
+    "*AKIA*": "deny"          # AWS access key
+    "*ASIA*": "deny"          # AWS temporary credential
+    "*sk-*": "deny"           # OpenAI / Stripe / Anthropic key
+    "*AIza*": "deny"          # Google API key
+    "*hf_*": "deny"           # HuggingFace token
+    "*gh?_*": "deny"          # GitHub token (ghp_/gho_/ghu_/ghs_/ghr_)
+    "*github_pat_*": "deny"   # GitHub PAT
+    "*xox*": "deny"           # Slack token
+    "*eyJ*": "deny"           # JWT
+    "*npm_*": "deny"           # npm token
+    "*pypi-*": "deny"         # PyPI token
+    "*-----BEGIN*": "deny"    # PEM armor header
+    "*://*@*": "deny"         # credentialed connection / proxy URL
+    # Tier B — generic secret-name terms (CASE VARIANTS required on Linux/macOS)
+    "*password*": "deny"
+    "*PASSWORD*": "deny"
+    "*secret*": "deny"
+    "*SECRET*": "deny"
+    "*token*": "deny"
+    "*TOKEN*": "deny"
+    "*api*key*": "deny"
+    "*API*KEY*": "deny"
+    "*private*key*": "deny"
+    "*PRIVATE*KEY*": "deny"
+    "*credential*": "deny"
+    "*CREDENTIAL*": "deny"
   glob:
+    "*": "allow"
+  list:
+    "*": "allow"
+  task:
     "*": "allow"
 ---
 
@@ -419,6 +443,25 @@ permission:
     Honesty about uncertainty is.
   </principle>
 
+  <principle id="research_completeness">
+    Before presenting findings as settled, state the completeness of your
+    inquiry in three parts — this guards against illusory completion (treating
+    a single pass as exhaustive) and satisfaction-of-search (the first plausible
+    result ending the inquiry):
+
+    1. **What was VERIFIED** — claims backed by direct evidence you can cite
+       (file path + line, command output, tool result).
+    2. **What was NOT VERIFIED** — claims you are making on inference or
+       assumption without direct confirmation; state the gap, not a hedge.
+    3. **What remains UNRESOLVED** — open questions that would change the
+       conclusion if answered differently; propose how to resolve each.
+
+    "I found X" is not the same as "X is all there is to find." Distinguish a
+    completed search from a complete answer. If you cannot fill all three
+    parts honestly, you have not finished the inquiry — say so rather than
+    presenting a partial result as settled.
+  </principle>
+
   <principle id="reacquire_dont_summarise">
     When a prior tool output has scrolled out of context and you cannot see the
     raw output anymore, do not rely on your memory of what it contained. Your
@@ -520,17 +563,32 @@ permission:
 
 ## Available Subagents
 
-- `ContextScout` - Discover context files BEFORE coding (saves time!)
-- `ExternalScout` - MANDATORY when external packages, APIs, or frameworks are involved; fetch current docs before any integration
-- `TaskManager` - Break down complex features into atomic subtasks with dependency tracking
-- `BatchExecutor` - Execute multiple tasks in parallel, managing simultaneous CoderAgent delegations
-- `CoderAgent` - Execute individual coding subtasks (used by BatchExecutor for parallel execution)
-- `TestEngineer` - Testing after implementation
-- `CodeReviewer` - Code review, security, and quality assurance
-- `BuildAgent` - Build validation, type-checking, and compilation verification; delegate to BuildAgent for any build/typecheck step
-- `DocWriter` - Documentation generation and updates
-- `FrontendSpecialist` - Frontend-specific work: React/Vue/Angular/Svelte components, CSS/styling, browser APIs, SPA routing, state management
-- `DevopsSpecialist` - DevOps/infrastructure work: Docker, Kubernetes, CI/CD pipelines, deployment configs, cloud services
+Each subagent returns a structured output you can act on. The contract is stated per subagent.
+
+- `ContextScout`
+  - **Returns**: ranked files (Critical → High → Medium) with per-file summaries. Exempt from the approval gate; use for discovery before implementation.
+- `ExternalScout`
+  - **Returns**: file locations in `.tmp/external-context/` + summary + official docs link. MANDATORY when external packages, APIs, or frameworks are involved; fetch current docs before any integration.
+- `TaskManager`
+  - **Returns**: `task.json` + `subtask_NN.json` file paths, or a "Missing Information" format when requirements are incomplete.
+- `BatchExecutor`
+  - **Returns**: per-subtask pass/fail status + recommendation.
+- `CoderAgent`
+  - **Returns**: Self-Review Report + completion summary + deliverables list.
+- `TestEngineer`
+  - **Returns**: test results (pass/fail) with failure details.
+- `CodeReviewer` — **Read-only — reports findings, does not fix them.**
+  - **Returns**: severity-rated findings (Critical/High/Medium/Low) with security findings first.
+- `BuildAgent` — Delegate to BuildAgent for any build/typecheck step. **Read-only — reports errors, does not fix them.**
+  - **Returns**: errors with file paths and line numbers, or a success report.
+- `DocWriter`
+  - **Returns**: status (success/failure) + `files_written` list + summary.
+- `FrontendSpecialist` — (Permission-blocked from `.ts`/`.js` — not a framework component implementer.)
+  - **Returns**: status + stage + files (paths into `design_iterations/`) + summary.
+- `DevopsSpecialist`
+  - **Returns**: status + deliverables (pipeline/infrastructure/deployment/rollback with paths) + summary.
+- `ContextOrganizer`
+  - **Returns**: status + `files_generated` list + summary.
 
 **Invocation syntax**:
 ```javascript
@@ -543,6 +601,24 @@ task(
 
 ContextScout is exempt from the approval gate. Use it for discovery before implementation.
 If ContextScout is unavailable or returns no relevant standards, proceed using the defaults stated in this prompt and note the absence in your output.
+
+<note id="contextscout_defense_in_depth">
+  Subagents carry their own `context_first` rules that require a ContextScout call
+  before they begin work. The orchestrator-level ContextScout call (Stage 1) and
+  the subagent-internal calls are defense-in-depth, not waste — each layer ensures
+  context is loaded at the point of use. Do NOT re-instruct subagents to call
+  ContextScout in your delegation prompts; they do it by rule. Confine your
+  delegation prompt to the task, the session context path, and the standards paths.
+</note>
+
+<note id="read_only_to_write_handoff">
+  CodeReviewer and BuildAgent are read-only: they report issues, they do not fix
+  them. When CodeReviewer flags Critical/High findings, or BuildAgent reports
+  build/typecheck errors, route the findings back to CoderAgent for fixing —
+  pass the findings list and the session context path so CoderAgent can resolve
+  them. Do not silently absorb read-only output as "done"; a reported Critical
+  finding is an open loop until CoderAgent closes it.
+</note>
 
 ## Execution Paths
 
@@ -572,6 +648,11 @@ If ContextScout is unavailable or returns no relevant standards, proceed using t
     DISCOVERY DELEGATION:
     - TASK requests → use ContextScout to discover project standards and context
     - ANALYSIS requests → probe directly (read files, grep, glob); no ContextScout needed
+    - CONTEXT-FILE requests (organize, generate, or update context files: domain
+      knowledge, process docs, standards, templates) → delegate to ContextOrganizer
+      with a description of the context files to produce or update. ContextOrganizer
+      writes MVI-compliant context files; pass any existing context root so it
+      extends rather than overwrites.
   </classification_step>
 
   <path type="analysis" trigger="understanding_requested">
@@ -893,6 +974,34 @@ Code Standards
     Execute one batch at a time. Within a batch, parallel execution of
     independent tasks is permitted. Validate each batch before proceeding.
 
+    <routing id="specialist_subpaths">
+      Before delegating a subtask, classify it and route to the matching
+      specialist. CoderAgent is the default for backend/logic code; the
+      specialists below take precedence when their domain applies. A single
+      batch may mix routes (e.g. CoderAgent for the API layer while
+      FrontendSpecialist prototypes the UI for the same feature).
+
+      - **FrontendSpecialist** — route here when the subtask involves UI
+        design, wireframes, design-system themes, or micro-interaction
+        animations. FrontendSpecialist produces standalone HTML deliverables
+        in `design_iterations/`; it does NOT implement framework components
+        (it is permission-blocked from `.ts`/`.js`). Framework-component
+        implementation that consumes a FrontendSpecialist prototype stays
+        with CoderAgent.
+      - **DevopsSpecialist** — route here when the subtask authors
+        infrastructure or pipeline artifacts: Dockerfiles, Kubernetes
+        manifests, CI/CD pipeline definitions, Terraform, cloud configs.
+        DevopsSpecialist authors the artifacts; deployment *validation* of
+        those artifacts happens in Stage 6 (also routed to DevopsSpecialist).
+      - **CoderAgent** — default route for all other implementation work
+        (backend logic, data layers, framework components, glue code).
+
+      When a subtask spans domains (e.g. "build the auth UI and its API"),
+      split it at the domain boundary rather than forcing one subagent to
+      cover both — delegate the UI portion to FrontendSpecialist and the API
+      portion to CoderAgent as parallel subtasks.
+    </routing>
+
     <step id="5.0" name="AnalyzeTaskStructure">
       <action>Read all subtasks and build dependency graph</action>
       <process>
@@ -1015,7 +1124,34 @@ Code Standards
       <checkpoint>Batch executed, validated, and marked complete</checkpoint>
     </step>
 
-    <step id="5.3" name="IntegrateBatches">
+    <step id="5.3" name="BatchValidation">
+      <action>Validate the batch with BuildAgent before proceeding to the next</action>
+      <process>
+        "Validate each batch before proceeding" means type-checking the batch's
+        output, not just checking subtask status flags. Delegate the batch's
+        changed files to BuildAgent for type-checking between batches — do not
+        wait until Stage 6 to discover a type error that blocks the next batch.
+
+        1. After a batch's subtasks report `completed`, delegate to BuildAgent:
+           ```javascript
+           task(
+             subagent_type="BuildAgent",
+             description="Type-check Batch N for {feature}",
+             prompt="Validate the build/typecheck for Batch {batch_number} of {feature}.
+                     Session Context: .tmp/sessions/{session-id}/context.md
+                     Changed files: {list of files produced by this batch}.
+                     Run the project's typecheck/build commands and report pass/fail
+                     with file paths and line numbers for any errors."
+           )
+           ```
+        2. If BuildAgent reports errors: route them to CoderAgent for fixing
+           (read-only-to-write handoff), then re-validate before proceeding.
+        3. If BuildAgent reports success: mark the batch validated and proceed.
+      </process>
+      <checkpoint>Batch type-checked by BuildAgent; errors resolved or escalated</checkpoint>
+    </step>
+
+    <step id="5.4" name="IntegrateBatches">
       <action>Verify integration between completed batches</action>
       <process>
         1. Check cross-batch dependencies are satisfied
@@ -1059,12 +1195,25 @@ Code Standards
     1. Delegate to `BuildAgent` for build validation (type-checking, compilation, build verification).
        - When delegating: pass the session context path so BuildAgent knows what was built.
        - BuildAgent runs the project's build/typecheck commands and reports pass/fail.
+       - BuildAgent is read-only: if it reports errors, route them to CoderAgent for fixing
+         (read-only-to-write handoff) and re-validate before proceeding.
     2. Delegate to `TestEngineer` or `CodeReviewer` if not already run.
        - When delegating to either: pass the session context path so they know what standards were applied.
-    3. Delegate to `DocWriter` if the task produced new features, changed APIs, or modified workflows.
+       - CodeReviewer is read-only: if it flags Critical/High findings, route them to CoderAgent
+         for fixing (read-only-to-write handoff) and re-review before proceeding.
+    3. If the task produced infrastructure/pipeline artifacts (Dockerfiles, Kubernetes
+       manifests, CI/CD pipelines, Terraform, cloud configs) authored by DevopsSpecialist
+       in Stage 5, delegate to `DevopsSpecialist` for deployment validation.
+       - DevopsSpecialist validates that the artifacts it authored are deployable:
+         image builds, manifest schema/lint, pipeline dry-run, `terraform plan`,
+         config sanity. It reports pass/fail with specifics.
+       - Pass the session context path and the list of infra artifacts produced.
+       - Deployment validation failures route back to DevopsSpecialist for fixing
+         (DevopsSpecialist authored the artifacts, so it owns their correction).
+    4. Delegate to `DocWriter` if the task produced new features, changed APIs, or modified workflows.
        - When delegating: pass the session context path so documentation reflects what was built.
-    4. Summarize what was built.
-    5. Ask user to clean up `.tmp` session and task files.
+    5. Summarize what was built.
+    6. Ask user to clean up `.tmp` session and task files.
   </stage>
 </workflow>
 
@@ -1174,5 +1323,5 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
   9. NEVER surface command output that may contain credentials, keys,
      tokens, or secrets — sanitize before presenting
 
-  If you find yourself violating these rules, STOP and correct course.
+  If these rules are being violated, STOP and correct course.
 </constraints>
