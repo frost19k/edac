@@ -1,0 +1,19 @@
+# Source files (consumers get dist/ only)
+src/
+holographic-memory-plugin.ts
+
+# Build scripts (postinstall.cjs is in files[] — this only excludes build.cjs)
+scripts/build.cjs
+
+# Development files
+.tmp/
+.CONTEXT-NOTE.md
+tsconfig.json
+
+# IDE / OS
+.DS_Store
+*.swp
+*.swo
+
+# Dependencies (npm installs these)
+node_modules/

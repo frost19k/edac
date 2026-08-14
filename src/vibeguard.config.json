@@ -1,0 +1,37 @@
+{
+  "enabled": true,
+  "debug": false,
+  "placeholder_prefix": "__VG_",
+  "session": {
+    "ttl": "1h",
+    "max_mappings": 100000
+  },
+  "patterns": {
+    "keywords": [
+      { "value": "my-api-key-123", "category": "API_KEY" }
+    ],
+    "regex": [
+      { "pattern": "sk-[A-Za-z0-9]{48}", "category": "OPENAI_KEY" },
+      { "pattern": "sk-proj-[A-Za-z0-9_-]+", "category": "OPENAI_PROJ_KEY" },
+      { "pattern": "sk-ant-api03-[A-Za-z0-9_-]{95}", "category": "ANTHROPIC_KEY" },
+      { "pattern": "AIza[0-9A-Za-z_-]{35}", "category": "GOOGLE_API_KEY" },
+      { "pattern": "hf_[A-Za-z0-9]{34}", "category": "HUGGINGFACE_TOKEN" },
+      { "pattern": "(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]+", "category": "GITHUB_TOKEN" },
+      { "pattern": "github_pat_[0-9a-zA-Z_]{36,}", "category": "GITHUB_PAT" },
+      { "pattern": "AKIA[0-9A-Z]{16}", "category": "AWS_ACCESS_KEY" },
+      { "pattern": "fc-[A-Za-z0-9]{20,}", "category": "FIRECRAWL_KEY" },
+      { "pattern": "eci_live_[a-z0-9]+", "category": "ECOURTS_TOKEN" },
+      { "pattern": "-----BEGIN [A-Z ]*PRIVATE KEY-----[\\s\\S]*?-----END [A-Z ]*PRIVATE KEY-----", "category": "PRIVATE_KEY_BLOCK" },
+      { "pattern": "eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+", "category": "JWT_TOKEN" },
+      { "pattern": "(?:mysql|postgres|postgresql|mongodb|redis|mongodb\\+srv)://[^:]+:[^@]+@", "category": "DB_CONNECTION_STRING" },
+      { "pattern": "(?:https?|socks5)://[^@\\s]+@", "category": "PROXY_AUTH_URL" },
+      { "pattern": "SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43}", "category": "SENDGRID_KEY" },
+      { "pattern": "xox[bpras]-[0-9]+-[0-9]+-[A-Za-z0-9]+", "category": "SLACK_TOKEN" },
+      { "pattern": "sk_live_[A-Za-z0-9]{24,}", "category": "STRIPE_LIVE_KEY" },
+      { "pattern": "npm_[A-Za-z0-9]{36}", "category": "NPM_TOKEN" },
+      { "pattern": "pypi-AgEIcHlwaS5vcmc[A-Za-z0-9_-]+", "category": "PYPI_TOKEN" }
+    ],
+    "builtin": ["email", "china_phone", "china_id", "uuid", "ipv4", "mac"],
+    "exclude": ["example.com", "localhost", "127.0.0.1", "0.0.0.0"]
+  }
+}

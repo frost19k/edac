@@ -1,0 +1,41 @@
+{
+  "name": "holographic-memory",
+  "version": "0.1.0",
+  "description": "Holographic Reduced Representations memory plugin for OpenCode — faithful port from Hermes Agent",
+  "type": "module",
+  "main": "dist/holographic-memory.ts",
+  "exports": {
+    ".": "./dist/holographic-memory.ts"
+  },
+  "files": [
+    "dist/holographic-memory.ts",
+    "config/holographic_memory.json",
+    "skills/holographic-memory/SKILL.md",
+    "scripts/postinstall.cjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "postinstall": "node scripts/postinstall.cjs",
+    "check": "bunx tsc --noEmit",
+    "test": "bun test"
+  },
+  "keywords": ["opencode", "plugin", "memory", "hrr", "holographic", "hermes"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frost19k/holographic-memory"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.14.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "1.14.18",
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  }
+}
