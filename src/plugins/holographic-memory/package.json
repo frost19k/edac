@@ -8,16 +8,10 @@
     ".": "./dist/holographic-memory.ts"
   },
   "files": [
-    "dist/holographic-memory.ts",
-    "config/holographic_memory.json",
-    "skills/holographic-memory/SKILL.md",
-    "scripts/postinstall.cjs",
-    "README.md",
-    "LICENSE"
+    "dist/holographic-memory.ts"
   ],
   "scripts": {
     "build": "node scripts/build.cjs",
-    "postinstall": "node scripts/postinstall.cjs",
     "check": "bunx tsc --noEmit",
     "test": "bun test"
   },

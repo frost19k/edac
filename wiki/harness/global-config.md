@@ -52,7 +52,7 @@ At install, `install.sh` merges the template with any existing target `opencode.
 
 - [Permission Model](../harness/permission-model.md) — the 14-key permission reference, global-only vs per-agent keys, evaluation order.
 - [MCP Provisioning](../harness/mcp-provisioning.md) — the 4 MCP servers provisioned via the `mcp:` block.
-- [Plugin Provisioning](../harness/plugin-provisioning.md) — the 3 plugins provisioned via the `plugin:` block.
+- [Plugin Provisioning](../harness/plugin-provisioning.md) — the 4 plugins (3 via `plugin:` block, 1 built from source).
 - [Install Merge Logic](../harness/install-merge.md) — how `install.sh` merges config templates at install time.
 - [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — how agent body text handles globally-provisioned tools.
 - [src/ Package Structure](../framework/src-structure.md) — where the template lives in `src/`.

@@ -1,6 +1,6 @@
 ---
 name: holographic-memory
-description: Persistent cross-session memory system using Holographic Reduced Representations (HRR). Provides fact_store and fact_feedback tools for structured recall with entity-based probing, compositional reasoning, contradiction detection, and trust scoring.
+description: Persistent cross-session memory system using Holographic Reduced Representations (HRR). Provides the memory store and memory feedback tools for structured recall with entity-based probing, compositional reasoning, contradiction detection, and trust scoring.
 ---
 
 # Holographic Memory — Agent Skill
@@ -18,7 +18,7 @@ You have access to **holographic memory**, a persistent cross-session memory sys
 
 ## Tools
 
-### `fact_store` — 9 Actions
+### Memory Store — 9 Actions
 
 | Action | Use When | Example |
 |--------|----------|---------|
@@ -32,7 +32,7 @@ You have access to **holographic memory**, a persistent cross-session memory sys
 | `remove` | Delete a fact | `{ action: "remove", fact_id: 42 }` |
 | `list` | Browse by category | `{ action: "list", category: "project" }` |
 
-### `fact_feedback` — 2 Actions
+### Memory Feedback — 2 Actions
 
 | Action | Effect |
 |--------|--------|
@@ -75,13 +75,15 @@ You have access to **holographic memory**, a persistent cross-session memory sys
 
 ```
 # User says: "I prefer vim keybindings in VS Code"
+# Store a fact via holographic memory:
 fact_store({ action: "add", content: "User prefers vim keybindings in VS Code", category: "user_pref", tags: "editor,vim,vscode" })
 
 # Later, need to recall editor preferences
+# Search facts via holographic memory:
 fact_store({ action: "search", query: "editor keybindings" })
-# OR
+# OR probe for a specific entity:
 fact_store({ action: "probe", entity: "vim" })
 
-# Used the fact and it was helpful
+# Used the fact and it was helpful — record feedback via holographic memory:
 fact_feedback({ action: "helpful", fact_id: 7 })
 ```

@@ -12,7 +12,7 @@ status: stable
 
 `install.sh` installs the Developer profile from `src/` into a target OpenCode environment. For the component types that need more than a flat copy — config templates and the plugin — it dispatches to one of **three install modes**: merge-on-install (config), copy-or-skip (config), and build-plus-copy (plugin). The generic `cp` path handles agents, subagents, commands, context, and tools; this page covers only the config and plugin logic.
 
-The component list and dispatch routing come from `registry.json` (repo root), the sole source of truth for components, dependencies, and the Developer profile seed (see [Versioning](../framework/versioning.md)). `profiles.developer.components` has 31 entries; the config/plugin dispatch handles 4 of them — 1 plugin and 3 configs — while the remaining agents, subagents, commands, context, tools, and skills fall through to the generic copy path.
+The component list and dispatch routing come from `registry.json` (repo root), the sole source of truth for components, dependencies, and the Developer profile seed (see [Versioning](../framework/versioning.md)). `profiles.developer.components` has 33 entries; the config/plugin dispatch handles 5 of them — 1 plugin and 4 configs — while the remaining agents, subagents, commands, context, tools, and skills fall through to the generic copy path.
 
 ## Config Merge Strategy
 
@@ -74,17 +74,15 @@ cd "$plugin_src" && bun install && node scripts/build.cjs
 
 A build failure is reported and counted but does not abort the install — the loop continues with remaining components. `--dry-run` detects a missing `dist/` ahead of time and warns that a build will be required (and that `bun` must be on PATH).
 
-### Copy (three files)
+### Copy (one file)
 
-Each file respects `--overwrite` independently — an existing file is skipped unless the flag is set:
+The plugin's built bundle is the only file `install_plugin` copies. The config (`holographic_memory.json`) and skill (`holographic-memory/SKILL.md`) are standalone registered components installed via the standard config and skill paths:
 
 | Source (under `src/plugins/holographic-memory/`) | Destination |
 |---|---|
 | `dist/holographic-memory.ts` | `$INSTALL_DIR/plugins/holographic-memory.ts` |
-| `skills/holographic-memory/SKILL.md` | `$INSTALL_DIR/skills/holographic-memory/SKILL.md` |
-| `config/holographic_memory.json` | `$INSTALL_DIR/holographic_memory.json` (install root) |
 
-The plugin's config lands at the install root (not under `plugins/`) because OpenCode loads it from the top-level config location. The skill lands under `skills/` so the harness discovers it via the standard skill path.
+The config lands at `$INSTALL_DIR/holographic_memory.json` (install root) via `install_copy_or_skip` — see [Copy-or-skip](#copy-or-skip-install_copy_or_skip) above. The skill lands at `$INSTALL_DIR/skills/holographic-memory/SKILL.md` via the generic `cp` path.
 
 ## Type-Specific Dispatch (`install_components`)
 
@@ -94,7 +92,7 @@ The install loop resolves dependencies recursively, then iterates `RESOLVED_ORDE
 |---|---|
 | `type:plugin` | `install_plugin` |
 | `config:opencode`, `config:vibeguard` | `install_config_merge` |
-| `config:dcp` | `install_copy_or_skip` |
+| `config:dcp`, `config:holographic_memory` | `install_copy_or_skip` |
 | Everything else (agents, subagents, commands, context, tools, skills) | generic `cp` with `--overwrite` gate and global-install path rewriting |
 
 The dispatch is a `case` on the config `id`, not the `path` — so adding a new merge-mode config means registering it with an `id` the case recognizes, not changing path-matching logic. An unknown config `id` hits the `*)` default and errors — every config must have an explicit handler.
@@ -107,7 +105,7 @@ The dispatch is a `case` on the config `id`, not the `path` — so adding a new 
 jq -r '.profiles.developer.components[]' registry.json
 ```
 
-The 31 seed entries resolve through `resolve_dependencies` (recursive, with wildcard expansion for `context:core/*` etc.) into the final install order. The registry is the sole source of truth — `src/manifest.json` and `src/metadata.json` are deprecated and no script reads them (see [Versioning](../framework/versioning.md) and [src/ Package Structure](../framework/src-structure.md)).
+The 33 seed entries resolve through `resolve_dependencies` (recursive, with wildcard expansion for `context:core/*` etc.) into the final install order. The registry is the sole source of truth — `src/manifest.json` and `src/metadata.json` are deprecated and no script reads them (see [Versioning](../framework/versioning.md) and [src/ Package Structure](../framework/src-structure.md)).
 
 The mirror source directory is defined in two places that must stay in sync: `install.sh` `SRC_ROOT` (`"src"`) and `scripts/registry/dependency-resolution.ts` `MIRROR_DIR` (`"src"`). Changing one without the other breaks path resolution.
 

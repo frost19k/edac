@@ -38,7 +38,7 @@ Redacts secrets in command output before they reach the model. Operates globally
 
 ### Holographic-memory — cross-session fact persistence
 
-Persistent cross-session memory using Holographic Reduced Representations (HRR). Registers two tools — `fact_store` and `fact_feedback` — that agents call deliberately to store, search, and reason about facts. Unlike the auto-managed plugins, this one requires agent awareness: the agent must decide when a fact is worth persisting. The awareness tier varies by agent role — see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) for the full matrix (holo-mem column).
+Persistent cross-session memory using Holographic Reduced Representations (HRR). Registers two tools — the memory store and memory feedback — that agents call deliberately to store, search, and reason about facts. Unlike the auto-managed plugins, this one requires agent awareness: the agent must decide when a fact is worth persisting. The awareness tier varies by agent role — see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) for the full matrix (holo-mem column). The plugin is built from source at install time; its config (`holographic_memory.json`) and skill (`holographic-memory/SKILL.md`) are registered as standalone EDAC components at canonical `src/` locations, not nested inside the plugin directory.
 
 ### PTY — long-running process management
 
@@ -72,7 +72,7 @@ Installed with merge (target wins for existing keys). Keys:
 
 ### `holographic_memory.json` — HRR config
 
-Installed copy. Keys:
+Installed copy-or-skip as a registered config component at `src/holographic_memory.json` (not nested inside the plugin directory). Keys:
 
 | Key | Default | Purpose |
 |---|---|---|
@@ -86,7 +86,7 @@ Installed copy. Keys:
 
 ## Install — Build-at-Install
 
-Holographic-memory is the only plugin built from source. If `dist/` is missing at install time, `install.sh` runs `bun install && node scripts/build.cjs` in `src/plugins/holographic-memory/`, then copies the built `dist/holographic-memory.ts` to the target `plugins/` directory. DCP, vibeguard, and PTY are package references resolved by OpenCode's plugin loader at runtime — no build step. See [Install Merge Logic](../harness/install-merge.md) for the full install procedure, including config-file handling.
+Holographic-memory is the only plugin built from source. If `dist/` is missing at install time, `install.sh` runs `bun install && node scripts/build.cjs` in `src/plugins/holographic-memory/`, then copies the built `dist/holographic-memory.ts` to the target `plugins/` directory. The plugin directory contains only the build contract: `src/` (6 .ts sources), `package.json`, `tsconfig.json`, `scripts/build.cjs`. The config (`holographic_memory.json`) and skill (`holographic-memory/SKILL.md`) are standalone EDAC components at canonical `src/` locations, installed via the standard config and skill paths — not extracted from the plugin directory. DCP, vibeguard, and PTY are package references resolved by OpenCode's plugin loader at runtime — no build step. See [Install Merge Logic](../harness/install-merge.md) for the full install procedure.
 
 ## Related
 

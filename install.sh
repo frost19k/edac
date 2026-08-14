@@ -312,31 +312,6 @@ install_plugin() {
     ok "Installed: plugin:$id (dist)"
     installed=$((installed + 1))
   fi
-
-  # Install skill → skills/holographic-memory/SKILL.md
-  local skill_src="$plugin_src/skills/holographic-memory/SKILL.md"
-  local dest_skill="$INSTALL_DIR/skills/holographic-memory/SKILL.md"
-  mkdir -p "$(dirname "$dest_skill")"
-  if [[ -f "$dest_skill" && "$OVERWRITE" == false ]]; then
-    info "Skipped: plugin:$id (skill, exists)"
-    skipped=$((skipped + 1))
-  else
-    cp "$skill_src" "$dest_skill"
-    ok "Installed: plugin:$id (skill)"
-    installed=$((installed + 1))
-  fi
-
-  # Install config → holographic_memory.json (at install root)
-  local config_src="$plugin_src/config/holographic_memory.json"
-  local dest_config="$INSTALL_DIR/holographic_memory.json"
-  if [[ -f "$dest_config" && "$OVERWRITE" == false ]]; then
-    info "Skipped: plugin:$id (config, exists)"
-    skipped=$((skipped + 1))
-  else
-    cp "$config_src" "$dest_config"
-    ok "Installed: plugin:$id (config)"
-    installed=$((installed + 1))
-  fi
 }
 
 # ── Config Merge Install ─────────────────────────────────────────────────────
@@ -447,7 +422,7 @@ install_components() {
           install_config_merge "$id" "$path"
           continue
           ;;
-        dcp)
+        dcp|holographic_memory)
           install_copy_or_skip "$id" "$path"
           continue
           ;;

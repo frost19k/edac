@@ -2286,6 +2286,20 @@
         ],
         "dependencies": [],
         "category": "essential"
+      },
+      {
+        "id": "holographic_memory",
+        "name": "Holographic Memory Config",
+        "type": "config",
+        "path": "holographic_memory.json",
+        "description": "Holographic-memory plugin configuration — HRR memory store settings",
+        "tags": [
+          "config",
+          "holographic-memory",
+          "memory"
+        ],
+        "dependencies": [],
+        "category": "essential"
       }
     ],
     "skills": [
@@ -2306,6 +2320,23 @@
           "skills/task-management/SKILL.md",
           "skills/task-management/router.sh",
           "skills/task-management/scripts/task-cli.ts"
+        ]
+      },
+      {
+        "id": "holographic-memory",
+        "name": "Holographic Memory",
+        "type": "skill",
+        "path": "skills/holographic-memory/SKILL.md",
+        "description": "Persistent cross-session memory system using Holographic Reduced Representations (HRR). Provides fact_store and fact_feedback tools for structured recall with entity-based probing, compositional reasoning, contradiction detection, and trust scoring.",
+        "tags": [
+          "memory",
+          "persistence",
+          "hrr"
+        ],
+        "dependencies": [],
+        "category": "essential",
+        "files": [
+          "skills/holographic-memory/SKILL.md"
         ]
       }
     ]
@@ -2346,7 +2377,9 @@
         "plugin:holographic-memory",
         "config:opencode",
         "config:dcp",
-        "config:vibeguard"
+        "config:vibeguard",
+        "config:holographic_memory",
+        "skill:holographic-memory"
       ]
     }
   },

@@ -55,8 +55,13 @@ longer uses.
 | `src/agents/subagents/<tier>/` | Subagents by tier: `core/`, `code/`, `development/` |
 | `src/commands/` | Slash commands: `add-context`, `analyze-patterns`, `clean`, `commit`, `context`, `optimize`, `test` |
 | `src/context/` | Context files by domain: `web/`, `core/`, `intl/`, `dev/`, plus `navigation.md` |
-| `src/skills/` | Skills: `task-management/` |
+| `src/skills/` | Skills: `task-management/`, `holographic-memory/` |
 | `src/tools/` | Tooling: `env/` |
+| `src/plugins/holographic-memory/` | Plugin build contract only: `src/` (6 .ts sources), `dist/` (gitignored, built at install), `package.json`, `tsconfig.json`, `scripts/build.cjs`. Config and skill are standalone components at canonical `src/` locations. |
+| `src/opencode.jsonc` | Global config template — merged with existing config on install. |
+| `src/dcp.jsonc` | DCP/compress plugin config — copy-or-skip on install. |
+| `src/vibeguard.config.json` | Vibeguard secret-redaction config — merged on install. |
+| `src/holographic_memory.json` | Holographic-memory plugin config — copy-or-skip on install. |
 | `src/manifest.json` | Deprecated — `registry.json` `profiles.developer` carries the same fields. |
 | `src/metadata.json` | Deprecated — `registry.json` is the sole source of truth; no script reads this file. |
 
