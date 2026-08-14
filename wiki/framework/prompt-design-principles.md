@@ -49,7 +49,7 @@ The granular permission block exists because every `"allow"` entry is one fewer 
 
 "Request approval before ANY implementation" is ambiguous. Use the three-tier model:
 
-- **Tier 1 — Discovery** (no approval): read, grep, glob, list, ContextScout, analysis.
+- **Tier 1 — Discovery** (no approval): read, grep, glob, ContextScout, analysis.
 - **Tier 2 — Proposal** (approval required): present approach, get user buy-in.
 - **Tier 3 — Execution** (approval covers plan): after proposal approval, file operations within the approved plan proceed without per-action approval. Material deviations require new approval.
 
@@ -213,7 +213,7 @@ Intent classification (ANALYSIS / TASK / CONVERSATIONAL — see [Principle 7](#7
 - [ ] No tool schemas / runtime message metadata are restated where the harness already injects them
 
 **Permission block**
-- [ ] Only valid OpenCode permission keys used — see the verified 15-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
+- [ ] Only valid OpenCode permission keys used — see the verified 14-key set in [Permission Model](../harness/permission-model.md) (note: `external_directory` is valid but EDAC agents rely on its default behaviour, so it is not set explicitly).
 - [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects — see [Permission Model](../harness/permission-model.md) §b "Granular vs shorthand keys".
 - [ ] No OAC metadata fields in frontmatter (belong in `registry.json` — see [Agent Frontmatter](../harness/agent-frontmatter.md) and [src/ Package Structure](./src-structure.md))
   - [ ] Sensitive files denied under `read` and `edit` (path globs) for all agents; `grep` restricted by search-term denies (see [Permission Model](../harness/permission-model.md) §d) — `grep` CANNOT be scoped by file path
@@ -243,4 +243,5 @@ permission:
 - [../harness/subagent-structure.md](../harness/subagent-structure.md) — standard subagent file template (principle #12).
 - [../harness/agent-frontmatter.md](../harness/agent-frontmatter.md) — valid YAML frontmatter keys.
 - [../harness/permission-model.md](../harness/permission-model.md) — consolidated permission allow/deny/ask model (principles #4, #5).
+- [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — the Minimal vs Comprehensive model that operationalizes principles #11 and #14 for globally-provisioned tools.
 - [../framework/versioning.md](../framework/versioning.md) — agent prompt/permission changes trigger repo and per-agent component version bumps.

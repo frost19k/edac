@@ -10,7 +10,7 @@ status: stable
 
 # Agent YAML Frontmatter
 
-**Finding**: Valid OpenCode agent frontmatter uses a small set of fields; OAC-specific metadata and several legacy keys must be kept out of the frontmatter block. The `name` field — not the filename — is the agent's true identifier. The authoritative permission-key list is 15 keys (see [../harness/permission-model.md](../harness/permission-model.md)); the source OAC document omits `list` and `todowrite` and is corrected here.
+**Finding**: Valid OpenCode agent frontmatter uses a small set of fields; OAC-specific metadata and several legacy keys must be kept out of the frontmatter block. The `name` field — not the filename — is the agent's true identifier. The authoritative permission-key list is 14 keys (see [../harness/permission-model.md](../harness/permission-model.md)); the source OAC document omits `todowrite` and is corrected here.
 
 **Spec reference**: https://opencode.ai/docs/agents/ (v1.17.x)
 
@@ -130,9 +130,10 @@ The complete permission-key reference, evaluation order, and pattern syntax live
 - **Evaluation order**: last-match-wins (catch-all `"*"` first, specific overrides after) — full rules in the consolidated [Permission Model](../harness/permission-model.md).
 - `external_directory` is a valid OpenCode key but EDAC agents rely on its default behaviour and do not set it explicitly.
 - **`grep` is a secret-leak vector** — see the consolidated [Permission Model](../harness/permission-model.md) (§d "Canonical grep search-term deny block") for the rationale and the deny block.
-- **Correction vs OAC source**: The OAC source document's quick-reference list omits `list` and `todowrite` and is therefore incomplete; `question`, `list`, and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` is **not** valid. The authoritative 15-key list is in the consolidated [Permission Model](../harness/permission-model.md).
+- **Correction vs OAC source**: The OAC source document's quick-reference list omits `todowrite` and is therefore incomplete; `question` and `todowrite` are valid keys, `todoread` is **not** a standalone key (it is gated by `todowrite`), and `codesearch` and `list` are **not** valid keys (`list` appears in the Agents page table but has no corresponding tool on the Tools page — it is inert). The authoritative 14-key list is in the consolidated [Permission Model](../harness/permission-model.md).
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it.
-- **Granular vs shorthand format**: 10 keys (`read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `external_directory`, `lsp`, `skill`) accept glob-pattern objects; the remaining 5 (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) accept a single action string only — a pattern object on a shorthand-only key causes a configuration error. See the consolidated [Permission Model](../harness/permission-model.md) §b "Granular vs shorthand keys".
+- **Granular vs shorthand format**: 9 keys (`read`, `edit`, `glob`, `grep`, `bash`, `task`, `external_directory`, `lsp`, `skill`) accept glob-pattern objects; the remaining 5 (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) accept a single action string only — a pattern object on a shorthand-only key causes a configuration error. See the consolidated [Permission Model](../harness/permission-model.md) §b "Granular vs shorthand keys".
+- **Global-only keys**: `webfetch`, `websearch`, `question`, `skill`, and `external_directory` are defined in EDAC's `opencode.jsonc` template. Agent frontmatters should not repeat these unless overriding with a more restrictive value (see [../harness/permission-model.md](../harness/permission-model.md) §b "Global-only vs per-agent keys").
 
 ---
 
@@ -233,6 +234,8 @@ The OAC metadata fields (see the canonical field list in [src/ Package Structure
 - [ ] Correct field names (`permission` not `permissions`)?
 - [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see Permission Model §d) — `grep` CANNOT be scoped by file path.
 - [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects (see Permission Model §b)?
+- [ ] Global-only keys (`webfetch`, `websearch`, `question`, `skill`) not declared in agent frontmatter unless overriding the global config with a more restrictive value?
+- [ ] No `list` permission key (inert — no corresponding tool exists)?
 - [ ] Only one `---` delimiter at top?
 - [ ] Valid YAML syntax?
 

@@ -5,7 +5,7 @@ Cross-session build plan for the EDAC wiki workflow.
 ## Done
 - [x] Wiki init: SCHEMA.md, index.md, log.md, TODO.md (2026-07-29)
 - [x] First ingest loop: oac-standards batch — 7 pages (framework x3, harness x3, research x1) + meta aggregation (2026-07-29)
-  - Resolved permission-key contradiction via upstream research (canonical 15 keys: question/list/todowrite valid; todoread/codesearch invalid)
+  - Resolved permission-key contradiction via upstream research (canonical 14 keys: question/todowrite valid; todoread/codesearch/list invalid)
 
 ## Next
 - [x] ~~Define ResearchAgent / WikiJanitor / WikiLibrarian subagents~~ — **superseded (2026-08-04):** research subagents retired; SystemBuilder internalizes all wiki functions inline under Wiki Stewardship. ExternalScout is the external research arm.
@@ -35,7 +35,7 @@ Cross-session build plan for the EDAC wiki workflow.
 - [x] Frontmatter enum violation — `src-structure.md` fixed (Agent 1, → `concept`); `permission-model.md` fixed (→ `concept`). SCHEMA enum left unchanged (pages conformed rather than extending the enum).
 - [x] Contradiction: non-existent `repo/` context dir — `versioning.md:29` corrected to `dev/`.
 - [x] `versioning.md` `## Cross-links` → `## Related` (protocol uniformity).
-- [x] Harness dedup (Bundle B) — sensitive-file deny block consolidated to one canonical block in `permission-model.md` §d; grep-leak explanation collapsed; `agent-frontmatter.md` 15-key list + OAC-metadata field list replaced with cross-links. ~58 lines removed across the two pages.
+- [x] Harness dedup (Bundle B) — sensitive-file deny block consolidated to one canonical block in `permission-model.md` §d; grep-leak explanation collapsed; `agent-frontmatter.md` 14-key list + OAC-metadata field list replaced with cross-links. ~58 lines removed across the two pages.
  - [x] `src-structure.md` inbound-link gap — closed (`agent-frontmatter.md` now cross-links `src-structure.md` at 2 points).
   - [x] **OAC-boilerplate / non-existent-dir cleanup in `src/context/` (2026-08-08)** — All `intelligence/` → `intl/`, `repo/` → `dev/`, `OAC` → `EDAC`, `OPENCODE_INSTALL_DIR` → `EDAC_INSTALL_DIR` across `src/context/` (navigation.md, intl/*, core/standards/*, core/context-system/*, core/system/context-paths.md). Removed dead cross-links to non-existent files (`agent-frontmatter.md`, `adding-agent-basics.md` under `repo/`). Principle: agents have no cross-session memory — context files must reference only resources that exist *now*. See `framework/mechanistic-framing.md` (broadened from the original hygiene concept to full anti-anthropomorphism discipline).
   - [x] **Anti-anthropomorphism + compliance research ingestion (2026-08-13)** — `framework/llm-context-hygiene.md` deleted (concept was anti-anthropomorphism, not "context hygiene"); replaced by `framework/mechanistic-framing.md` (broadened to full stateless-text-processing-function discipline). Two source files (`sources/compliance-research.md`, `sources/behavioural-conventions.md`) ingested into `framework/anti-fabrication.md` + `framework/research-completeness.md`. `epistemic-standards.md` and `prompt-design-principles.md` enriched with empirical citations (71% finding, deontological-framing 27–64%, mechanisms-over-declarations). ExternalScout research filed as `sources/anti-anthropomorphism-research.md`. **Sources removed after ingestion** (2026-08-13) — sources are transient; ingested pages are the durable record. SCHEMA.md updated to codify the transient-sources convention.

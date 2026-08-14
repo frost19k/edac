@@ -10,11 +10,16 @@
 - [Research Completeness](framework/research-completeness.md) — the "when to stop" failure class: illusory completion, satisfaction of search, premature confidence; distinguishing "I found X" from "X is all there is to find."
 - [Versioning](framework/versioning.md) — three coexisting versions: repo semver, registry schema_version, per-agent component version.
 - [src/ Package Structure](framework/src-structure.md) — EDAC's authoritative on-disk layout; the source of truth for all path assertions. **Includes "Packaging vs. runtime location"** — `src/context/` is packaging-only; agents' `.opencode/context/` strings are correct for the installed location, not stale.
+- [Tool Awareness Tiers](framework/tool-awareness-tiers.md) — the Minimal vs Comprehensive model for how agent body text handles globally-provisioned tools (MCPs, plugins). Includes the nomenclature principle and the 16-agent awareness matrix.
 
 ## harness/
 - [Agent Frontmatter](harness/agent-frontmatter.md) — valid OpenCode frontmatter fields, display-name vs file-name, deprecated keys, common mistakes.
 - [Subagent Structure](harness/subagent-structure.md) — standard subagent file template, tiers, rules, validation checklist.
-- [Permission Model](harness/permission-model.md) — consolidated: verified 15-key set, granular-vs-shorthand format spec, evaluation order, agent-type patterns, security patterns.
+- [Permission Model](harness/permission-model.md) — consolidated: verified 14-key set, granular-vs-shorthand format spec, evaluation order, agent-type patterns, security patterns, bash allow-list conventions.
+- [Global Config Template](harness/global-config.md) — the `opencode.jsonc` template: permission floor, MCP/plugin provisioning, install-time merge.
+- [MCP Provisioning](harness/mcp-provisioning.md) — the 4 MCP servers (Context7, GrepApp, DeepWiki, Playwright) provisioned globally via the `mcp:` block.
+- [Plugin Provisioning](harness/plugin-provisioning.md) — the 4 plugins (DCP, Vibeguard, PTY, Holographic-memory): auto-managed vs per-agent awareness, configs, build-at-install.
+- [Install Merge Logic](harness/install-merge.md) — install.sh config merge (deep merge, target wins, JSONC strip), plugin build-at-install, type-specific dispatch.
 
 ## research/
 - [OpenCode Permission Model](research/opencode-permission-model.md) — upstream-verified canonical permission keys; resolves the OAC source contradiction.

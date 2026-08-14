@@ -195,6 +195,7 @@ permission:
 
 - **Frontmatter**: [Agent Frontmatter](../harness/agent-frontmatter.md)
 - **Permission Model**: [Permission Model](../harness/permission-model.md) (consolidated; replaces OAC `permission-agent-patterns.md`)
+- **Tool Awareness Tiers**: [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — where capability-layer notes belong (context block, not workflow)
 - **OpenCode Docs**: https://opencode.ai/docs/agents/
 
 ---

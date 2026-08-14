@@ -36,17 +36,18 @@ permission:
 
 ## (b) Valid Permission Keys (Verified List)
 
-The following 15 keys are the **verified canonical set**, confirmed against `opencode.ai/docs` (see [../research/opencode-permission-model.md](../research/opencode-permission-model.md)):
+The following 14 keys are the **verified canonical set**, confirmed against `opencode.ai/docs` (see [../research/opencode-permission-model.md](../research/opencode-permission-model.md)):
 
-`read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `external_directory`, `todowrite`, `webfetch`, `websearch`, `lsp`, `skill`, `question`, `doom_loop`
+`read`, `edit`, `glob`, `grep`, `bash`, `task`, `external_directory`, `todowrite`, `webfetch`, `websearch`, `lsp`, `skill`, `question`, `doom_loop`
 
 **This verified list supersedes the contradictory OAC source files.** Specific corrections:
 
 - `permission-keys.md` **omitted** `question` and **falsely listed** `todoread` (not a standalone key — it is gated by `todowrite`) and `codesearch` (not a valid key).
-- `agent-frontmatter.md` **omitted** `list` and `todowrite`.
+- `agent-frontmatter.md` **omitted** `todowrite`.
 - `agent-prompt-design.md` **omitted** `external_directory`.
+- `list` was listed in the Agents page permission table but has no corresponding tool on the Tools page and is absent from the Permissions page "Available Permissions" list. It is inert — a permission key for a tool that does not exist. Do not use it.
 
-Use the 15-key list above; do not reintroduce `todoread` or `codesearch`.
+Use the 14-key list above; do not reintroduce `todoread`, `codesearch`, or `list`.
 
 **Key notes:**
 
@@ -54,12 +55,24 @@ Use the 15-key list above; do not reintroduce `todoread` or `codesearch`.
 - There is **no `write` key.** The `edit` key covers both modifying existing files and creating new files. A `write:` entry in a `permission:` block is silently ignored by OpenCode — use `edit` instead.
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it from their frontmatter.
 
+**Global-only vs per-agent keys:**
+
+EDAC's `opencode.jsonc` template (merged into the target config at install time) defines five permissions globally. Agent frontmatters should not repeat these unless overriding with a *more restrictive* value:
+
+- **Global-only keys** (defined in `opencode.jsonc`): `webfetch`, `websearch`, `question`, `skill`, `external_directory`.
+- **Per-agent keys** (defined in agent frontmatter): `bash`, `read`, `edit`, `grep`, `glob`, `task`.
+- **Restrictive overrides**: an agent MAY declare a global-only key if it needs a more restrictive value than the global config (e.g., TaskManager declares `skill: {*: deny, task-management: allow}` to deny all skills except one). A declaration that merely duplicates the global value is noise — remove it.
+
+**Canonical key ordering:**
+
+Agent frontmatter permission blocks should declare keys in this order: `bash` → `read` → `edit` → `grep` → `glob` → `task`. This ordering reflects the security-criticality gradient (most dangerous first) and groups file-system keys together. Additional keys (e.g., a restrictive `skill` override) appear after `task`.
+
 **Granular vs shorthand keys (format spec):**
 
-Not all 15 keys accept the same value format. This distinction was verified against `opencode.ai/docs` (see [../research/opencode-permission-model.md](../research/opencode-permission-model.md) §"Granular vs shorthand") and is the authority on how each key must be declared.
+Not all 14 keys accept the same value format. This distinction was verified against `opencode.ai/docs` (see [../research/opencode-permission-model.md](../research/opencode-permission-model.md) §"Granular vs shorthand") and is the authority on how each key must be declared.
 
 - **Granular keys** — accept either a shorthand action (`"allow"`) or an object of glob/pattern → action (`{"*": "deny", "git status *": "allow"}`):
-  `read`, `edit`, `glob`, `grep`, `list`, `bash`, `task`, `external_directory`, `lsp`, `skill`
+  `read`, `edit`, `glob`, `grep`, `bash`, `task`, `external_directory`, `lsp`, `skill`
 - **Shorthand-only keys** — accept a single action string only (`"allow"`, `"ask"`, or `"deny"`). A glob-pattern object (`{"*": "allow"`) is **invalid** and causes a configuration error at load time:
   `webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`
 
@@ -211,7 +224,7 @@ Use case: agents that need only a narrow set of shell commands (e.g. discovery s
 
 ```yaml
 permission:
-  bash: { "*": "deny", "git status *": "allow", "git diff *": "allow", "git log *": "allow", "ls *": "allow", "cat *": "allow" }
+  bash: { "*": "deny", "git status *": "allow", "git diff *": "allow", "git log *": "allow" }
   read:
     "*": "allow"
     "**/*.env": "deny"
@@ -239,6 +252,25 @@ permission:
 ```
 
 Examples: ExternalScout, ContextScout.
+
+### Bash Allow-List Conventions (No Harness-Tool Duplicates)
+
+Bash `allow` entries should contain only commands with no harness equivalent. Commands that duplicate harness tools create redundant permission surface and blur the boundary between bash and the structured tools.
+
+**Harness-tool duplicates to exclude from bash allow-lists:**
+- `cat`, `head`, `tail` → use `read`
+- `grep`, `rg` → use `grep`
+- `find`, `ls` → use `glob`
+- `sed`, `awk`, `tee`, `patch` → use `edit` or `write`
+
+**Valid bash allow-list categories:**
+- Domain-specific commands (git, docker, bun, npm, terraform, kubectl)
+- Text-processing pipeline utilities that operate on stdin/stdout (sort, uniq, cut, tr, jq, yq, diff, base64)
+- System-info commands (pwd, which, whoami, uname, date, env)
+- Network fetch (curl, wget)
+- Filesystem mutations without a harness equivalent (mkdir, touch, cp, mv, rm)
+
+*Why:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. Keeping bash to commands without harness equivalents maintains the permission layer's integrity.
 
 ## (d) Security Patterns
 
@@ -369,7 +401,8 @@ permission:
 - [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects — see §b "Granular vs shorthand keys".
 - [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see §d "Canonical grep search-term deny block") — `grep` CANNOT be scoped by file path. Omit only for a tool denied wholesale via `"*": "deny"`.
 - [ ] Dangerous commands denied (`sudo *`, `rm -rf /*`, `> /dev/*`, `chmod 777 *`); destructive operations set to `ask` (`rm -rf *`, `git push --force*`, `docker system prune*`, `npm publish*`).
-- [ ] Write-enabled agents declare explicit `read`, `grep`, `glob`, `list` permissions rather than relying on defaults.
+- [ ] Bash allow-lists contain no harness-tool duplicates (`cat`/`head`/`tail` = `read`; `grep`/`rg` = `grep`; `find`/`ls` = `glob`; `sed`/`awk`/`tee`/`patch` = `edit`/`write`) — see §c "Bash Allow-List Conventions".
+- [ ] Write-enabled agents declare explicit `read`, `grep`, `glob` permissions rather than relying on defaults.
 - [ ] `task:` permissions appropriate for agent type and use **Display Names**, not filenames.
 - [ ] Only valid actions used (`"allow"`, `"ask"`, `"deny"`).
 
@@ -377,4 +410,6 @@ permission:
 
 - [Agent Frontmatter](../harness/agent-frontmatter.md) — `name` field is the Display Name used by `task:`.
 - [Subagent Structure](../harness/subagent-structure.md) — subagent taxonomy and delegation.
-- [OpenCode Permission Model (research)](../research/opencode-permission-model.md) — the authority that verified the 15-key list against `opencode.ai/docs`.
+- [Global Config Template](../harness/global-config.md) — the `opencode.jsonc` template that defines the permission floor (global-only keys).
+- [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — how agent body text handles globally-provisioned tools (MCPs, plugins) without per-agent permission entries.
+- [OpenCode Permission Model (research)](../research/opencode-permission-model.md) — the authority that verified the 14-key list against `opencode.ai/docs`.

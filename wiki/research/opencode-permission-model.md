@@ -10,16 +10,16 @@ status: stable
 
 ## Finding (verified canonical set)
 
-The **definitive, complete set of valid OpenCode permission keys is 15**:
+The **definitive, complete set of valid OpenCode permission keys is 14**:
 
-`read, edit, glob, grep, list, bash, task, external_directory, todowrite, webfetch, websearch, lsp, skill, question, doom_loop`
+`read, edit, glob, grep, bash, task, external_directory, todowrite, webfetch, websearch, lsp, skill, question, doom_loop`
 
-**Resolution of the five disputed keys:**
+**Resolution of the disputed keys:**
 
 | Key | Valid? | Verdict |
 |---|---|---|
 | `question` | ✅ Yes | Listed in both authoritative pages. |
-| `list` | ✅ Yes | Listed in the Agents page permission table (`list` → `list`). |
+| `list` | ❌ No | Listed in the Agents page permission table but has **no corresponding tool** on the Tools page and is absent from the Permissions page "Available Permissions" list. The key is inert — a permission for a tool that does not exist. Do not use it. |
 | `todowrite` | ✅ Yes | Listed in the Agents page table; it gates **both** `todowrite` and `todoread`. |
 | `todoread` | ❌ No | **Not a standalone key.** It is gated by `todowrite` (Agents page: "`todowrite` → `todowrite`, `todoread`"). Any OAC source listing `todoread` as its own key is wrong. |
 | `codesearch` | ❌ No | **Not a valid OpenCode permission key.** It appears in **neither** authoritative OpenCode doc page. Any OAC source listing `codesearch` is wrong. |
@@ -31,7 +31,7 @@ The **definitive, complete set of valid OpenCode permission keys is 15**:
 - **Defaults:** most permissions default to `"allow"`; `doom_loop` and `external_directory` default to `"ask"`; `read` is `"allow"` but `*.env` / `*.env.*` are denied by default.
   - **Wildcards:** `*` matches zero-or-more of any character; `?` matches exactly one. Keys are matched as wildcard patterns against the underlying tool name, so the same syntax works for built-ins, custom tools, and MCP tools (e.g. `"mymcp_*": "deny"`).
   - **`grep` matches the search query, not the file path.** The `grep` permission pattern is compared against the content/regex the agent searches for, so path globs like `**/*.env` are inert under `grep:`; restrict `grep:` with search-term wildcards instead. Verified in-repo; see the canonical block in [../harness/permission-model.md](../harness/permission-model.md) §d.
-- **Granular vs shorthand:** `read, edit, glob, grep, list, bash, task, external_directory, lsp, skill` accept either a shorthand action or an object of glob/pattern → action. The remaining keys (`webfetch, websearch, question, todowrite, doom_loop`) accept the shorthand action only.
+- **Granular vs shorthand:** `read, edit, glob, grep, bash, task, external_directory, lsp, skill` accept either a shorthand action or an object of glob/pattern → action. The remaining keys (`webfetch, websearch, question, todowrite, doom_loop`) accept the shorthand action only.
 
 ### Keys valid upstream but absent from some OAC sources
 
@@ -47,7 +47,7 @@ Two authoritative OpenCode documentation pages were fetched on 2026-07-29 (both 
 Lists, verbatim:
 > `read` — reading a file · `edit` — all file modifications · `glob` — file globbing · `grep` — content search · `bash` — running shell commands · `task` — launching subagents · `skill` — loading a skill · `lsp` — running LSP queries · `question` — asking the user questions during execution · `webfetch` — fetching a URL · `websearch` — web search · `external_directory` — triggered when a tool touches paths outside the project working directory · `doom_loop` — triggered when the same tool call repeats 3 times with identical input
 
-This page confirms `question`, `webfetch`, `websearch`, `external_directory`, `doom_loop` as valid. It **omits** `list` and `todowrite` (a documentation gap — see below).
+This page confirms `question`, `webfetch`, `websearch`, `external_directory`, `doom_loop` as valid. It **omits** `todowrite` (a documentation gap — see below).
 
 **2. Agents page — "Permissions" section** (https://opencode.ai/docs/agents/)
 Provides the explicit "available permission keys" table, verbatim:
@@ -58,7 +58,6 @@ Provides the explicit "available permission keys" table, verbatim:
 | `edit` | `write`, `edit`, `apply_patch` |
 | `glob` | `glob` |
 | `grep` | `grep` |
-| `list` | `list` |
 | `bash` | `bash` |
 | `task` | `task` |
 | `external_directory` | Any tool that reads or writes files outside the project worktree |
@@ -70,9 +69,9 @@ Provides the explicit "available permission keys" table, verbatim:
 | `question` | `question` |
 | `doom_loop` | Recovery prompts when an agent appears stuck |
 
-This table is the authoritative enumeration of permission keys. It **adds `list` and `todowrite`** to the Permissions-page list, and it explicitly shows `todowrite` gating `todoread` (so `todoread` is not its own key). It contains **no `codesearch`** entry.
+This table is the authoritative enumeration of permission keys. It **adds `todowrite`** to the Permissions-page list, and it explicitly shows `todowrite` gating `todoread` (so `todoread` is not its own key). It contains **no `codesearch`** entry. It lists `list`, but no corresponding `list` tool exists on the Tools page — the key is inert and should not be used.
 
-**Reconciliation:** The canonical set is the union of both pages (15 keys). The Permissions page's "Available Permissions" prose list is incomplete (missing `list` and `todowrite`); the Agents page table is the definitive enumeration and is treated as authoritative for key membership. `codesearch` is absent from both and is therefore not a valid OpenCode permission key.
+**Reconciliation:** The canonical set is 14 keys (the union of both pages, minus `list` which is inert). The Permissions page's "Available Permissions" prose list is incomplete (missing `todowrite`); the Agents page table is the definitive enumeration for key membership, but its `list` entry has no backing tool and is excluded. `codesearch` is absent from both and is therefore not a valid OpenCode permission key.
 
 ---
 
@@ -80,20 +79,20 @@ This table is the authoritative enumeration of permission keys. It **adds `list`
 
 Three OAC internal standards disagreed. Against the upstream docs:
 
-- **`agent-frontmatter.md`** — **WRONG by omission.** It lists `read, edit, glob, grep, bash, task, skill, lsp, question, webfetch, websearch, external_directory, doom_loop` and only *mentions* `todowrite` without listing it as a key. It **omits two valid keys: `list` and `todowrite`**. It does not list `todoread` or `codesearch` (correct, since those are invalid). It correctly includes `question`, `external_directory`, `doom_loop`.
-- **`agent-prompt-design.md`** — **MOSTLY CORRECT, one omission.** It lists `read, edit, glob, grep, list, bash, task, skill, lsp, question, webfetch, websearch, todowrite, doom_loop`. It correctly includes `list`, `todowrite`, and `question`. Its only error is **omitting the valid key `external_directory`**. It does not list `todoread` or `codesearch` (correct).
-- **`permission-keys.md`** — **WRONG on multiple counts.** It lists `read, edit, glob, grep, list, bash, task, skill, lsp, todoread, todowrite, webfetch, websearch, codesearch, external_directory, doom_loop`. It **omits the valid key `question`**, and it **includes two INVALID keys: `todoread`** (not a standalone key — gated by `todowrite`) and **`codesearch`** (not a valid OpenCode permission key at all). It correctly includes `list`, `todowrite`, `external_directory`, `doom_loop`.
+- **`agent-frontmatter.md`** — **WRONG by omission.** It lists `read, edit, glob, grep, bash, task, skill, lsp, question, webfetch, websearch, external_directory, doom_loop` and only *mentions* `todowrite` without listing it as a key. It **omits one valid key: `todowrite`**. It does not list `todoread` or `codesearch` (correct, since those are invalid). It correctly includes `question`, `external_directory`, `doom_loop`.
+- **`agent-prompt-design.md`** — **MOSTLY CORRECT, one omission.** It lists `read, edit, glob, grep, list, bash, task, skill, lsp, question, webfetch, websearch, todowrite, doom_loop`. It correctly includes `todowrite` and `question`. Its errors are **omitting the valid key `external_directory`** and **including the inert key `list`**. It does not list `todoread` or `codesearch` (correct).
+- **`permission-keys.md`** — **WRONG on multiple counts.** It lists `read, edit, glob, grep, list, bash, task, skill, lsp, todoread, todowrite, webfetch, websearch, codesearch, external_directory, doom_loop`. It **omits the valid key `question`**, and it **includes three invalid keys: `todoread`** (not a standalone key — gated by `todowrite`), **`codesearch`** (not a valid OpenCode permission key at all), and **`list`** (inert — no corresponding tool). It correctly includes `todowrite`, `external_directory`, `doom_loop`.
 
 **Summary of errors:**
-- `agent-frontmatter.md`: missing valid `list`, `todowrite`.
-- `agent-prompt-design.md`: missing valid `external_directory`.
-- `permission-keys.md`: missing valid `question`; falsely lists invalid `todoread` and `codesearch`.
+- `agent-frontmatter.md`: missing valid `todowrite`.
+- `agent-prompt-design.md`: missing valid `external_directory`; includes inert `list`.
+- `permission-keys.md`: missing valid `question`; falsely lists invalid `todoread`, `codesearch`, and inert `list`.
 
 ---
 
 ## Downstream guidance for EDAC
 
-- The EDAC permission schema should use exactly the 15-key canonical set above.
-- Drop `todoread` and `codesearch` from any OAC-derived schema; if a "todo read" capability must be governed, use `todowrite` (it covers both write and read).
+- The EDAC permission schema should use exactly the 14-key canonical set above.
+- Drop `todoread`, `codesearch`, and `list` from any OAC-derived schema; if a "todo read" capability must be governed, use `todowrite` (it covers both write and read). `list` is inert — no corresponding tool exists.
 - Retain `external_directory` and `question` even though some OAC sources dropped them.
 - Encode the last-match-wins evaluation order and the allow/ask/deny action triad in any harness-page ingest that consumes this list.
