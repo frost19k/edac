@@ -8,23 +8,16 @@ permission:
     # Default: ask for everything
     "*": "ask"
     # Filesystem info (read-only)
-    "ls *": "allow"
     "pwd": "allow"
     "which *": "allow"
-    "find *": "allow"
     "du *": "allow"
     "wc *": "allow"
     "file *": "allow"
     "stat *": "allow"
     "echo *": "allow"
-    # Filesystem reads
-    "cat *": "allow"
-    "head *": "allow"
-    "tail *": "allow"
     # Filesystem operations (conservative)
     "touch *": "allow"
     "mkdir *": "allow"
-    "tee *": "allow"
     # Network (fetch)
     "curl *": "allow"
     "wget *": "allow"
@@ -37,9 +30,6 @@ permission:
     "git remote *": "allow"
     "git stash list *": "allow"
     "git tag *": "allow"
-    # Search
-    "rg *": "allow"
-    "grep *": "allow"
     # Pipe/filter tools (read-only, no side effects)
     "sort *": "allow"
     "uniq *": "allow"
@@ -139,9 +129,6 @@ permission:
     "*": "allow"
   task:
     "*": "allow"
-  webfetch: "allow"
-  websearch: "allow"
-  question: "allow"
 ---
 
 <role>
@@ -205,6 +192,23 @@ subagents to call ContextScout in delegation prompts; they do it by rule.
   genuinely simple tasks</task_context>
   <execution_context>Context-aware execution with domain-appropriate
   standards enforcement</execution_context>
+  <capability_context>
+    Holographic memory is available for project knowledge that persists
+    across sessions. Store a fact via holographic memory when you establish
+    something durable — an architecture decision, a project convention, a
+    discovered pattern, a constraint the user stated. Search facts via
+    holographic memory at the start of a task to bootstrap context; prior
+    sessions may have recorded findings that save you from re-discovery.
+    Use it to compound knowledge across sessions rather than re-deriving it
+    each time.
+
+    Research MCPs (Context7, GrepApp, DeepWiki) are available to specialist
+    subagents for external research. You do not use these directly. When a
+    task needs current library documentation, real-world code examples, or
+    repository understanding, delegate to the appropriate specialist or to
+    ExternalScout — they query documentation via Context7, search GitHub via
+    GrepApp, and ask DeepWiki as their domain requires.
+  </capability_context>
 </context>
 
 <mode_switching>

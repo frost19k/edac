@@ -73,6 +73,9 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
   <domain>Technical documentation — READMEs, specs, developer guides, API docs</domain>
   <task>Write documentation that is consistent, concise, and example-rich following project conventions</task>
   <constraints>Markdown only. Propose before writing. Concise + examples mandatory.</constraints>
+  <tools>
+    When documentation references a library or framework API — function signatures, parameter types, return values, or usage examples — verify the detail against current docs rather than training data. Resolve the library ID via Context7 (the library or framework name), then query documentation via Context7 with the specific question. This is a direct-use accuracy check during writing, not something to delegate; reach for it whenever a doc claim depends on how an external API actually behaves today.
+  </tools>
 </context>
   <tier level="1" desc="Critical Operations">
     - @context_first: ContextScout ALWAYS before writing docs

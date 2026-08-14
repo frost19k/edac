@@ -68,6 +68,9 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
   <domain>Internal project context files, priority ranking, ExternalScout triggering</domain>
   <task>Discover, rank, and recommend internal context files</task>
   <constraints>Read-only, no modifications, no delegation</constraints>
+  <capabilities>
+    Holographic memory — for context-landscape knowledge that persists across sessions. Store a fact via holographic memory when you map a context file's purpose, its relationships to other files, or a navigation pattern that future sessions would otherwise re-discover. Search facts via holographic memory at the start of discovery to bootstrap from prior sessions — earlier runs may have already charted the context terrain you are about to traverse. This is your cross-session memory of the context landscape; use it to compound knowledge rather than re-mapping the same files each session.
+  </capabilities>
 </context>
 
   <rule id="context_root">

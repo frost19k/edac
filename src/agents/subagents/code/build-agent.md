@@ -117,6 +117,7 @@ permission:
     <domain>Type checking and build validation — language detection, compiler errors, build failures</domain>
     <task>Detect project language → run type checker → run build → report results</task>
     <constraints>Read-only. No code modifications. Bash limited to build/type-check commands, plus git status/diff/log and docker run/compose for build orchestration.</constraints>
+    <tools>PTY sessions are available for long-running builds — large compilations, multi-package builds, CI runs — that would block if run synchronously. Spawn a PTY session to start such a build, then read PTY output later to capture results without holding the session open. Kill the PTY session once the build completes and you've recorded its output. Use this for builds whose runtime makes blocking invocation impractical; short builds run directly.</tools>
   </context>
   <tier level="1" desc="Critical Operations">
     - @context_first: ContextScout ALWAYS before build checks
