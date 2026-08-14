@@ -13,7 +13,7 @@
     "external_directory": {
       "*": "ask",
       "/tmp/opencode/**": "allow",
-      "$HOME/.config/opencode/context/**": "allow"
+      "~/.config/opencode/context/**": "allow"
     },
   },
   "plugin": [
