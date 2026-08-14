@@ -63,8 +63,48 @@ warn()  { echo -e "${YELLOW}⚠${NC} $1"; }
 info()  { echo -e "${BLUE}ℹ${NC} $1"; }
 
 command -v jq >/dev/null 2>&1 || { err "jq is required but not installed"; exit 1; }
+command -v perl >/dev/null 2>&1 || { err "perl is required for JSONC merge but not installed"; exit 1; }
 
 jq_exec() { jq -r "$@" | tr -d '\r'; }
+
+# ── JSONC / JSON Merge Helpers ────────────────────────────────────────────────
+
+# Strip JSONC comments and trailing commas, output valid JSON via jq.
+# Handles // line comments, /* */ block comments, and trailing commas —
+# all while preserving // inside string values (e.g. URLs).
+strip_jsonc() {
+  local file="$1"
+  perl -0777 -pe '
+    s{/\*.*?\*/}{}gs;                           # block comments
+    s{("(?:[^"\\]|\\.)*")|(//[^\n]*)}{$1}gs;    # line comments (skip inside strings)
+    s~,(\s*[\]}])~$1~g;                         # trailing commas
+  ' "$file" | jq .
+}
+
+# Deep merge two JSON objects: target wins for scalars, arrays merge+dedupe.
+# Args: base_json (template) override_json (target) — outputs merged JSON.
+deep_merge_json() {
+  local base_json="$1" override_json="$2"
+  jq -n --argjson base "$base_json" --argjson override "$override_json" '
+    def mergedeep(base; override):
+      if (base | type) == "object" and (override | type) == "object"
+      then
+        reduce (base + override | keys[]) as $k
+        ({}; .[$k] =
+          if (base | has($k)) and (override | has($k))
+          then mergedeep(base[$k]; override[$k])
+          elif (base | has($k))
+          then base[$k]
+          else override[$k]
+          end
+        )
+      elif (base | type) == "array" and (override | type) == "array"
+      then (base + override) | unique
+      else override
+      end;
+    mergedeep($base; $override)
+  '
+}
 
 # ── Registry Helpers ─────────────────────────────────────────────────────────
 
@@ -228,8 +268,147 @@ dry_run() {
     err "Dry-run found ${#missing[@]} missing component(s) — install would write nothing. Fix MIRROR_DIR/SRC_ROOT or restore sources."
   fi
 
+  # Check if plugin needs building at install time
+  for comp in "${RESOLVED_ORDER[@]}"; do
+    local ctype="${comp%%:*}" cid="${comp##*:}"
+    if [[ "$ctype" == "plugin" ]]; then
+      local ppath; ppath=$(resolve_component_path "$ctype" "$cid")
+      local pdist="$SRC_ROOT/$ppath/dist/holographic-memory.ts"
+      if [[ ! -f "$pdist" ]]; then
+        warn "Plugin $cid: dist/ missing — will build at install time (requires bun)"
+      fi
+    fi
+  done
+
   echo ""
   echo -e "Install dir: ${CYAN}${INSTALL_DIR}${NC}"
+}
+
+# ── Plugin Install ───────────────────────────────────────────────────────────
+
+install_plugin() {
+  local id="$1" path="$2"
+  local plugin_src="$SRC_ROOT/$path"
+
+  # Build the plugin if dist/ is missing
+  local dist_file="$plugin_src/dist/holographic-memory.ts"
+  if [[ ! -f "$dist_file" ]]; then
+    info "Building plugin: $id (dist/ not found)"
+    if ! (cd "$plugin_src" && bun install && node scripts/build.cjs); then
+      err "Failed to build plugin: $id"
+      failed=$((failed + 1))
+      return 0
+    fi
+  fi
+
+  # Install dist → plugins/
+  local dest_plugin="$INSTALL_DIR/plugins/holographic-memory.ts"
+  mkdir -p "$(dirname "$dest_plugin")"
+  if [[ -f "$dest_plugin" && "$OVERWRITE" == false ]]; then
+    info "Skipped: plugin:$id (dist, exists)"
+    skipped=$((skipped + 1))
+  else
+    cp "$dist_file" "$dest_plugin"
+    ok "Installed: plugin:$id (dist)"
+    installed=$((installed + 1))
+  fi
+
+  # Install skill → skills/holographic-memory/SKILL.md
+  local skill_src="$plugin_src/skills/holographic-memory/SKILL.md"
+  local dest_skill="$INSTALL_DIR/skills/holographic-memory/SKILL.md"
+  mkdir -p "$(dirname "$dest_skill")"
+  if [[ -f "$dest_skill" && "$OVERWRITE" == false ]]; then
+    info "Skipped: plugin:$id (skill, exists)"
+    skipped=$((skipped + 1))
+  else
+    cp "$skill_src" "$dest_skill"
+    ok "Installed: plugin:$id (skill)"
+    installed=$((installed + 1))
+  fi
+
+  # Install config → holographic_memory.json (at install root)
+  local config_src="$plugin_src/config/holographic_memory.json"
+  local dest_config="$INSTALL_DIR/holographic_memory.json"
+  if [[ -f "$dest_config" && "$OVERWRITE" == false ]]; then
+    info "Skipped: plugin:$id (config, exists)"
+    skipped=$((skipped + 1))
+  else
+    cp "$config_src" "$dest_config"
+    ok "Installed: plugin:$id (config)"
+    installed=$((installed + 1))
+  fi
+}
+
+# ── Config Merge Install ─────────────────────────────────────────────────────
+
+install_config_merge() {
+  local id="$1" path="$2"
+  local src="$SRC_ROOT/$path"
+  local dest; dest=$(get_install_path "$path")
+
+  mkdir -p "$(dirname "$dest")"
+
+  if [[ ! -f "$dest" ]]; then
+    # Target doesn't exist — copy (strip comments for .jsonc)
+    if [[ "$path" == *.jsonc ]]; then
+      strip_jsonc "$src" > "$dest"
+      warn "Stripped JSONC comments from $id (new install)"
+    else
+      cp "$src" "$dest"
+    fi
+    ok "Installed: config:$id (new)"
+    installed=$((installed + 1))
+    return 0
+  fi
+
+  # Target exists — merge (target wins, arrays dedupe)
+  local src_json target_json
+  src_json=$(strip_jsonc "$src") || {
+    err "Failed to parse source: $id"
+    failed=$((failed + 1))
+    return 0
+  }
+  target_json=$(strip_jsonc "$dest") || {
+    err "Failed to parse target: $id"
+    failed=$((failed + 1))
+    return 0
+  }
+
+  if [[ "$path" == *.jsonc ]]; then
+    warn "Merging $id — JSONC comments will be stripped from result"
+  fi
+
+  deep_merge_json "$src_json" "$target_json" > "$dest" || {
+    err "Failed to merge: $id"
+    failed=$((failed + 1))
+    return 0
+  }
+
+  ok "Merged: config:$id (target preserved, template keys added)"
+  installed=$((installed + 1))
+}
+
+# ── Config Copy-or-Skip Install ──────────────────────────────────────────────
+
+install_copy_or_skip() {
+  local id="$1" path="$2"
+  local src="$SRC_ROOT/$path"
+  local dest; dest=$(get_install_path "$path")
+
+  if [[ -f "$dest" && "$OVERWRITE" == false ]]; then
+    info "Skipped: config:$id (exists)"
+    skipped=$((skipped + 1))
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+  if cp "$src" "$dest"; then
+    ok "Installed: config:$id"
+    installed=$((installed + 1))
+  else
+    err "Failed: config:$id"
+    failed=$((failed + 1))
+  fi
 }
 
 # ── Install ──────────────────────────────────────────────────────────────────
@@ -253,6 +432,26 @@ install_components() {
       warn "No path: $comp"
       failed=$((failed + 1))
       continue
+    fi
+
+    # ── Plugin: build + multi-file install ──
+    if [[ "$type" == "plugin" ]]; then
+      install_plugin "$id" "$path"
+      continue
+    fi
+
+    # ── Config: merge or copy-or-skip ──
+    if [[ "$type" == "config" ]]; then
+      case "$id" in
+        opencode|vibeguard)
+          install_config_merge "$id" "$path"
+          continue
+          ;;
+        dcp)
+          install_copy_or_skip "$id" "$path"
+          continue
+          ;;
+      esac
     fi
 
     local dest; dest=$(get_install_path "$path")

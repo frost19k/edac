@@ -368,7 +368,22 @@
         "category": "essential"
       }
     ],
-    "plugins": [],
+    "plugins": [
+      {
+        "id": "holographic-memory",
+        "name": "Holographic Memory",
+        "type": "plugin",
+        "path": "plugins/holographic-memory",
+        "description": "HRR-based persistent cross-session memory with fact store, entity probing, and trust scoring",
+        "tags": [
+          "memory",
+          "persistence",
+          "hrr"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      }
+    ],
     "contexts": [
       {
         "id": "standards-code",
@@ -2243,6 +2258,48 @@
         ],
         "dependencies": [],
         "category": "essential"
+      },
+      {
+        "id": "opencode",
+        "name": "OpenCode Config",
+        "type": "config",
+        "path": "opencode.jsonc",
+        "description": "OpenCode configuration template — merged with existing config on install",
+        "tags": [
+          "config",
+          "opencode",
+          "core"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "dcp",
+        "name": "DCP Config",
+        "type": "config",
+        "path": "dcp.jsonc",
+        "description": "DCP/compress plugin configuration — EDAC-specific",
+        "tags": [
+          "config",
+          "dcp",
+          "compression"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "vibeguard",
+        "name": "Vibeguard Config",
+        "type": "config",
+        "path": "vibeguard.config.json",
+        "description": "Vibeguard secret-redaction plugin configuration — merged with existing config on install",
+        "tags": [
+          "config",
+          "vibeguard",
+          "security"
+        ],
+        "dependencies": [],
+        "category": "essential"
       }
     ],
     "skills": [
@@ -2300,7 +2357,11 @@
         "context:intl/*",
         "context:web/*",
         "context:dev/*",
-        "config:readme"
+        "config:readme",
+        "plugin:holographic-memory",
+        "config:opencode",
+        "config:dcp",
+        "config:vibeguard"
       ]
     }
   },
