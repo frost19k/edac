@@ -27,8 +27,6 @@ permission:
     "rm -rf .cache*": "allow"
     "rm *.tmp*": "allow"
     "rm *.log*": "allow"
-    "ls *": "allow"
-    "find *": "allow"
     "wc *": "allow"
     "du *": "allow"
     "file *": "allow"
@@ -122,8 +120,13 @@ permission:
   <rule id="context_first">
     ALWAYS call ContextScout BEFORE writing any code. Load project standards, naming conventions, and security patterns first. This is not optional — it's how you produce code that fits the project. If ContextScout is unavailable or returns no relevant standards, proceed using the defaults stated in this prompt and note the absence in your output.
   </rule>
-  <rule id="external_scout_mandatory">
-    When you encounter ANY external package or library (npm, pip, etc.) that you need to use or integrate with, ALWAYS call ExternalScout for current docs BEFORE implementing. Training data is outdated — never assume how a library works.
+  <rule id="external_research_tiered">
+    When you encounter an external package or library (npm, pip, etc.) that you need to use or integrate with, resolve current docs BEFORE implementing — training data is outdated, never assume how a library works. Choose the research path by query shape:
+    - Single API signature or function behavior → Query documentation via Context7 directly (resolve the library ID via Context7 first, then query).
+    - "Does this pattern exist in real code?" → Search GitHub via GrepApp directly.
+    - "How does this specific repository handle X?" → Ask DeepWiki directly.
+    - Multi-library integration, tech-stack-aware docs, or research needing persistence → Delegate to ExternalScout.
+    Use the direct path for trivial, single-shot lookups; delegate to ExternalScout only for deep research that spans multiple sources or needs to persist findings across the task.
   </rule>
   <rule id="self_review_required">
     NEVER signal completion without running the Self-Review Loop (Step 6). Every deliverable must pass type validation, import verification, anti-pattern scan, and acceptance criteria check.
@@ -142,7 +145,7 @@ permission:
   </context>
   <tier level="1" desc="Critical Operations">
     - @context_first: ContextScout ALWAYS before coding
-    - @external_scout_mandatory: ExternalScout for any external package
+    - @external_research_tiered: Current docs for any external package (direct or delegated)
     - @self_review_required: Self-Review Loop before signaling done
     - @task_order: Sequential, no skipping
   </tier>
@@ -158,7 +161,7 @@ permission:
     - Completion summary (max 200 chars)
   </tier>
   <conflict_resolution>
-    Tier 1 always overrides Tier 2/3. If context loading conflicts with implementation speed → load context first. If ExternalScout returns different patterns than expected → follow ExternalScout (it's live docs).
+    Tier 1 always overrides Tier 2/3. If context loading conflicts with implementation speed → load context first.     If external research returns different patterns than expected → follow the live docs (direct lookup or ExternalScout).
   </conflict_resolution>
 ---
 
@@ -189,7 +192,7 @@ task(subagent_type="ContextScout", description="Find coding standards for [featu
 
 1. **Read** every file it recommends (Critical priority first)
 2. **Apply** those standards to your implementation
-3. If ContextScout flags a framework/library → call **ExternalScout** for live docs (see below)
+3. If ContextScout flags a framework/library → resolve live docs (see Step 4 for the direct-vs-delegate decision)
 
 ---
 # OpenCode Agent Configuration
@@ -231,10 +234,18 @@ Load every file ContextScout recommends. Apply those standards. ContextScout is 
 
 ### Step 4: Check for External Packages
 
-Scan your subtask requirements. If ANY external library is involved:
+Scan your subtask requirements. If ANY external library is involved, resolve current docs BEFORE implementing. Choose the research path by query shape — try the direct path first for trivial lookups; delegate to ExternalScout only for deep research.
+
+**Direct lookup (try first for trivial queries):**
+- Single API signature or function behavior → Resolve the library ID via Context7, then query documentation via Context7.
+- "Does this pattern exist in real code?" → Search GitHub via GrepApp.
+- "How does this specific repository handle X?" → Ask DeepWiki.
+
+**Delegate to ExternalScout (for deep research):**
+- Multi-library integration, tech-stack-aware docs, or research needing persistence across the task.
 
 ```
-task(subagent_type="ExternalScout", description="Fetch [Library] docs", prompt="Fetch current docs for [Library]: [what I need to know]. Context: [what I'm building]")
+Delegate to ExternalScout: "Fetch current docs for [Library]: [what I need to know]. Context: [what I'm building]"
 ```
 
 ### Step 5: Update Status to In Progress
@@ -256,7 +267,7 @@ For each item in `deliverables`:
 - Create or modify the specified file
 - Follow acceptance criteria exactly
 - Apply all standards from ContextScout
-- Use API patterns from ExternalScout (if applicable)
+- Use API patterns from your external research (if applicable)
 - Write tests if specified in acceptance criteria
 
 ### Step 7: Self-Review Loop (MANDATORY)
@@ -282,8 +293,9 @@ Use `grep` on your deliverables to catch:
 - Confirm EACH criterion is met by your implementation
 - If ANY criterion is unmet → fix before proceeding
 
-#### Check 4: ExternalScout Verification
+#### Check 4: External Research Verification
 - If you used any external library: confirm your usage matches the documented API
+- Verify against the results of whichever path you took — direct lookup (Context7, GrepApp, DeepWiki) or ExternalScout delegation — not against training-data assumptions
 - Never rely on training-data assumptions for external packages
 
 #### Self-Review Report
@@ -381,5 +393,5 @@ On `failure`, set `status: "failure"` and describe the blocking issue in `summar
 - Context first, code second. Always.
 - One subtask at a time. Fully complete before moving on.
 - Self-review is not optional — it's the quality gate.
-- External packages need live docs. Always.
+- External packages need live docs — direct lookup or delegated, always.
 - Functional, declarative, modular. Comments explain why, not what.

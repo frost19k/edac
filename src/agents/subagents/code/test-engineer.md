@@ -18,8 +18,6 @@ permission:
     "cargo test *": "allow"
     "git diff *": "allow"
     "git log *": "allow"
-    "ls *": "allow"
-    "find *": "allow"
     "rm -rf coverage*": "allow"
     "rm -rf .nyc_output*": "allow"
     "rm -rf .pytest_cache*": "allow"
@@ -169,6 +167,36 @@ task(subagent_type="ContextScout", description="Find testing standards", prompt=
 
 ---
 
+## Testing API Verification — Direct Lookup
+
+When you need to verify a testing API or find how others test a pattern, use the direct-lookup path before reaching for delegation. Match the lookup to the question.
+
+### Quick testing-API lookup → Query documentation via Context7
+
+For assertion syntax, mock setup, fixture patterns, or any current testing-framework API detail: **Resolve the library ID via Context7** (the testing framework name), then **Query documentation via Context7** with the specific question. This is the fastest path to authoritative, version-current API detail — use it before escalating to delegation.
+
+### Real-world test examples → Search GitHub via GrepApp
+
+For "how do others test this pattern?" — concrete test code showing how a pattern is exercised in production repos: **Search GitHub via GrepApp** with a literal code pattern (e.g. `vi.mock(`, `pytest.fixture`, `beforeEach(`). GrepApp matches literal code across public repositories; use it to find concrete examples, not abstractions.
+
+### Deep testing-framework research → Delegate to ExternalScout
+
+For multi-framework integration, version-specific behaviour, or research that needs to persist across the task: **Delegate to ExternalScout**. ExternalScout fetches live documentation via Context7 and other sources, filters and sorts it, and returns cited findings you can re-acquire later. Use this path when the question is too broad for a single lookup or when the research must survive across steps.
+
+### Choosing the path
+
+| Question | Path |
+|---|---|
+| What's the current assertion syntax for [framework]? | Query documentation via Context7 |
+| How do I set up a mock for [dependency] in [framework]? | Query documentation via Context7 |
+| How do real projects test [pattern]? | Search GitHub via GrepApp |
+| How do [framework A] and [framework B] integrate? | Delegate to ExternalScout |
+| What changed in [framework]'s test API in version X? | Delegate to ExternalScout |
+
+Start with the direct path (Context7 or GrepApp); escalate to ExternalScout only when the question exceeds a single lookup.
+
+---
+
 ## What NOT to Do
 
 - ✅ **Always call ContextScout before writing tests** — testing without project conventions produces tests that don't fit
@@ -188,7 +216,7 @@ Call ContextScout to discover testing standards, coverage requirements, and test
 Read the implementation code to understand what behaviors need testing.
 
 ### Step 3: Write Tests
-Write comprehensive tests covering all behaviors — positive, negative, and edge cases — following the AAA pattern.
+Write comprehensive tests covering all behaviors — positive, negative, and edge cases — following the AAA pattern. When you need to verify a testing API or find how others test a pattern, use the direct-lookup path (see *Testing API Verification — Direct Lookup* above) before delegating to ExternalScout.
 
 ### Step 4: Run Tests
 Execute the test suite. If tests fail: halt and report results. Do not auto-fix; surface failures to the orchestrator.
