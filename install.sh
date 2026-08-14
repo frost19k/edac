@@ -371,7 +371,11 @@ install_config_merge() {
   local tmp
   tmp=$(mktemp "${dest}.XXXXXX")
   if merge_config_json "$src_json" "$target_json" "$sets" > "$tmp"; then
-    cp -p "$dest" "${dest}.edac-bak"
+    if [[ -f "${dest}.edac-bak" ]]; then
+      warn "Preserving existing backup: ${dest}.edac-bak (not overwritten)"
+    else
+      cp -p "$dest" "${dest}.edac-bak"
+    fi
     mv "$tmp" "$dest"
     ok "Merged: config:$id (target preserved, template keys added)"
     installed=$((installed + 1))
@@ -399,7 +403,13 @@ install_copy_or_skip() {
   fi
 
   mkdir -p "$(dirname "$dest")"
-  [[ -f "$dest" ]] && cp -p "$dest" "${dest}.edac-bak"
+  if [[ -f "$dest" ]]; then
+    if [[ -f "${dest}.edac-bak" ]]; then
+      warn "Preserving existing backup: ${dest}.edac-bak (not overwritten)"
+    else
+      cp -p "$dest" "${dest}.edac-bak"
+    fi
+  fi
   if cp "$src" "$dest"; then
     ok "Installed: config:$id"
     installed=$((installed + 1))
