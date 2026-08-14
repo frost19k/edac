@@ -69,40 +69,43 @@ jq_exec() { jq -r "$@" | tr -d '\r'; }
 
 # ── JSONC / JSON Merge Helpers ────────────────────────────────────────────────
 
-# Strip JSONC comments and trailing commas, output valid JSON via jq.
-# Handles // line comments, /* */ block comments, and trailing commas —
-# all while preserving // inside string values (e.g. URLs).
-strip_jsonc() {
+# Read a JSONC or plain JSON config file and output normalized JSON via jq.
+# For .jsonc files: strips block comments, line comments, and trailing commas,
+# with all comment patterns protected against string values (including /* and //).
+# For .json files: parses only, with no text rewriting, so regex values are never
+# corrupted (e.g. {36,} quantifiers in secret-redaction patterns).
+read_config_json() {
   local file="$1"
-  perl -0777 -pe '
-    s{/\*.*?\*/}{}gs;                           # block comments
-    s{("(?:[^"\\]|\\.)*")|(//[^\n]*)}{$1}gs;    # line comments (skip inside strings)
-    s~,(\s*[\]}])~$1~g;                         # trailing commas
-  ' "$file" | jq .
+  if [[ "$file" == *.jsonc ]]; then
+    perl -0777 -pe '
+      s{("(?:[^"\\]|\\.)*")|(//[^\n]*)|(/\*[\s\S]*?\*/)}{defined($1)?$1:""}ges;
+      s~,(\s*[\]}])~$1~g;
+    ' "$file" | jq .
+  else
+    jq . "$file"
+  fi
 }
 
-# Deep merge two JSON objects: target wins for scalars, arrays merge+dedupe.
-# Args: base_json (template) override_json (target) — outputs merged JSON.
-deep_merge_json() {
-  local base_json="$1" override_json="$2"
-  jq -n --argjson base "$base_json" --argjson override "$override_json" '
-    def mergedeep(base; override):
-      if (base | type) == "object" and (override | type) == "object"
-      then
-        reduce (base + override | keys[]) as $k
-        ({}; .[$k] =
-          if (base | has($k)) and (override | has($k))
-          then mergedeep(base[$k]; override[$k])
-          elif (base | has($k))
-          then base[$k]
-          else override[$k]
-          end
-        )
-      elif (base | type) == "array" and (override | type) == "array"
-      then (base + override) | unique
-      else override
+# Single-pass config merge: template fills in missing keys, user wins everywhere
+# else, and only declared set-arrays are unioned in order-preserving fashion.
+# Args: $1 template JSON, $2 user JSON, $3 JSON array of set-array paths
+#       (e.g. '[["plugin"]]'). Arrays that are NOT declared as set-arrays are
+#       leaves (user wins) so order-sensitive arrays like command are preserved.
+merge_config_json() {
+  local tpl_json="$1" usr_json="$2" sets_json="${3:-[]}"
+  jq -n --argjson tpl "$tpl_json" --argjson usr "$usr_json" --argjson sets "$sets_json" '
+    def dedupe: reduce .[] as $x ([]; if any(.[]; . == $x) then . else . + [$x] end);
+    def fill(t; u):
+      if (t | type) == "object" and (u | type) == "object"
+      then reduce (t | keys_unsorted[]) as $k (u;
+             .[$k] = (if (u | has($k)) then fill(t[$k]; u[$k]) else t[$k] end))
+      elif u == null then t
+      else u
       end;
-    mergedeep($base; $override)
+    reduce ($sets[]) as $p (fill($tpl; $usr);
+      if ($tpl | getpath($p)) == null then .
+      else setpath($p; ((getpath($p) // []) + ($tpl | getpath($p))) | dedupe)
+      end)
   '
 }
 
@@ -192,13 +195,17 @@ resolve_dependencies() {
   # Look up component
   local key; key=$(get_registry_key "$type")
   local deps
-  deps=$(jq_exec ".components.${key}[]? | select(.id == \"${id}\" or (.aliases // [] | index(\"${id}\"))) | .dependencies[]?" "$REGISTRY" 2>/dev/null || echo "")
+  if ! deps=$(jq_exec ".components.${key}[]? | select(.id == \"${id}\" or (.aliases // [] | index(\"${id}\"))) | .dependencies[]?" "$REGISTRY" 2>/dev/null); then
+    err "Registry lookup failed for $comp — dependencies may be incomplete"
+  fi
 
   RESOLVED_ORDER+=("$comp")
 
   # Recurse into dependencies
   if [[ -n "$deps" ]]; then
-    for dep in $deps; do
+    local dep_array=()
+    mapfile -t dep_array <<< "$deps"
+    for dep in "${dep_array[@]}"; do
       resolve_dependencies "$dep"
     done
   fi
@@ -317,6 +324,8 @@ install_plugin() {
 # ── Config Merge Install ─────────────────────────────────────────────────────
 
 install_config_merge() {
+  # NOTE: this function mutates installed/failed counters declared local in
+  # install_components via bash dynamic scoping. Keep the call stack aligned.
   local id="$1" path="$2"
   local src="$SRC_ROOT/$path"
   local dest; dest=$(get_install_path "$path")
@@ -326,7 +335,7 @@ install_config_merge() {
   if [[ ! -f "$dest" ]]; then
     # Target doesn't exist — copy (strip comments for .jsonc)
     if [[ "$path" == *.jsonc ]]; then
-      strip_jsonc "$src" > "$dest"
+      read_config_json "$src" > "$dest"
       warn "Stripped JSONC comments from $id (new install)"
     else
       cp "$src" "$dest"
@@ -336,36 +345,49 @@ install_config_merge() {
     return 0
   fi
 
-  # Target exists — merge (target wins, arrays dedupe)
-  local src_json target_json
-  src_json=$(strip_jsonc "$src") || {
+  # Target exists — merge (target wins, declared set-arrays union in order)
+  local src_json target_json sets
+  src_json=$(read_config_json "$src") || {
     err "Failed to parse source: $id"
     failed=$((failed + 1))
     return 0
   }
-  target_json=$(strip_jsonc "$dest") || {
+  target_json=$(read_config_json "$dest") || {
     err "Failed to parse target: $id"
     failed=$((failed + 1))
     return 0
   }
 
+  case "$id" in
+    opencode)  sets='[["plugin"]]' ;;
+    vibeguard) sets='[["patterns","keywords"],["patterns","regex"],["patterns","builtin"],["patterns","exclude"]]' ;;
+    *)         sets='[]' ;;
+  esac
+
   if [[ "$path" == *.jsonc ]]; then
-    warn "Merging $id — JSONC comments will be stripped from result"
+    warn "Merging $id — JSONC comments will be stripped from result (backup: ${dest}.edac-bak)"
   fi
 
-  deep_merge_json "$src_json" "$target_json" > "$dest" || {
+  local tmp
+  tmp=$(mktemp "${dest}.XXXXXX")
+  if merge_config_json "$src_json" "$target_json" "$sets" > "$tmp"; then
+    cp -p "$dest" "${dest}.edac-bak"
+    mv "$tmp" "$dest"
+    ok "Merged: config:$id (target preserved, template keys added)"
+    installed=$((installed + 1))
+  else
+    rm -f "$tmp"
     err "Failed to merge: $id"
     failed=$((failed + 1))
     return 0
-  }
-
-  ok "Merged: config:$id (target preserved, template keys added)"
-  installed=$((installed + 1))
+  fi
 }
 
 # ── Config Copy-or-Skip Install ──────────────────────────────────────────────
 
 install_copy_or_skip() {
+  # NOTE: this function mutates installed/skipped/failed counters declared local
+  # in install_components via bash dynamic scoping. Keep the call stack aligned.
   local id="$1" path="$2"
   local src="$SRC_ROOT/$path"
   local dest; dest=$(get_install_path "$path")
@@ -377,6 +399,7 @@ install_copy_or_skip() {
   fi
 
   mkdir -p "$(dirname "$dest")"
+  [[ -f "$dest" ]] && cp -p "$dest" "${dest}.edac-bak"
   if cp "$src" "$dest"; then
     ok "Installed: config:$id"
     installed=$((installed + 1))

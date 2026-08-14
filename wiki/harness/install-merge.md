@@ -18,27 +18,29 @@ The component list and dispatch routing come from `registry.json` (repo root), t
 
 Two helpers underpin the merge mode.
 
-### JSONC comment stripping (`strip_jsonc`)
+### JSONC / JSON reading (`read_config_json`)
 
-A perl one-liner normalizes JSONC to valid JSON before any jq operation:
+Config reading is extension-gated to avoid corrupting plain JSON values:
 
-- Strips `/* */` block comments (greedy, multiline).
-- Strips `//` line comments — but the alternation `("(?:[^"\\]|\\.)*")|(//[^\n]*)` captures string literals first and re-emits them via `$1`, so `//` inside a string value (e.g. a URL like `"https://..."`) is preserved.
-- Strips trailing commas before `]` or `}`.
-- Pipes the result through `jq .` for validation — a parse failure surfaces as an error rather than silent corruption.
+- For `.jsonc` files, a perl one-liner normalizes JSONC to valid JSON before piping through `jq .`:
+  - Block comments (`/* */`), line comments (`//`), and trailing commas are stripped.
+  - All comment patterns and the trailing-comma rewrite are protected against string literals, so `//` inside a URL, `/*` inside a regex, and `{n,}` quantifiers are never corrupted.
+- For `.json` files, the file is passed straight to `jq .` with no text rewriting. This is critical for `vibeguard.config.json`, whose regex patterns contain quantifiers like `{36,}` that the old trailing-comma rewrite would silently truncate.
 
 When the target is a `.jsonc` file, `install.sh` warns the user that comments will be stripped from the result. The installed file is plain JSON; JSONC comments do not survive the merge.
 
-### Deep merge (`deep_merge_json`)
+### Config merge (`merge_config_json`)
 
-A jq function merges a base (template) with an override (existing target):
+A single-pass jq function merges a template with an existing user config:
 
-- **Scalars:** target (override) wins.
-- **Objects:** recursive — `mergedeep` descends into keys present in both.
-- **Arrays:** concatenated then deduped via `unique`.
+- **Scalars:** target (user) wins.
+- **Objects:** recursive — the function descends into keys present in the template, adding template-only keys and preserving user-overridden keys. `keys_unsorted` keeps the user's key order intact, minimizing diff churn.
+- **Arrays:** by default, arrays are leaves (user wins). This preserves order-sensitive arrays such as `mcp.playwright.command` (`["npx", "-y", "@playwright/mcp@latest"]`) and the documented plugin hook order.
+- **Set-arrays:** only arrays explicitly declared as set-arrays are unioned. The call site passes a JSON array of paths (e.g. `[["plugin"]]` for `opencode.jsonc`) and an order-preserving `reduce`-based dedupe is applied — never `unique`, which sorts.
+- **Null handling:** if the user sets a key to `null`, the template value fills it.
 - **Type mismatch (object vs non-object):** target wins outright.
 
-The implementation uses `reduce (base + override | keys[]) as $k` rather than `with_entries`. The `with_entries` form had a context bug: `base | has(.key)` resolved `.key` to `base.key` instead of the entry key, producing wrong merge decisions. The `reduce`-over-keys form binds `$k` explicitly and avoids the ambiguity.
+The implementation uses `reduce (t | keys_unsorted[]) as $k` rather than `with_entries`. The `with_entries` form had a context bug: `base | has(.key)` resolved `.key` to `base.key` instead of the entry key, producing wrong merge decisions. The `reduce`-over-keys form binds `$k` explicitly and avoids the ambiguity.
 
 ## Config Install Modes
 
@@ -46,17 +48,23 @@ The implementation uses `reduce (base + override | keys[]) as $k` rather than `w
 
 Applies to `opencode.jsonc` and `vibeguard.config.json` — the two config templates that users may have already customized (see [Global Config Template](../harness/global-config.md)).
 
-- **Target absent:** copy the template verbatim, stripping JSONC comments for `.jsonc` files. Warns on comment stripping.
-- **Target present:** strip both source and target to JSON, deep-merge with target winning, write the merged result. Warns that JSONC comments are stripped from the result.
+- **Target absent:** copy the template, stripping JSONC comments for `.jsonc` files. Warns on comment stripping.
+- **Target present:** read both source and target as JSON, merge with target winning, and write the result atomically:
+  1. Write the merged JSON to a temp file next to the destination (`mktemp "${dest}.XXXXXX"`).
+  2. On success, copy the existing destination to `${dest}.edac-bak`, then `mv` the temp file into place.
+  3. On failure, remove the temp file, report the error, and count the component as failed.
 
-The merge is non-destructive to user values: existing keys are preserved, template-only keys are added, and arrays (e.g. plugin lists, MCP server entries) union and dedupe.
+This guarantees that a jq or merge failure never leaves the user with a truncated or empty config. The `.edac-bak` backup also covers the irreversible JSONC comment loss case. Warns that JSONC comments are stripped from the result and names the backup path.
+
+The merge is non-destructive to user values: existing keys are preserved, template-only keys are added, and only declared set-arrays (e.g. `plugin`, `patterns.regex`, `patterns.builtin`) are unioned with order preserved.
 
 ### Copy-or-skip (`install_copy_or_skip`)
 
-Applies to `dcp.jsonc` — a config that is EDAC-specific rather than user-extensible.
+Applies to `dcp.jsonc` and `holographic_memory.json` — configs that are EDAC-specific rather than user-extensible.
 
 - **Target absent:** copy.
 - **Target present:** skip unless `--overwrite`. No merge.
+- **Before overwriting:** the existing destination is copied to `${dest}.edac-bak`, matching the merge path's backup behavior.
 
 The distinction from merge-on-install is intentional: `dcp.jsonc` configures the DCP/compress plugin with EDAC-specific settings the user should not need to hand-edit, so clobbering a stale local copy with `--overwrite` is the correct repair, not a merge.
 
