@@ -59,7 +59,6 @@ longer uses.
 | `src/tools/` | Tooling: `env/` |
 | `src/manifest.json` | Deprecated — `registry.json` `profiles.developer` carries the same fields. |
 | `src/metadata.json` | Deprecated — `registry.json` is the sole source of truth; no script reads this file. |
-| `src/README.md` | (currently empty) |
 
 ## Adjacent files at repo root (NOT in `src/`)
 

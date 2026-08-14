@@ -451,6 +451,11 @@ install_components() {
           install_copy_or_skip "$id" "$path"
           continue
           ;;
+        *)
+          err "Unknown config component: $id — add an explicit handler"
+          failed=$((failed + 1))
+          continue
+          ;;
       esac
     fi
 

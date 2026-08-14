@@ -12,7 +12,7 @@ status: stable
 
 `install.sh` installs the Developer profile from `src/` into a target OpenCode environment. For the component types that need more than a flat copy — config templates and the plugin — it dispatches to one of **three install modes**: merge-on-install (config), copy-or-skip (config), and build-plus-copy (plugin). The generic `cp` path handles agents, subagents, commands, context, and tools; this page covers only the config and plugin logic.
 
-The component list and dispatch routing come from `registry.json` (repo root), the sole source of truth for components, dependencies, and the Developer profile seed (see [Versioning](../framework/versioning.md)). `profiles.developer.components` has 32 entries; the config/plugin dispatch handles 4 of them — 1 plugin and 3 configs — while the remaining `config:readme` falls through to the generic copy path.
+The component list and dispatch routing come from `registry.json` (repo root), the sole source of truth for components, dependencies, and the Developer profile seed (see [Versioning](../framework/versioning.md)). `profiles.developer.components` has 31 entries; the config/plugin dispatch handles 4 of them — 1 plugin and 3 configs — while the remaining agents, subagents, commands, context, tools, and skills fall through to the generic copy path.
 
 ## Config Merge Strategy
 
@@ -95,9 +95,9 @@ The install loop resolves dependencies recursively, then iterates `RESOLVED_ORDE
 | `type:plugin` | `install_plugin` |
 | `config:opencode`, `config:vibeguard` | `install_config_merge` |
 | `config:dcp` | `install_copy_or_skip` |
-| Everything else (agents, subagents, commands, context, tools, `config:readme`) | generic `cp` with `--overwrite` gate and global-install path rewriting |
+| Everything else (agents, subagents, commands, context, tools, skills) | generic `cp` with `--overwrite` gate and global-install path rewriting |
 
-The dispatch is a `case` on the config `id`, not the `path` — so adding a new merge-mode config means registering it with an `id` the case recognizes, not changing path-matching logic.
+The dispatch is a `case` on the config `id`, not the `path` — so adding a new merge-mode config means registering it with an `id` the case recognizes, not changing path-matching logic. An unknown config `id` hits the `*)` default and errors — every config must have an explicit handler.
 
 ## Registry as Source of Truth
 
@@ -107,7 +107,7 @@ The dispatch is a `case` on the config `id`, not the `path` — so adding a new 
 jq -r '.profiles.developer.components[]' registry.json
 ```
 
-The 32 seed entries resolve through `resolve_dependencies` (recursive, with wildcard expansion for `context:core/*` etc.) into the final install order. The registry is the sole source of truth — `src/manifest.json` and `src/metadata.json` are deprecated and no script reads them (see [Versioning](../framework/versioning.md) and [src/ Package Structure](../framework/src-structure.md)).
+The 31 seed entries resolve through `resolve_dependencies` (recursive, with wildcard expansion for `context:core/*` etc.) into the final install order. The registry is the sole source of truth — `src/manifest.json` and `src/metadata.json` are deprecated and no script reads them (see [Versioning](../framework/versioning.md) and [src/ Package Structure](../framework/src-structure.md)).
 
 The mirror source directory is defined in two places that must stay in sync: `install.sh` `SRC_ROOT` (`"src"`) and `scripts/registry/dependency-resolution.ts` `MIRROR_DIR` (`"src"`). Changing one without the other breaks path resolution.
 

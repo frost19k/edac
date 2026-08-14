@@ -2246,20 +2246,6 @@
     ],
     "config": [
       {
-        "id": "readme",
-        "name": "README",
-        "type": "config",
-        "path": "README.md",
-        "description": "Project documentation and setup guide",
-        "tags": [
-          "documentation",
-          "readme",
-          "guide"
-        ],
-        "dependencies": [],
-        "category": "essential"
-      },
-      {
         "id": "opencode",
         "name": "OpenCode Config",
         "type": "config",
@@ -2357,7 +2343,6 @@
         "context:intl/*",
         "context:web/*",
         "context:dev/*",
-        "config:readme",
         "plugin:holographic-memory",
         "config:opencode",
         "config:dcp",
