@@ -22,6 +22,20 @@ const DEFAULT_CONFIG: HolographicConfig = {
   min_trust_threshold: 0.3,
 }
 
+/**
+ * Expand ~, ${HOME}, and $HOME in a path string to the user's home directory.
+ * Node.js does not perform shell expansion, so paths from config files that
+ * use these patterns must be expanded manually to avoid creating literal
+ * "~" or "${HOME}" directories in the working directory.
+ */
+function expandPath(p: string): string {
+  const home = homedir()
+  if (p.startsWith('~')) {
+    return join(home, p.slice(1))
+  }
+  return p.replace(/\$\{?HOME\}?/g, home)
+}
+
 function loadConfig(): HolographicConfig {
   const configPath = join(homedir(), '.config', 'opencode', 'holographic_memory.json')
 
@@ -29,7 +43,11 @@ function loadConfig(): HolographicConfig {
     try {
       const raw = readFileSync(configPath, 'utf-8')
       const userConfig = JSON.parse(raw)
-      return { ...DEFAULT_CONFIG, ...userConfig }
+      const merged = { ...DEFAULT_CONFIG, ...userConfig }
+      if (merged.db_path) {
+        merged.db_path = expandPath(merged.db_path)
+      }
+      return merged
     } catch {
       // Fall back to defaults if config is malformed
     }

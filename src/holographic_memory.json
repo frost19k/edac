@@ -1,5 +1,5 @@
 {
-  "db_path": "~/.config/opencode/memory/memory_store.db",
+  "db_path": "${HOME}/.config/opencode/memory/memory_store.db",
   "auto_extract": false,
   "default_trust": 0.5,
   "hrr_dim": 1024,
