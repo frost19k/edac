@@ -60,27 +60,27 @@ export function unbind(memory: Float64Array, key: Float64Array): Float64Array {
  * Bundle: superpose multiple vectors via circular mean.
  * Result is similar to each input. Capacity: O(sqrt(dim)) items.
  */
-export function bundle(vectors: Float64Array[]): Float64Array {
+export function bundle(vectors: Float64Array[], dim: number = 1024): Float64Array {
   if (vectors.length === 0) {
-    return new Float64Array(1024)
+    return new Float64Array(dim)
   }
   if (vectors.length === 1) {
     return new Float64Array(vectors[0])
   }
 
-  const dim = vectors[0].length
-  let sumReal = new Float64Array(dim)
-  let sumImag = new Float64Array(dim)
+  const itemDim = vectors[0].length
+  let sumReal = new Float64Array(itemDim)
+  let sumImag = new Float64Array(itemDim)
 
   for (const v of vectors) {
-    for (let i = 0; i < dim; i++) {
+    for (let i = 0; i < itemDim; i++) {
       sumReal[i] += Math.cos(v[i])
       sumImag[i] += Math.sin(v[i])
     }
   }
 
-  const result = new Float64Array(dim)
-  for (let i = 0; i < dim; i++) {
+  const result = new Float64Array(itemDim)
+  for (let i = 0; i < itemDim; i++) {
     result[i] = ((Math.atan2(sumImag[i], sumReal[i]) % TWO_PI) + TWO_PI) % TWO_PI
   }
 
@@ -116,7 +116,7 @@ export async function encodeText(text: string, dim: number = 1024): Promise<Floa
   }
 
   const vectors = await Promise.all(tokens.map(t => encodeAtom(t, dim)))
-  return bundle(vectors)
+  return bundle(vectors, dim)
 }
 
 /**
@@ -141,16 +141,7 @@ export async function encodeFact(
     components.push(bind(entityVec, roleEntity))
   }
 
-  return bundle(components)
-}
-
-/**
- * Estimate signal-to-noise ratio for a bundle of n_items at given dim.
- * SNR < 2.0 means capacity is near limit.
- */
-export function snrEstimate(dim: number, nItems: number): number {
-  if (nItems <= 0) return Infinity
-  return Math.sqrt(dim / nItems)
+  return bundle(components, dim)
 }
 
 /**

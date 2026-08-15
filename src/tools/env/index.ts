@@ -125,8 +125,7 @@ To fix this:
 2. Or export it: export ${varName}=your_value_here
 
 Current working directory: ${process.cwd()}
-Searched paths: ${searchPaths.join(', ')}
-Environment variables available: ${Object.keys(process.env).filter(k => k.includes(varName.split('_')[0])).join(', ') || 'none matching'}`)
+Searched paths: ${searchPaths.join(', ')}`)
   }
   
   return value

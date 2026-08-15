@@ -63,7 +63,10 @@ function extractFrontmatter(content: string): string | null {
 }
 
 /**
- * Check whether a frontmatter block contains a given top-level key.
+ * Check whether the raw frontmatter text contains a line starting with
+ * the given key followed by a colon (i.e., a top-level YAML field).
+ * This is a string prefix match on raw text, not a parsed YAML lookup —
+ * it will not detect nested (indented) keys.
  */
 function frontmatterHasKey(frontmatter: string, key: string): boolean {
   for (const line of frontmatter.split('\n')) {
@@ -114,7 +117,7 @@ function validateTypescriptFile(filePath: string): void {
     printSuccess('Has exports');
   }
 
-  if (!/^\s*\*/m.test(content)) {
+  if (!/\/\*\*/.test(content)) {
     printWarning(`No JSDoc comments found in ${relPath}`);
   } else {
     printSuccess('Has documentation');

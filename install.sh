@@ -44,7 +44,13 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run)    DRY_RUN=true; shift ;;
     --overwrite)  OVERWRITE=true; shift ;;
-    --install-dir) INSTALL_DIR="$2"; shift 2 ;;
+    --install-dir)
+      if [[ -z "${2:-}" || "${2:0:1}" == "-" ]]; then
+        err "--install-dir requires a directory path argument"
+        usage
+      fi
+      INSTALL_DIR="$2"; shift 2
+      ;;
     -h|--help)    usage ;;
     *)            echo "Unknown option: $1"; usage ;;
   esac
@@ -163,6 +169,7 @@ expand_context_wildcard() {
 
 SELECTED=()
 RESOLVED_ORDER=()
+declare -A RESOLVED_SET=()
 
 resolve_dependencies() {
   local comp="$1"
@@ -170,9 +177,7 @@ resolve_dependencies() {
   local id="${comp##*:}"
 
   # Already resolved?
-  for existing in "${RESOLVED_ORDER[@]}"; do
-    [[ "$existing" == "$comp" ]] && return
-  done
+  [[ -n "${RESOLVED_SET[$comp]:-}" ]] && return
 
   # Wildcard expansion (only for context types)
   if [[ "$id" == *"*"* ]]; then
@@ -183,10 +188,9 @@ resolve_dependencies() {
     while IFS= read -r match; do
       [[ -z "$match" ]] && continue
       local exp="context:${match}"
-      for existing in "${RESOLVED_ORDER[@]}"; do
-        [[ "$existing" == "$exp" ]] && continue 2
-      done
+      [[ -n "${RESOLVED_SET[$exp]:-}" ]] && continue 2
       RESOLVED_ORDER+=("$exp")
+      RESOLVED_SET[$exp]=1
       resolve_dependencies "$exp"
     done < <(expand_context_wildcard "$id")
     return
@@ -200,6 +204,7 @@ resolve_dependencies() {
   fi
 
   RESOLVED_ORDER+=("$comp")
+  RESOLVED_SET[$comp]=1
 
   # Recurse into dependencies
   if [[ -n "$deps" ]]; then

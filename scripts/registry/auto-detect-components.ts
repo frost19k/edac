@@ -136,7 +136,7 @@ function checkFileSecurity(file: string): string[] {
     }
 
     const content = readFileSync(file, 'utf-8');
-    const realKeyPattern = /(sk-proj-[a-zA-Z0-9]{40,}|ghp_[a-zA-Z0-9]{36,}|xox[baprs]-[a-zA-Z0-9-]{10,})/;
+    const realKeyPattern = /(sk-proj-[a-zA-Z0-9]{40,}|ghp_[a-zA-Z0-9]{36,}|xox[baprs]-[a-zA-Z0-9-]{10,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|sk_live_[0-9a-zA-Z]{24,}|rk_live_[0-9a-zA-Z]{24,}|eyJ[a-zA-Z0-9_-]*\.eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*)/;
     if (realKeyPattern.test(content)) {
       issues.push('Potential real API key detected');
     }
@@ -147,7 +147,7 @@ function checkFileSecurity(file: string): string[] {
     }
 
     const content = readFileSync(file, 'utf-8');
-    const secretPattern = /(password|secret|api[_-]?key|token|credential|private[_-]?key).*[=:].*[a-zA-Z0-9]{20,}/i;
+    const secretPattern = /\b(password|secret|api[_-]?key|token|credential|private[_-]?key)\b.*[=:]\s*['"]?[a-zA-Z0-9+/=_-]{25,}/i;
     if (secretPattern.test(content)) {
       issues.push('Potential hardcoded secrets detected');
     }
