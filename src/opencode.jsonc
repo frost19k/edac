@@ -43,7 +43,7 @@
       "command": [
         "npx",
         "-y",
-        "@playwright/mcp@latest"
+        "@playwright/mcp@0.0.79"
       ],
       "environment": {
         "PLAYWRIGHT_MCP_EXECUTABLE_PATH": "/usr/bin/chromium",

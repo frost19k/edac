@@ -275,14 +275,16 @@ dry_run() {
     err "Dry-run found ${#missing[@]} missing component(s) — install would write nothing. Fix MIRROR_DIR/SRC_ROOT or restore sources."
   fi
 
-  # Check if plugin needs building at install time
+  # Report plugin build intent and verify prerequisites
   for comp in "${RESOLVED_ORDER[@]}"; do
     local ctype="${comp%%:*}" cid="${comp##*:}"
     if [[ "$ctype" == "plugin" ]]; then
       local ppath; ppath=$(resolve_component_path "$ctype" "$cid")
-      local pdist="$SRC_ROOT/$ppath/dist/holographic-memory.ts"
-      if [[ ! -f "$pdist" ]]; then
-        warn "Plugin $cid: dist/ missing — will build at install time (requires bun)"
+      local pscript="$SRC_ROOT/$ppath/scripts/build.cjs"
+      if [[ ! -f "$pscript" ]]; then
+        warn "Plugin $cid: build script not found — install will fail"
+      else
+        info "Plugin $cid: will build from source at install time"
       fi
     fi
   done
@@ -296,29 +298,29 @@ dry_run() {
 install_plugin() {
   local id="$1" path="$2"
   local plugin_src="$SRC_ROOT/$path"
-
-  # Build the plugin if dist/ is missing
-  local dist_file="$plugin_src/dist/holographic-memory.ts"
-  if [[ ! -f "$dist_file" ]]; then
-    info "Building plugin: $id (dist/ not found)"
-    if ! (cd "$plugin_src" && bun install && node scripts/build.cjs); then
-      err "Failed to build plugin: $id"
-      failed=$((failed + 1))
-      return 0
-    fi
-  fi
-
-  # Install dist → plugins/
   local dest_plugin="$INSTALL_DIR/plugins/holographic-memory.ts"
-  mkdir -p "$(dirname "$dest_plugin")"
+
+  # Skip entirely if destination exists and not overwriting
   if [[ -f "$dest_plugin" && "$OVERWRITE" == false ]]; then
-    info "Skipped: plugin:$id (dist, exists)"
+    info "Skipped: plugin:$id (exists)"
     skipped=$((skipped + 1))
-  else
-    cp "$dist_file" "$dest_plugin"
-    ok "Installed: plugin:$id (dist)"
-    installed=$((installed + 1))
+    return 0
   fi
+
+  # Build from source — dist/ may be stale or missing
+  info "Building plugin: $id from source"
+  if ! (cd "$plugin_src" && bun install && node scripts/build.cjs); then
+    err "Failed to build plugin: $id"
+    failed=$((failed + 1))
+    return 0
+  fi
+
+  # Copy freshly built dist → destination
+  local dist_file="$plugin_src/dist/holographic-memory.ts"
+  mkdir -p "$(dirname "$dest_plugin")"
+  cp "$dist_file" "$dest_plugin"
+  ok "Installed: plugin:$id (built from source)"
+  installed=$((installed + 1))
 }
 
 # ── Config Merge Install ─────────────────────────────────────────────────────

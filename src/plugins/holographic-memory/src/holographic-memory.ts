@@ -38,6 +38,16 @@ function loadConfig(): HolographicConfig {
   return { ...DEFAULT_CONFIG }
 }
 
+/** Cached config — avoids re-reading disk on every tool invocation */
+let _config: HolographicConfig | null = null
+
+function getConfig(): HolographicConfig {
+  if (!_config) {
+    _config = loadConfig()
+  }
+  return _config
+}
+
 // ─── Singleton Store ──────────────────────────────────────────
 
 let _store: HolographicStore | null = null
@@ -45,16 +55,14 @@ let _retriever: FactRetriever | null = null
 
 function getStore(): HolographicStore {
   if (!_store) {
-    const config = loadConfig()
-    _store = new HolographicStore(config)
+    _store = new HolographicStore(getConfig())
   }
   return _store
 }
 
 function getRetriever(): FactRetriever {
   if (!_retriever) {
-    const config = loadConfig()
-    _retriever = new FactRetriever(getStore(), config)
+    _retriever = new FactRetriever(getStore(), getConfig())
   }
   return _retriever
 }
@@ -202,7 +210,7 @@ Actions:
 
             case 'remove': {
               if (!args.fact_id) return 'Error: fact_id is required for remove'
-              const success = store.removeFact(args.fact_id)
+              const success = await store.removeFact(args.fact_id)
               return success ? JSON.stringify({ fact_id: args.fact_id, status: 'removed' }) : 'Error: fact not found'
             }
 
@@ -256,7 +264,7 @@ Actions:
 
     // ── Auto-Extract on Session Compaction ────────────────────
     'experimental.session.compacting': async (_input, output) => {
-      const config = loadConfig()
+      const config = getConfig()
       if (!config.auto_extract) return
 
       output.context.push(
@@ -266,7 +274,7 @@ Actions:
 
     // ── Post-Compaction Extraction ────────────────────────────
     'experimental.compaction.autocontinue': async (_input, output) => {
-      const config = loadConfig()
+      const config = getConfig()
       if (!config.auto_extract) return
 
       // Keep auto-continue enabled so the agent can process extracted facts

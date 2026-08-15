@@ -60,7 +60,10 @@ export async function loadEnvVariables(config: EnvLoaderConfig = {}): Promise<Re
           // Remove quotes if present
           const cleanValue = value.replace(/^["']|["']$/g, '')
           
-          if (key && cleanValue && (override || !process.env[key])) {
+          // Validate key format to prevent env var injection
+          if (!key || !/^[A-Z_][A-Z0-9_]*$/i.test(key)) continue
+          
+          if (cleanValue && (override || !process.env[key])) {
             process.env[key] = cleanValue
             loadedVars[key] = cleanValue
             

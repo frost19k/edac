@@ -242,12 +242,12 @@ export class HolographicStore {
   }
 
   /** Remove a fact */
-  removeFact(factId: number): boolean {
+  async removeFact(factId: number): Promise<boolean> {
     const fact = this.getFact(factId)
     if (!fact) return false
 
     this.db.query('DELETE FROM facts WHERE fact_id = ?').run(factId)
-    this.rebuildBank(fact.category)
+    await this.rebuildBank(fact.category)
     return true
   }
 
@@ -442,6 +442,16 @@ export class HolographicStore {
     ).run(factId)
   }
 
+  /** Batch increment retrieval count for multiple facts (single SQL write) */
+  incrementRetrievals(factIds: number[]): void {
+    if (factIds.length === 0) return
+    const placeholders = factIds.map(() => '?').join(', ')
+    this.db.query(
+      `UPDATE facts SET retrieval_count = retrieval_count + 1, updated_at = datetime('now')
+       WHERE fact_id IN (${placeholders})`
+    ).run(...factIds)
+  }
+
   /** Close the database connection */
   close(): void {
     this.db.close()
@@ -455,9 +465,7 @@ export class HolographicStore {
  * Wraps bare hyphenated/dotted tokens in double quotes.
  */
 function sanitizeFts5Query(query: string): string {
-  // Wrap hyphenated tokens in double quotes to prevent FTS5 parsing as NOT
-  return query.replace(
-    /(?<!")(\b\w+(?:[-.]\w+)+\b)(?!")/g,
-    '"$1"'
-  )
+  // Wrap entire query in double quotes to prevent FTS5 operator injection.
+  // Escape any embedded double quotes by doubling them (FTS5 escape rule).
+  return '"' + query.replace(/"/g, '""') + '"'
 }

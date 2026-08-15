@@ -57,6 +57,7 @@ export class FactRetriever {
 
     // Stage 2-4: Rerank each candidate
     const scored: ScoredFact[] = []
+    const retrievedIds: number[] = []
 
     for (const fact of candidates) {
       // Stage 2: Jaccard token overlap
@@ -82,7 +83,7 @@ export class FactRetriever {
         score *= temporalDecay(fact.updated_at, this.halfLife)
       }
 
-      this.store.incrementRetrieval(fact.fact_id)
+      retrievedIds.push(fact.fact_id)
 
       scored.push({
         ...fact,
@@ -90,6 +91,9 @@ export class FactRetriever {
         score,
       })
     }
+
+    // Batch increment retrieval counts (single SQL write)
+    this.store.incrementRetrievals(retrievedIds)
 
     // Sort by score descending, return top N
     scored.sort((a, b) => b.score - a.score)
@@ -126,13 +130,20 @@ export class FactRetriever {
 
     const roleContent = await hrr.encodeAtom('__hrr_role_content__', this.dim)
     const scored: ScoredFact[] = []
+    const contentVecCache = new Map<string, Float64Array>()
 
     for (const fact of facts) {
       if (!fact.hrr_vector) continue
 
       const factVec = hrr.bytesToPhases(new Uint8Array(fact.hrr_vector))
       const residual = hrr.unbind(factVec, probeKey)
-      const contentVec = hrr.bind(await hrr.encodeText(fact.content, this.dim), roleContent)
+
+      let contentVec = contentVecCache.get(fact.content)
+      if (!contentVec) {
+        contentVec = hrr.bind(await hrr.encodeText(fact.content, this.dim), roleContent)
+        contentVecCache.set(fact.content, contentVec)
+      }
+
       const sim = hrr.similarity(residual, contentVec)
       const score = ((sim + 1.0) / 2.0) * fact.trust_score
 

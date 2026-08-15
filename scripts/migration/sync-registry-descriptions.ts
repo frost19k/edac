@@ -50,7 +50,7 @@ interface Registry {
 
 function extractFrontmatterDescription(filePath: string): string | null {
   const content = readFileSync(filePath, 'utf-8');
-  const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+  const fmMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!fmMatch) return null;
 
   const fm = fmMatch[1];
@@ -112,9 +112,9 @@ function main(): void {
   }
 
   if (apply && updated > 0) {
-    registry.metadata.lastUpdated = '2026-08-13';
+    registry.metadata.lastUpdated = new Date().toISOString().split('T')[0];
     writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2) + '\n');
-    console.log(`\n✓ Applied ${updated} description updates + metadata.lastUpdated → 2026-08-13`);
+    console.log(`\n✓ Applied ${updated} description updates + metadata.lastUpdated → ${new Date().toISOString().split('T')[0]}`);
   } else {
     console.log(`\nDry run: ${updated} would update, ${skipped} already synced, ${notFound} not found`);
     console.log('Run with --apply to make changes.');

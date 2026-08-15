@@ -33,25 +33,6 @@ export async function encodeAtom(word: string, dim: number = 1024): Promise<Floa
 }
 
 /**
- * Synchronous encode using pre-computed hash.
- * For hot paths where async is unacceptable.
- */
-export function encodeAtomSync(hash: Uint8Array, dim: number = 1024): Float64Array {
-  const phases = new Float64Array(dim)
-  const valuesPerBlock = 16
-
-  for (let i = 0; i < dim; i++) {
-    const blockIdx = Math.floor(i / valuesPerBlock)
-    const withinBlock = i % valuesPerBlock
-    const byteIdx = withinBlock * 2
-    const uint16Val = hash[byteIdx] | (hash[byteIdx + 1] << 8)
-    phases[i] = uint16Val * (TWO_PI / 65536.0)
-  }
-
-  return phases
-}
-
-/**
  * Bind two concepts via circular convolution (element-wise phase addition).
  * Result is dissimilar to both inputs (quasi-orthogonal).
  */
