@@ -10,26 +10,16 @@
  */
 
 import { existsSync, readFileSync, lstatSync } from 'fs';
-import { join, dirname, relative } from 'path';
-import { fileURLToPath } from 'url';
+import { join, relative } from 'path';
 import { globSync } from 'glob';
 import { MIRROR_DIR } from './dependency-resolution';
-
-// Colors
-const colors = {
-  red: '\x1b[0;31m',
-  green: '\x1b[0;32m',
-  yellow: '\x1b[1;33m',
-  blue: '\x1b[0;34m',
-  reset: '\x1b[0m',
-};
+import { colors, REPO_ROOT, printSuccess, printInfo } from './shared';
 
 // Counters
 let errors = 0;
 let warnings = 0;
 
 // Configuration
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const REGISTRY_FILE = 'registry.json';
 
 // Types
@@ -43,10 +33,6 @@ interface Registry {
 }
 
 // Utility functions
-function printSuccess(msg: string): void {
-  console.log(`${colors.green}✓${colors.reset} ${msg}`);
-}
-
 function printError(msg: string): void {
   console.error(`${colors.red}✗${colors.reset} ${msg}`);
   errors++;
@@ -55,10 +41,6 @@ function printError(msg: string): void {
 function printWarning(msg: string): void {
   console.error(`${colors.yellow}⚠${colors.reset} ${msg}`);
   warnings++;
-}
-
-function printInfo(msg: string): void {
-  console.log(`${colors.blue}ℹ${colors.reset} ${msg}`);
 }
 
 /**

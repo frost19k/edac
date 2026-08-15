@@ -11,25 +11,14 @@
 
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
 import { parseDependency, resolveCategory, buildComponentMap, componentExists, MIRROR_DIR } from './dependency-resolution';
 import type { ComponentRef } from './dependency-resolution';
-
-// Colors
-const colors = {
-  red: '\x1b[0;31m',
-  green: '\x1b[0;32m',
-  yellow: '\x1b[1;33m',
-  blue: '\x1b[0;34m',
-  cyan: '\x1b[0;36m',
-  bold: '\x1b[1m',
-  reset: '\x1b[0m',
-};
+import { colors, REPO_ROOT, printSuccess, printError, printWarning, printInfo } from './shared';
+import type { Component, Registry } from './shared';
 
 // Configuration
 const REGISTRY_FILE = 'registry.json';
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
 // Counters
 let TOTAL_PATHS = 0;
@@ -47,33 +36,6 @@ const MISSING_DEPS: string[] = [];
 let VERBOSE = false;
 let FIX_MODE = false;
 
-// Types
-interface Component {
-  id: string;
-  name: string;
-  type: string;
-  path: string;
-  dependencies?: string[];
-  [key: string]: unknown;
-}
-
-interface Registry {
-  version: string;
-  schema_version: string;
-  repository: string;
-  categories?: Record<string, string>;
-  components: {
-    agents?: Component[];
-    subagents?: Component[];
-    commands?: Component[];
-    tools?: Component[];
-    plugins?: Component[];
-    contexts?: Component[];
-    config?: Component[];
-    skills?: Component[];
-  };
-}
-
 // Utility Functions
 function printHeader(): void {
   console.log(`${colors.cyan}${colors.bold}`);
@@ -83,22 +45,6 @@ function printHeader(): void {
   console.log('║                                                                ║');
   console.log('╚════════════════════════════════════════════════════════════════╝');
   console.log(`${colors.reset}`);
-}
-
-function printSuccess(msg: string): void {
-  console.log(`${colors.green}✓${colors.reset} ${msg}`);
-}
-
-function printError(msg: string): void {
-  console.error(`${colors.red}✗${colors.reset} ${msg}`);
-}
-
-function printWarning(msg: string): void {
-  console.error(`${colors.yellow}⚠${colors.reset} ${msg}`);
-}
-
-function printInfo(msg: string): void {
-  console.log(`${colors.blue}ℹ${colors.reset} ${msg}`);
 }
 
 function usage(): void {

@@ -16,24 +16,13 @@
  */
 
 import { existsSync, readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import { buildComponentMap, componentExists } from './dependency-resolution';
+import { colors, REPO_ROOT, printSuccess, printError, printWarning, printInfo } from './shared';
+import type { Component, Registry } from './shared';
 
 // Configuration
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const REGISTRY_FILE = join(REPO_ROOT, 'registry.json');
-
-// Colors
-const colors = {
-  red: '\x1b[0;31m',
-  green: '\x1b[0;32m',
-  yellow: '\x1b[1;33m',
-  blue: '\x1b[0;34m',
-  cyan: '\x1b[0;36m',
-  bold: '\x1b[1m',
-  reset: '\x1b[0m',
-};
 
 // Counters
 let TOTAL_CHECKS = 0;
@@ -47,37 +36,6 @@ const CRITICAL_FILES_MISSING: string[] = [];
 
 // CLI flags
 let VERBOSE = false;
-
-// Types
-interface Component {
-  id: string;
-  name: string;
-  type: string;
-  path: string;
-  dependencies?: string[];
-}
-
-interface Registry {
-  version: string;
-  schema_version: string;
-  repository: string;
-  categories?: Record<string, string>;
-  components: {
-    agents?: Component[];
-    subagents?: Component[];
-    commands?: Component[];
-    tools?: Component[];
-    plugins?: Component[];
-    contexts?: Component[];
-    config?: Component[];
-    skills?: Component[];
-  };
-  profiles?: Record<string, {
-    name: string;
-    description: string;
-    components: string[];
-  }>;
-}
 
 // Critical files that must be in registry
 const CRITICAL_FILES = [
@@ -95,22 +53,6 @@ function printHeader(): void {
   console.log('║                                                                ║');
   console.log('╚════════════════════════════════════════════════════════════════╝');
   console.log(`${colors.reset}`);
-}
-
-function printSuccess(msg: string): void {
-  console.log(`${colors.green}✓${colors.reset} ${msg}`);
-}
-
-function printError(msg: string): void {
-  console.log(`${colors.red}✗${colors.reset} ${msg}`);
-}
-
-function printWarning(msg: string): void {
-  console.log(`${colors.yellow}⚠${colors.reset} ${msg}`);
-}
-
-function printInfo(msg: string): void {
-  console.log(`${colors.blue}ℹ${colors.reset} ${msg}`);
 }
 
 function printStep(msg: string): void {

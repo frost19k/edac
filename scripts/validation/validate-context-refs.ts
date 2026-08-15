@@ -29,25 +29,12 @@
  */
 
 import { existsSync, readFileSync } from 'fs';
-import { dirname, join, relative } from 'path';
-import { fileURLToPath } from 'url';
+import { join, relative } from 'path';
 import { globSync } from 'glob';
 import { remark } from 'remark';
 import { visit } from 'unist-util-visit';
 import { MIRROR_DIR } from '../registry/dependency-resolution';
-
-// Colors
-const colors = {
-  red: '\x1b[0;31m',
-  green: '\x1b[0;32m',
-  yellow: '\x1b[1;33m',
-  blue: '\x1b[0;34m',
-  cyan: '\x1b[0;36m',
-  bold: '\x1b[1m',
-  reset: '\x1b[0m',
-};
-
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
+import { colors, REPO_ROOT } from '../registry/shared';
 
 let errors = 0;
 let warnings = 0;
