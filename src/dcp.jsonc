@@ -3,8 +3,8 @@
   "compress": {
     "minContextLimit": 64000,
     "maxContextLimit": 128000,
-    "iterationNudgeThreshold": 15,
-    "nudgeFrequency": 5
+    "iterationNudgeThreshold": 16,
+    "nudgeFrequency": 8
   },
   "strategies": {
     "purgeErrors": {
