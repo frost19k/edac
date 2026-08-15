@@ -138,9 +138,8 @@ function hasShellCommandWithPath(line: string): boolean {
 
 // --- Check functions ---
 
-function checkAgents(): void {
-  console.log('Checking agent files...');
-  const dir = join(REPO_ROOT, MIRROR_DIR, 'agents');
+function checkDirectory(dir: string, label: string, isContext: boolean = false): void {
+  console.log(`Checking ${label} files...`);
   for (const file of collectFiles(dir)) {
     const rel = relPath(file);
 
@@ -155,59 +154,10 @@ function checkAgents(): void {
 
     const refs = findNonStandardRefs(file);
     if (refs.length > 0) {
-      console.log(`${colors.yellow}⚠️${colors.reset}  Non-standard reference in: ${rel}`);
-      for (const ref of refs) {
-        console.log(`   line ${ref.line}: ${ref.match}`);
-      }
-      warnings++;
-    }
-  }
-}
-
-function checkCommands(): void {
-  console.log('Checking command files...');
-  const dir = join(REPO_ROOT, MIRROR_DIR, 'commands');
-  for (const file of collectFiles(dir)) {
-    const rel = relPath(file);
-
-    const dynamicLines = findDynamicVarLines(file);
-    if (dynamicLines.length > 0) {
-      console.log(`${colors.red}❌${colors.reset} Dynamic context reference in: ${rel}`);
-      for (const line of dynamicLines) {
-        console.log(`   ${line}`);
-      }
-      errors++;
-    }
-
-    const refs = findNonStandardRefs(file);
-    if (refs.length > 0) {
-      console.log(`${colors.yellow}⚠️${colors.reset}  Non-standard reference in: ${rel}`);
-      for (const ref of refs) {
-        console.log(`   line ${ref.line}: ${ref.match}`);
-      }
-      warnings++;
-    }
-  }
-}
-
-function checkContexts(): void {
-  console.log('Checking context files...');
-  const dir = join(REPO_ROOT, MIRROR_DIR, 'context');
-  for (const file of collectFiles(dir)) {
-    const rel = relPath(file);
-
-    const dynamicLines = findDynamicVarLines(file);
-    if (dynamicLines.length > 0) {
-      console.log(`${colors.red}❌${colors.reset} Dynamic context reference in: ${rel}`);
-      for (const line of dynamicLines) {
-        console.log(`   ${line}`);
-      }
-      errors++;
-    }
-
-    const refs = findNonStandardRefs(file);
-    if (refs.length > 0) {
-      console.log(`${colors.yellow}⚠️${colors.reset}  Context file has non-standard reference: ${rel}`);
+      const msg = isContext
+        ? `Context file has non-standard reference: ${rel}`
+        : `Non-standard reference in: ${rel}`;
+      console.log(`${colors.yellow}⚠️${colors.reset}  ${msg}`);
       for (const ref of refs) {
         console.log(`   line ${ref.line}: ${ref.match}`);
       }
@@ -244,9 +194,9 @@ function main(): void {
     process.exit(1);
   }
 
-  checkAgents();
-  checkCommands();
-  checkContexts();
+  checkDirectory(join(REPO_ROOT, MIRROR_DIR, 'agents'), 'agent');
+  checkDirectory(join(REPO_ROOT, MIRROR_DIR, 'commands'), 'command');
+  checkDirectory(join(REPO_ROOT, MIRROR_DIR, 'context'), 'context', true);
   checkShellCommands();
 
   // Summary
