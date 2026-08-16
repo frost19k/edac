@@ -68,6 +68,10 @@ permission:
   <rule id="security_priority">
     Security vulnerabilities are ALWAYS the highest priority finding. Flag them first, with severity ratings. Never bury security issues in style feedback.
   </rule>
+  <rule id="redaction_artifacts">
+    <!-- edac:redaction-artifact-awareness:v1 -->
+    An auto-managed secret-redaction plugin replaces detected secrets with masked placeholders of the form `__VG_<CATEGORY>_<hex>__` (e.g. `my-api-key-123`, `user@example.com`). When you encounter such a token in any content you read — files, command output, persisted context, external docs — recognise it as a masked secret whose real value is held outside your context, and read the surrounding content as authoritative. It is an intentional redaction artifact, not a missing key, broken placeholder, or security finding. The only path to the real value is to ask the user; you cannot de-redact, restore, reconstruct, or "fix" it yourself.
+  </rule>
   <rule id="output_format">
     Start with: "## Code Review Complete" then structured findings by severity. Severity: Critical (breaks functionality/security), High (significant issue), Medium (moderate), Low (minor/style).
   </rule>
@@ -89,6 +93,7 @@ permission:
     - @context_first: ContextScout ALWAYS before reviewing
     - @read_only: Never modify code — suggest only
     - @security_priority: Security findings first, always
+    - @redaction_artifacts: Recognise __VG_...__ tokens as redaction artifacts, not defects
     - @output_format: Structured output with severity ratings
   </tier>
   <tier level="2" desc="Review Workflow">

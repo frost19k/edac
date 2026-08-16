@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "validate": "bun run validate:registry && bun run validate:components && bun run validate:context-links && bun run validate:context-refs",
+    "validate": "bun run validate:registry && bun run validate:components && bun run validate:context-links && bun run validate:context-refs && bun run validate:redaction-awareness",
     "validate:registry": "bun run scripts/registry/validate-registry.ts",
     "validate:components": "bun run scripts/registry/validate-component.ts",
     "validate:context-links": "bun run scripts/validation/validate-markdown-links.ts",
     "validate:context-refs": "bun run scripts/validation/validate-context-refs.ts",
+    "validate:redaction-awareness": "bun run scripts/validation/validate-redaction-awareness.ts",
     "validate:deps": "bun run scripts/registry/check-dependencies.ts",
     "detect:components": "bun run scripts/registry/auto-detect-components.ts"
   },

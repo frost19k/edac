@@ -3,7 +3,7 @@ title: Plugin Provisioning
 type: concept
 tags: [plugins, dcp, vibeguard, holographic-memory, pty, install, awareness-tiers]
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-16
 sources: []
 status: stable
 ---
@@ -16,7 +16,7 @@ EDAC provisions four plugins: two are **auto-managed** (transparent to agents, c
 
 The distinction is structural:
 
-- **Auto-managed** — the plugin operates at the plugin layer, configured globally via its own config file. Agents have no awareness of it; it does its work transparently (compression, redaction). No agent body text mentions it. DCP/compress and Vibeguard are auto-managed.
+- **Auto-managed** — the plugin operates at the plugin layer, configured globally via its own config file. Redaction and compression happen transparently; agents do not configure or invoke the plugin. DCP/compress is fully transparent (agents have no awareness of it). Vibeguard is auto-managed but **artifact-aware**: agents carry a recognition-only directive that teaches them to identify `__VG_<CATEGORY>_<hex>__` tokens as masked secrets (not missing keys, broken placeholders, or security findings) and to read surrounding content as authoritative — the only path to the real value is to ask the user. This awareness is recognition-only (no de-redaction tool, no restore instruction); the plugin's structural guarantee holds. The directive is enforced by `validate:redaction-awareness` (version marker `<!-- edac:redaction-artifact-awareness:v1 -->` in every agent body).
 - **Per-agent awareness** — the plugin exposes tools agents must call deliberately. Agent body text tells the agent the tool exists and when to use it. Awareness is tiered per the [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) model: **minimal** for most agents (a capability-layer note: "store/retrieve facts via holographic memory" or "spawn a PTY session for long-running processes"), **comprehensive** for OpenCoder (a decision framework for when to persist project knowledge and when to use PTY for dev servers). Holographic-memory and PTY have per-agent awareness.
 
 ## The Four Plugins
@@ -24,7 +24,7 @@ The distinction is structural:
 | Plugin | Package / source | Config file | Awareness |
 |---|---|---|---|
 | **DCP/compress** | `@tarquinen/opencode-dcp@latest` (package ref in `plugin:` array) | `dcp.jsonc` | Auto-managed — none |
-| **Vibeguard** | `opencode-vibeguard` (package ref in `plugin:` array) | `vibeguard.config.json` | Auto-managed — none |
+| **Vibeguard** | `opencode-vibeguard` (package ref in `plugin:` array) | `vibeguard.config.json` | Auto-managed — artifact-aware (recognition-only) |
 | **PTY** | `opencode-pty` (package ref in `plugin:` array) | — | Per-agent — tiered (see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md)) |
 | **Holographic-memory** | built from `src/plugins/holographic-memory/` at install time | `holographic_memory.json` | Per-agent — tiered (see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md)) |
 
@@ -34,7 +34,7 @@ Dynamic context pruning and compression. Operates globally: when context approac
 
 ### Vibeguard — secret redaction
 
-Redacts secrets in command output before they reach the model. Operates globally: detected secrets are replaced with placeholders and held in a session-scoped mapping. Agents do not know about it — redaction is transparent. This is the structural guard behind the "sanitize command output" behavioural convention; the plugin enforces it so agents don't have to.
+Redacts secrets in command output before they reach the model. Operates globally: detected secrets are replaced with placeholders and held in a session-scoped mapping. Redaction itself is transparent — agents do not configure or invoke the plugin. However, agents carry a **recognition-only** directive (`redaction_artifacts`) that teaches them to identify `__VG_<CATEGORY>_<hex>__` tokens as masked secrets whose real value is held outside their context, and to read the surrounding content as authoritative rather than investigating the token as a missing-key defect, broken placeholder, or security finding. The only path to the real value is to ask the user; agents cannot de-redact, restore, reconstruct, or "fix" it themselves. This preserves the plugin's structural guarantee (no de-redaction tool) while closing the rabbit-hole failure mode. The directive is enforced by `validate:redaction-awareness` via the version marker `<!-- edac:redaction-artifact-awareness:v1 -->` in every agent body.
 
 ### Holographic-memory — cross-session fact persistence
 
