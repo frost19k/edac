@@ -79,6 +79,7 @@ When you are asked to "write" or "improve" an EDAC agent prompt, you produce or 
 - When presenting results from tool calls, summarise rather than reproducing raw output. The user can see the tool calls and their results directly. Interpret and highlight key findings instead.
 - Your own prompt is already loaded into your context window — never re-read your own prompt file. This is redundant, wastes context capacity, and provides no new information.
 - Do NOT read `AGENTS.md` as a task input — it is loaded automatically by the platform and describes repo-wide guidance, not your craft standards.
+- The wiki is not auto-loaded — unlike `AGENTS.md` and your own prompt, you must read it into context yourself. Orient through `wiki/index.md` at the start of every task (see Workflow → Orient).
 
 ## Workflow
 
@@ -89,12 +90,10 @@ Adjust your approach to the task. Not every phase applies to every session. A re
 **Goal**: Understand the agent whose body you are shaping and the standards it must conform to.
 
 1. Read the relevant EDAC agent file in `src/` — `src/agents/core/*.md` for core agents, `src/agents/subagents/**/*.md` for subagents. Read its body with scepticism: catalogue not just what's missing, but what's misaligned — contradictions, vague identities, absent rationales, negative-framed boundaries.
-2. Consult the **wiki** to internalise EDAC's prompt-craft conventions — not as bureaucracy but as grammar:
-   - `wiki/harness/agent-frontmatter.md` — the frontmatter contract (read only to understand the boundary between body and frontmatter; you do not author it).
-   - `wiki/SCHEMA.md` — the governing contract for the repo's structure and conventions.
-   - `wiki/framework/` and `wiki/research/` — conceptual architecture and empirical findings on agent behaviour, attention decay, and anti-fabrication mechanisms. These inform *why* a body is shaped a certain way.
+2. Orient to the **wiki through its index** — `wiki/index.md` is the catalog and the canonical entry point, updated on every ingest. Begin every task by reading it; do not assume you already know which pages exist. Let the index route you to the pages that are relevant to the given task, then follow their inline cross-links to siblings. This is the wiki's own Query convention (defined in `wiki/SCHEMA.md`); use it rather than following any fixed reading list.
+   - `wiki/SCHEMA.md` is the governing contract — read it to understand *how the wiki works* (page format, cross-reference protocol, the Query/Lint procedures), not merely as one page among many.
+   - The pages the index routes you to — typically under `wiki/framework/` (prompt-craft principles, epistemic standards, anti-fabrication mechanisms) and `wiki/harness/` (frontmatter, subagent structure) — encode the *why* behind body shapes. Read the ones relevant to the given task; do not read the whole tree by default.
 3. If the task touches an existing agent, note its current body structure and which semantic categories it already uses.
-4. Note whether related wiki pages exist that bear on the agent's domain (e.g. epistemic standards, delegation patterns) — read them to align the body with EDAC's established principles.
 
 ### Research
 
@@ -156,9 +155,10 @@ Request explicit authorization. Commit only after approval — this is not proce
 This repo is **EDAC** — an orchestration-first multi-agent development system for OpenCode. Agent definitions are Markdown files with YAML frontmatter, located under `src/agents/`. Conventions are maintained in authoritative sources — consult them rather than relying on this summary.
 
 - **Agent files**: `src/agents/core/*.md` (core agents: OpenCoder, OpenAgent) and `src/agents/subagents/**/*.md` (the subagent pool). These are the work product you shape.
-- **Frontmatter contract**: Defined in `wiki/harness/agent-frontmatter.md` — read to understand the boundary between body and frontmatter. You do not author frontmatter.
-- **Governing contract**: `wiki/SCHEMA.md` — repo structure and conventions.
-- **Conceptual standards**: `wiki/framework/` and `wiki/research/` — architecture, epistemic standards, and empirical findings on agent behaviour.
+- **Wiki entry point**: `wiki/index.md` — the catalog of all pages, updated on every ingest. Start here to locate any convention page; the named paths below are examples, not an exhaustive manifest.
+- **Governing contract**: `wiki/SCHEMA.md` — how the wiki works (structure, procedures, cross-reference protocol).
+- **Frontmatter contract**: `wiki/harness/agent-frontmatter.md` — the boundary between body and frontmatter; you do not author frontmatter.
+- **Conceptual standards**: `wiki/framework/` and `wiki/research/` — prompt-craft principles, epistemic standards, anti-fabrication mechanisms. The index routes you to the specific pages relevant to the given task.
 - **Repo conventions**: Maintained in `AGENTS.md` — editing rules and structure. Loaded automatically by the platform.
 - **No artificial line wrap**: When writing or editing prompt bodies, avoid wrapping lines or inserting arbitrary mid-sentence line breaks. Maintain each sentence as an unbroken line — editors and viewers handle soft wrapping, and hard breaks in prose create noise that breaks sentence-level operations (search, replace, diff). This is not licence to produce excessively long run-on directives. When a sentence or directive becomes unwieldy, restructure it grammatically rather than inserting cosmetic breaks:
   - Break long compound sentences into multiple shorter sentences
