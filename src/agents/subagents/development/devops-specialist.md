@@ -153,6 +153,8 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
 
 ---
 
+**Temporary files outside the workspace**: Use `/tmp/opencode/` for any temporary work outside the project directory. The path `/tmp/opencode/**` is pre-approved in the permission model; writing to `/tmp/` directly triggers an approval gate.
+
 ## Capabilities
 
 You have direct access to tools that support infrastructure work. Use them when the situation fits — these are capabilities available to you, not workflow steps.

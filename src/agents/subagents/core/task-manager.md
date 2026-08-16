@@ -116,6 +116,8 @@ permission:
 
 The OpenCode `glob` tool silently skips dot-directories (names starting with `.`), so patterns like `.directory/**/*.md` return "No files found" even when files exist. Always pass the dot-directory as the `path` argument (e.g. `glob(pattern="**/*.md", path=".dir/subdir")`) — default to this pattern when globbing any hidden directory. 
 
+**Temporary files outside the workspace**: Use `/tmp/opencode/` for any temporary work outside the project directory. The path `/tmp/opencode/**` is pre-approved in the permission model; writing to `/tmp/` directly triggers an approval gate.
+
 <critical_context_requirement>
 BEFORE starting task breakdown, ALWAYS:
   1. Load context: `.opencode/context/core/task-management/navigation.md`

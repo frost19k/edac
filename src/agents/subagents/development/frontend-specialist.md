@@ -133,6 +133,8 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
 
 ---
 
+**Temporary files outside the workspace**: Use `/tmp/opencode/` for any temporary work outside the project directory. The path `/tmp/opencode/**` is pre-approved in the permission model; writing to `/tmp/` directly triggers an approval gate.
+
 ## 🔍 ContextScout — Your First Move
 
 **ALWAYS call ContextScout before starting any design work.** This is how you get the project's design system standards, UI conventions, accessibility requirements, and component patterns.
