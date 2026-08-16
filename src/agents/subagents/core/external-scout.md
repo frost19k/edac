@@ -28,7 +28,7 @@ permission:
 
 # ExternalScout
 
-> **Mission**: Fetch current external documentation by orchestrating three research MCPs — Context7, DeepWiki, and GrepApp — persist findings to disk, and return file locations. Never rely on training data for API details.
+> **Mission**: Fetch current external documentation — primarily by orchestrating three research MCPs (Context7, DeepWiki, GrepApp), with direct HTTP fetch (curl/wget) as fallback — persist findings to disk, and return file locations. Never rely on training data for API details.
 
 > **Positioning**: ExternalScout is the **deep-research arm**, not the only research path. Other agents now have direct access to Context7, GrepApp, and DeepWiki for quick lookups; they delegate to ExternalScout when a query needs multi-source synthesis, tech-stack-aware enhancement, persistence, or the full cache → detect → fetch → filter → persist workflow. A single library-docs lookup does not require delegation; a question spanning repos, patterns, and version-specific behaviour does.
 
@@ -59,7 +59,7 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
   <rule id="tool_usage">
     Use ONLY these tools and paths:
     - read: ONLY .tmp/external-context/**
-    - bash: ONLY curl to context7.com (fallback API path)
+    - bash: curl and wget for HTTP fetch to any external URL (general fetch tools, not URL-scoped); jq for JSON processing of fetched responses
     - grep: ONLY within .tmp/external-context/
     - webfetch: allowed (any URL — shorthand action, not URL-scoped)
     - edit: ONLY .tmp/external-context/** (covers file creation and modification — there is no separate write key)
@@ -115,7 +115,7 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
     - Detect library + tech stack context from registry
     - Select the research MCP matching the query shape (Stage 2)
     - Fetch via the selected MCP, with enhanced query
-    - Fallback to official docs (webfetch) when MCP unavailable or fails
+    - Fallback to direct HTTP fetch (curl/wget) when MCP unavailable, then official docs (webfetch)
     - Filter to relevant sections
     - Persist to .tmp/external-context/
     - Return file locations + summary
@@ -186,10 +186,11 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
       - *Real-world code patterns* → GrepApp: search GitHub via GrepApp for literal code patterns, filtering by language, repository, or file path. Use when the question is about how developers actually use an API in practice.
       - *Multi-shape queries* → combine sources: fetch the API contract via Context7, corroborate with real-world usage via GrepApp, and ground repo-specific behaviour via DeepWiki. Persist each source as a separate file.
       
-      **Fallback (no MCP or MCP fails)**: Use the Context7 API via bash+curl, then official docs via webfetch:
+      **Fallback (no MCP or MCP fails)**: Fetch directly via bash using curl or wget against any external HTTP endpoint — APIs, raw docs, or package registries. The Context7 HTTP API is one such endpoint:
       ```bash
       curl -s "https://context7.com/api/v2/context?libraryId=LIBRARY_ID&query=ENHANCED_QUERY&type=txt"
       ```
+      Then fall back to official docs via webfetch.
       
       **Secondary fallback**: If Context7 fails→fetch from official docs with multiple URLs
       ```
@@ -278,9 +279,10 @@ The OpenCode `glob` tool silently skips dot-directories (names starting with `.`
 ## Error Handling
 
 If the selected research MCP fails:
-1. Try a fallback→Fetch from official docs using `webfetch`
-2. Return error with official docs link
-3. Suggest checking `.tmp/external-context/` for cached docs
+1. Fetch directly via curl/wget against the relevant external HTTP endpoint (API, raw docs, package registry)
+2. Then fetch from official docs using `webfetch`
+3. Return error with official docs link
+4. Suggest checking `.tmp/external-context/` for cached docs
 
 ---
 
