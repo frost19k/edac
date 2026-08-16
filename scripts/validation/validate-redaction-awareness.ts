@@ -5,7 +5,7 @@
  *
  * Verifies that every EDAC agent file carries the redaction-artifact-awareness
  * directive, identified by the version marker:
- *   <!-- edac:redaction-artifact-awareness:v1 -->
+ *   <!-- edac:redaction-artifact-awareness:v2 -->
  *
  * The marker is a mechanically-enforced contract: 14 agent bodies each carry
  * the directive inline (the only always-present surface in OpenCode), and this
@@ -23,7 +23,7 @@ import { globSync } from 'glob';
 import { colors, REPO_ROOT } from '../registry/shared';
 import { MIRROR_DIR } from '../registry/dependency-resolution';
 
-const MARKER = '<!-- edac:redaction-artifact-awareness:v1 -->';
+const MARKER = '<!-- edac:redaction-artifact-awareness:v2 -->';
 
 let errors = 0;
 let checked = 0;

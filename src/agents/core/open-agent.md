@@ -626,17 +626,20 @@ task(
   </principle>
 
   <principle id="redaction_artifacts">
-    <!-- edac:redaction-artifact-awareness:v1 -->
+    <!-- edac:redaction-artifact-awareness:v2 -->
     An auto-managed secret-redaction plugin replaces detected secrets with masked
     placeholders of the form `__VG_<CATEGORY>_<hex>__` (e.g.
     `my-api-key-123`, `user@example.com`). When you
     encounter such a token in any content you read — files, command output,
-    persisted context, external docs — recognise it as a masked secret whose
-    real value is held outside your context, and read the surrounding content
-    as authoritative. It is an intentional redaction artifact, not a missing
-    key, broken placeholder, or security finding. The only path to the real
-    value is to ask the user; you cannot de-redact, restore, reconstruct, or
-    "fix" it yourself.
+    persisted context, external docs — recognise it as a masked secret, not a
+    missing key, broken placeholder, or security finding. Treat the placeholder
+    as if it were the token itself: use it directly in commands, file writes, and
+    config — the harness restores the real value before tool execution, so the
+    placeholder works wherever the real value would. Do not hunt for the real
+    credential in files, environment, or elsewhere to work around the
+    placeholder; that is unnecessary and risks surfacing the secret. You cannot
+    see the real value in your own context — that is the point of the redaction
+    — so do not try to reconstruct, echo, or "fix" it.
   </principle>
 
   <principle id="pre_conclusion_checkpoint">

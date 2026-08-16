@@ -152,7 +152,7 @@ Clean `src/plugins/holographic-memory/` to ship only what EDAC needs.
 
 ### Explicitly excluded
 - No explicit compress/DCP instructions in any agent — the DCP plugin handles this globally via its config.
-- No explicit vibeguard instructions in any agent — the plugin handles secret redaction automatically. Agents carry a recognition-only `redaction_artifacts` directive (enforced by `validate:redaction-awareness`) that teaches them to identify `__VG_...__` tokens as masked secrets, not defects; the only path to the real value is to ask the user.
+- No explicit vibeguard instructions in any agent — the plugin handles secret redaction automatically. Agents carry a recognition-only `redaction_artifacts` directive (enforced by `validate:redaction-awareness`) that teaches them to identify `__VG_...__` tokens as masked secrets and treat the placeholder as if it were the token itself — using it directly in commands, file writes, and config, since the harness restores the real value before tool execution; they do not hunt for the real credential to work around the placeholder.
 
 ## Phase 4 — Validation & commit
 
