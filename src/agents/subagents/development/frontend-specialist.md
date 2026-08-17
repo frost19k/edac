@@ -18,8 +18,6 @@ permission:
     "**/credentials*": "deny"
   edit:
     "*": "allow"
-    "design_iterations/**/*.html": "allow"
-    "design_iterations/**/*.css": "allow"
     "**/*.ts": "deny"
     "**/*.js": "deny"
     "**/*.py": "deny"
