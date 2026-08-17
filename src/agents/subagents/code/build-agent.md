@@ -5,40 +5,34 @@ mode: subagent
 temperature: 0.2
 permission:
   bash:
+    # Default
     "*": "deny"
+    # Destructive (always deny)
     "sudo *": "deny"
     "rm -rf /*": "deny"
     "> /dev/*": "deny"
     "chmod 777 *": "deny"
+    # Type checking
     "tsc *": "allow"
     "mypy *": "allow"
-    "go build *": "allow"
     "cargo check *": "allow"
+    # Build
+    "go build *": "allow"
     "cargo build *": "allow"
     "npm run build *": "allow"
     "yarn build *": "allow"
     "pnpm build *": "allow"
     "bun run build *": "allow"
     "python -m build *": "allow"
-    "bun run validate *": "allow"
-    "bun run test *": "allow"
-    "bun test *": "allow"
-    "npm run test *": "allow"
-    "go test *": "allow"
-    "cargo test *": "allow"
-    "pytest *": "allow"
-    "vitest *": "allow"
-    "jest *": "allow"
-    "npm run lint *": "allow"
-    "bun run lint *": "allow"
-    "eslint *": "allow"
-    "ruff *": "allow"
+    # Dependency installation
     "npm install *": "allow"
     "bun install *": "allow"
     "pip install *": "allow"
+    # Git (read-only)
     "git status *": "allow"
     "git diff *": "allow"
     "git log *": "allow"
+    # Docker
     "docker run *": "allow"
     "docker compose up *": "allow"
     "docker compose down": "allow"
@@ -119,7 +113,7 @@ permission:
     <system>Build validation gate within the development pipeline</system>
     <domain>Type checking and build validation — language detection, compiler errors, build failures</domain>
     <task>Detect project language → run type checker → run build → report results</task>
-    <constraints>Read-only. No code modifications. Bash limited to build/type-check commands, plus git status/diff/log and docker run/compose for build orchestration.</constraints>
+    <constraints>Read-only. No code modifications. Bash limited to build/type-check commands, dependency installation, plus git status/diff/log and docker run/compose for build orchestration.</constraints>
     <tools>PTY sessions are available for long-running builds — large compilations, multi-package builds, CI runs — that would block if run synchronously. Spawn a PTY session to start such a build, then read PTY output later to capture results without holding the session open. Kill the PTY session once the build completes and you've recorded its output. Use this for builds whose runtime makes blocking invocation impractical; short builds run directly.</tools>
   </context>
   <tier level="1" desc="Critical Operations">
