@@ -259,24 +259,25 @@ Bash `allow` entries should exclude commands that duplicate harness tools for **
 
 **File-operation duplicates to exclude from bash allow-lists** (no pipeline use case; pure file reads/writes the harness tools cover with permission granularity):
 - `cat` → use `read`
-- `find`, `ls` → use `glob`
+- `find` → use `glob`
 
 **Pipe-capable duplicates permitted in bash allow-lists** (participate in stdin/stdout pipelines harness tools structurally cannot; vibeguard redaction layer mitigates the credential-leak surface this re-opens):
 - `grep`, `head`, `tail` — read streams in pipelines (`cmd | grep …`, `cmd | head -n`)
 - `sed`, `awk` — transform streams in pipelines (`cmd | sed …`, `cmd | awk …`)
 - `tee` — branch a pipeline while preserving stdout
+- `ls` — pipe-capable and serves metadata use cases `glob` cannot: `ls | wc -l` (count), `ls -t | head -5` (most-recent), `ls -la | grep '.log'` (filter detailed listings), `ls -la` (permissions/sizes/dates). `glob` returns paths only; it cannot sort by time, display metadata, or compose into a counting pipeline.
 
-*Why the split:* a blanket "exclude all harness-tool duplicates" rule (the prior convention) would deny `grep`/`head`/`tail`/`sed`/`awk`/`tee` even though their pipeline role has no harness equivalent — forcing the agent either to skip the pipeline or to re-implement stream processing through repeated `read`+`edit` calls. The file-operation duplicates (`cat`/`find`/`ls`) have no such pipeline role: `cat` reads a file (use `read`), `find`/`ls` enumerate paths (use `glob`). Source of truth: commit `85ee669` re-added the pipe-capable set to OpenCoder and OpenAgent with this rationale after a prior cleanup had removed them.
+*Why the split:* a blanket "exclude all harness-tool duplicates" rule (the prior convention) would deny `grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls` even though their pipeline and metadata roles have no harness equivalent — forcing the agent either to skip the pipeline or to re-implement stream processing through repeated `read`+`edit` calls. The file-operation duplicates (`cat`/`find`) have no such pipeline role: `cat` reads a file (use `read`), `find` enumerates paths (use `glob`). Source of truth: commit `85ee669` re-added the pipe-capable set to OpenCoder and OpenAgent with this rationale after a prior cleanup had removed them; `ls` was subsequently reclassified from file-op duplicate to pipe-capable on the same basis (pipeline participation + metadata use cases `glob` cannot serve).
 
 **Valid bash allow-list categories:**
 - Domain-specific commands (git, docker, bun, npm, terraform, kubectl)
-- Pipe-capable harness duplicates (grep, head, tail, sed, awk, tee) — see above
+- Pipe-capable harness duplicates (grep, head, tail, sed, awk, tee, ls) — see above
 - Text-processing pipeline utilities that operate on stdin/stdout (sort, uniq, cut, tr, jq, yq, diff, base64)
 - System-info commands (pwd, which, whoami, uname, date, env)
 - Network fetch (curl, wget)
 - Filesystem mutations without a harness equivalent (mkdir, touch, cp, mv, rm)
 
-*Why file-operation exclusion holds:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. The pipe-capable set does not bypass file permission in this way: they read from stdin (a prior pipeline stage), not from an agent-named path, so the path-based bypass argument does not extend to them. The residual leak surface — a pipeline stage surfacing a secret in its output — is mitigated by vibeguard output redaction, not by path denies.
+*Why file-operation exclusion holds:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. The pipe-capable set does not bypass file permission in this way: they read from stdin (a prior pipeline stage) or enumerate the CWD, not from an agent-named path, so the path-based bypass argument does not extend to them. The residual leak surface — a pipeline stage surfacing a secret in its output — is mitigated by vibeguard output redaction, not by path denies.
 
 **Permission calibration by knowledge tier.** How bash allow-lists and `task:` allows should be audited depends on the knowledge category of the entry — see [Instruction Knowledge Tiers](../framework/instruction-knowledge-tiers.md):
 - **Ambient-knowledge** (Tier 1): bash allow-list entries for ambient utilities (`echo`, `wc`, `jq`, `sort`, `diff`) should NOT be audited against body prescription. These are part of the bash capability; the agent knows they exist and will reach for them as the situation demands. An `echo` entry is not an over-grant even when no body instruction names `echo`.
@@ -287,7 +288,7 @@ Bash `allow` entries should exclude commands that duplicate harness tools for **
 EDAC agents operate in the project working directory by default. Bash commands should use **bare relative paths resolved from the session CWD** — not absolute paths, not the bash tool's `workdir` parameter, not `cd /abs && <cmd>` chaining, and not tool-specific directory flags (`git -C`, `npm --prefix`, etc.).
 
 **The rule:**
-- Use bare relative paths: `bun run validate`, `git status`, `ls scripts/install/` (where `ls` is permitted per the allow-list conventions above — though `glob` is the harness-preferred discovery tool).
+- Use bare relative paths: `bun run validate`, `git status`, `ls scripts/install/` (where `ls` is permitted per the allow-list conventions above).
 - Do NOT set the `workdir` parameter on the bash tool — the harness already resolves commands in the session CWD; setting `workdir` is redundant and obscures the CWD assumption.
 - Do NOT prepend `cd /abs/path && <cmd>` — absolute-path chaining adds shell-quoting hazard without benefit when the CWD is already the project root.
 - Do NOT use directory-flag forms (`git -C /abs`, `npm --prefix /abs`) — they fight the harness's CWD model for the same reason.

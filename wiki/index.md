@@ -16,7 +16,7 @@
 ## harness/
 - [Agent Frontmatter](harness/agent-frontmatter.md) — valid OpenCode frontmatter fields, display-name vs file-name, deprecated keys, common mistakes.
 - [Subagent Structure](harness/subagent-structure.md) — standard subagent file template, tiers, rules, validation checklist.
-- [Permission Model](harness/permission-model.md) — consolidated: verified 14-key set, granular-vs-shorthand format spec, evaluation order, agent-type patterns, security patterns, bash allow-list conventions (file-operation duplicates excluded; pipe-capable duplicates permitted), bash working-directory discipline (bare relative paths from session CWD; `external_directory` as out-of-project gate). §c enriched with permission-calibration-by-knowledge-tier guidance.
+- [Permission Model](harness/permission-model.md) — consolidated: verified 14-key set, granular-vs-shorthand format spec, evaluation order, agent-type patterns, security patterns, bash allow-list conventions (file-operation duplicates `cat`/`find` excluded; pipe-capable duplicates `grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls` permitted), bash working-directory discipline (bare relative paths from session CWD; `external_directory` as out-of-project gate). §c enriched with permission-calibration-by-knowledge-tier guidance.
 - [Global Config Template](harness/global-config.md) — the `opencode.jsonc` template: permission floor, MCP/plugin provisioning, install-time merge.
 - [MCP Provisioning](harness/mcp-provisioning.md) — the 4 MCP servers (Context7, GrepApp, DeepWiki, Playwright) provisioned globally via the `mcp:` block.
 - [Plugin Provisioning](harness/plugin-provisioning.md) — the 4 plugins (DCP, Vibeguard, PTY, Holographic-memory): auto-managed vs per-agent awareness, configs, build-at-install.
