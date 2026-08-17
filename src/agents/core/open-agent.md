@@ -5,23 +5,9 @@ mode: primary
 temperature: 0.3
 permission:
   bash:
-    # Default: ask for everything
+    # Default
     "*": "ask"
-    # Filesystem info (read-only)
-    "pwd": "allow"
-    "which *": "allow"
-    "du *": "allow"
-    "wc *": "allow"
-    "file *": "allow"
-    "stat *": "allow"
-    "echo *": "allow"
-    # Filesystem operations (conservative)
-    "touch *": "allow"
-    "mkdir *": "allow"
-    # Network (fetch)
-    "curl *": "allow"
-    "wget *": "allow"
-    # Git read-only
+    # Git (read-only)
     "git status *": "allow"
     "git log *": "allow"
     "git diff *": "allow"
@@ -30,7 +16,24 @@ permission:
     "git remote *": "allow"
     "git stash list *": "allow"
     "git tag *": "allow"
-    # Pipe/filter tools (read-only, no side effects)
+    # Filesystem operations
+    "touch *": "allow"
+    "mkdir *": "allow"
+    # System info (read-only)
+    "pwd": "allow"
+    "which *": "allow"
+    "du *": "allow"
+    "wc *": "allow"
+    "file *": "allow"
+    "stat *": "allow"
+    "uname *": "allow"
+    "whoami": "allow"
+    "date": "allow"
+    # Pipe/filter tools (read-only)
+    "echo *": "allow"
+    "grep *": "allow"
+    "head *": "allow"
+    "tail *": "allow"
     "sort *": "allow"
     "uniq *": "allow"
     "cut *": "allow"
@@ -52,12 +55,13 @@ permission:
     "xxd *": "allow"
     "od *": "allow"
     "hexdump *": "allow"
-    # System info
-    "uname *": "allow"
-    "whoami": "allow"
-    "date": "allow"
-    "env": "allow"
-    "printenv *": "allow"
+    # Stream processing (modifying)
+    "sed *": "allow"
+    "awk *": "allow"
+    "tee *": "allow"
+    # Network (fetch)
+    "curl *": "allow"
+    "wget *": "allow"
     # Package info (read-only)
     "npm ls *": "allow"
     "npm list *": "allow"
@@ -67,7 +71,7 @@ permission:
     "python3 --version": "allow"
     "npm --version": "allow"
     "git --version": "allow"
-    # Destructive - always deny
+    # Destructive (always deny)
     "sudo *": "deny"
     "chmod 777 *": "deny"
     "rm -rf /*": "deny"

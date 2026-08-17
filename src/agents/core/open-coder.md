@@ -5,9 +5,9 @@ mode: primary
 temperature: 0.2
 permission:
   bash:
-    # Default: ask for anything not explicitly allowed
+    # Default
     "*": "ask"
-    # Development workflow - allow
+    # Package managers
     "npm *": "allow"
     "npm publish*": "ask"
     "yarn *": "allow"
@@ -22,46 +22,39 @@ permission:
     "go *": "allow"
     "make *": "allow"
     "cmake *": "allow"
-    # Git - allow (development workflow)
+    # Git
     "git *": "allow"
+    "git commit *": "ask"
     "git push *": "ask"
-    # File operations - allow (within project)
-    "mkdir *": "allow"
+    # Filesystem operations
     "cp *": "allow"
     "mv *": "allow"
+    "mkdir *": "allow"
     "touch *": "allow"
-    # rm - ask by default, allow only safe cleanup patterns
+    # Removal (ask by default, allow only safe cleanup patterns)
     "rm *": "ask"
     "rm -rf dist*": "allow"
     "rm -rf build*": "allow"
     "rm -rf node_modules*": "allow"
-    "rm -rf out*": "allow"
-    "rm -rf target*": "allow"
-    "rm -rf coverage*": "allow"
     "rm -rf .tmp*": "allow"
     "rm -rf .cache*": "allow"
-    "rm -rf .next*": "allow"
-    "rm -rf .nuxt*": "allow"
-    "rm -rf .turbo*": "allow"
-    "rm -rf .parcel-cache*": "allow"
     "rm -rf __pycache__*": "allow"
     "rm -rf .pytest_cache*": "allow"
-    "rm *.tmp*": "allow"
-    "rm *.log*": "allow"
-    # Read-only - allow
+    # System info (read-only)
     "wc *": "allow"
     "du *": "allow"
     "file *": "allow"
     "stat *": "allow"
-    "echo *": "allow"
-    "pwd": "allow"
     "which *": "allow"
-    "whoami": "allow"
     "uname *": "allow"
+    "pwd": "allow"
     "date": "allow"
-    "env": "allow"
-    "printenv *": "allow"
+    "whoami": "allow"
     # Pipe/filter tools (read-only)
+    "echo *": "allow"
+    "grep *": "allow"
+    "head *": "allow"
+    "tail *": "allow"
     "sort *": "allow"
     "uniq *": "allow"
     "cut *": "allow"
@@ -84,9 +77,12 @@ permission:
     "xxd *": "allow"
     "od *": "allow"
     "hexdump *": "allow"
-    # Dev processing tools (can modify but standard in development)
+    # Stream processing (modifying)
+    "sed *": "allow"
+    "awk *": "allow"
+    "tee *": "allow"
     "xargs *": "allow"
-    # Testing/linting - allow
+    # Testing/linting
     "pytest *": "allow"
     "jest *": "allow"
     "vitest *": "allow"
@@ -113,16 +109,10 @@ permission:
     "ip route get *": "allow"
     "ip link show*": "allow"
     "ip neigh show*": "allow"
-    # System-modifying overrides (more specific, evaluated after general allows)
+    # Scope overrides (narrow patterns defeating broader allows above)
     "npm install -g *": "ask"
     "pip install --user *": "ask"
-    "chmod *": "ask"
-    "chown *": "ask"
-    "docker *": "ask"
-    "kubectl *": "ask"
-    "systemctl *": "ask"
-    "service *": "ask"
-    # Destructive - always deny
+    # Destructive (always deny)
     "sudo *": "deny"
     "chmod 777 *": "deny"
     "rm -rf /*": "deny"
