@@ -4,6 +4,13 @@ description: Organizes and generates context files (domain, processes, standards
 mode: subagent
 temperature: 0.2
 permission:
+  bash:
+    "*": "deny"
+    "mkdir *": "allow"
+    "cp *": "allow"
+    "mv *": "allow"
+    "diff *": "allow"
+    "rm *": "ask"
   read:
     "*": "allow"
     "**/*.env": "deny"
@@ -54,6 +61,8 @@ permission:
     "*PRIVATE*KEY*": "deny"
     "*credential*": "deny"
     "*CREDENTIAL*": "deny"
+  glob:
+    "*": "allow"
   task:
     "*": "deny"
     ContextScout: "allow"

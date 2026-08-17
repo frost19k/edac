@@ -12,7 +12,6 @@ permission:
   read:
     "*": "allow"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"
@@ -23,6 +22,14 @@ permission:
   edit:
     "*": "deny"
     ".tmp/tasks/**": "allow"
+    "**/*.env": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "**/*.pem": "deny"
+    "**/*.crt": "deny"
+    "**/*.api": "deny"
+    "**/creds*": "deny"
+    "**/credentials*": "deny"
   grep:
     "*": "allow"
     # Tier A — format-specific prefixes
