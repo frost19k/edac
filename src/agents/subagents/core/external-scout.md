@@ -11,6 +11,7 @@ permission:
     "wget *": "allow"
     "jq *": "allow"
     "echo *": "allow"
+    "mkdir -p *": "allow"
   read:
     "*": "deny"
     ".tmp/external-context/**": "allow"

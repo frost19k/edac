@@ -23,7 +23,6 @@ permission:
     "rm -rf .pytest_cache*": "allow"
     "npm install *": "allow"
     "npm ci *": "allow"
-    "npx *": "allow"
     "sudo *": "deny"
     "rm -rf /*": "deny"
     "> /dev/*": "deny"

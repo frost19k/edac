@@ -11,6 +11,7 @@ permission:
     "mv *": "allow"
     "diff *": "allow"
     "rm *": "ask"
+    "rm -rf /*": "deny"
   read:
     "*": "allow"
     "**/*.env": "deny"

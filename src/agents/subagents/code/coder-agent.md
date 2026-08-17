@@ -7,6 +7,7 @@ permission:
   bash:
     "*": "deny"
     "npm *": "allow"
+    "npm publish*": "ask"
     "yarn *": "allow"
     "pnpm *": "allow"
     "npx *": "allow"

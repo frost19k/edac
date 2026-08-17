@@ -94,7 +94,6 @@ permission:
   task:
     "*": "deny"
     ContextScout: "allow"
-    ExternalScout: "allow"
 ---
 
 # DevOps Specialist Subagent

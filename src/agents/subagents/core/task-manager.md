@@ -64,7 +64,6 @@ permission:
   task:
     "*": "deny"
     ContextScout: "allow"
-    ExternalScout: "allow"
   skill:
     "*": "deny"
     "task-management": "allow"
