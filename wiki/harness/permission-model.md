@@ -253,28 +253,50 @@ permission:
 
 Examples: ExternalScout, ContextScout.
 
-### Bash Allow-List Conventions (No Harness-Tool Duplicates)
+### Bash Allow-List Conventions (File-Operation Duplicates Excluded)
 
-Bash `allow` entries should contain only commands with no harness equivalent. Commands that duplicate harness tools create redundant permission surface and blur the boundary between bash and the structured tools.
+Bash `allow` entries should exclude commands that duplicate harness tools for **file operations** — operations where the harness tool provides structured, permission-governed access that bash bypasses. The distinction is **pipeline participation**: harness tools (`read`, `edit`, `grep`, `glob`) operate on discrete file targets and cannot compose into stdin/stdout pipelines; some bash utilities duplicate harness tools for file use but also serve as pipeline stages, where no harness equivalent exists.
 
-**Harness-tool duplicates to exclude from bash allow-lists:**
-- `cat`, `head`, `tail` → use `read`
-- `grep`, `rg` → use `grep`
+**File-operation duplicates to exclude from bash allow-lists** (no pipeline use case; pure file reads/writes the harness tools cover with permission granularity):
+- `cat` → use `read`
 - `find`, `ls` → use `glob`
-- `sed`, `awk`, `tee`, `patch` → use `edit` or `write`
+
+**Pipe-capable duplicates permitted in bash allow-lists** (participate in stdin/stdout pipelines harness tools structurally cannot; vibeguard redaction layer mitigates the credential-leak surface this re-opens):
+- `grep`, `head`, `tail` — read streams in pipelines (`cmd | grep …`, `cmd | head -n`)
+- `sed`, `awk` — transform streams in pipelines (`cmd | sed …`, `cmd | awk …`)
+- `tee` — branch a pipeline while preserving stdout
+
+*Why the split:* a blanket "exclude all harness-tool duplicates" rule (the prior convention) would deny `grep`/`head`/`tail`/`sed`/`awk`/`tee` even though their pipeline role has no harness equivalent — forcing the agent either to skip the pipeline or to re-implement stream processing through repeated `read`+`edit` calls. The file-operation duplicates (`cat`/`find`/`ls`) have no such pipeline role: `cat` reads a file (use `read`), `find`/`ls` enumerate paths (use `glob`). Source of truth: commit `85ee669` re-added the pipe-capable set to OpenCoder and OpenAgent with this rationale after a prior cleanup had removed them.
 
 **Valid bash allow-list categories:**
 - Domain-specific commands (git, docker, bun, npm, terraform, kubectl)
+- Pipe-capable harness duplicates (grep, head, tail, sed, awk, tee) — see above
 - Text-processing pipeline utilities that operate on stdin/stdout (sort, uniq, cut, tr, jq, yq, diff, base64)
 - System-info commands (pwd, which, whoami, uname, date, env)
 - Network fetch (curl, wget)
 - Filesystem mutations without a harness equivalent (mkdir, touch, cp, mv, rm)
 
-*Why:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. Keeping bash to commands without harness equivalents maintains the permission layer's integrity.
+*Why file-operation exclusion holds:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. The pipe-capable set does not bypass file permission in this way: they read from stdin (a prior pipeline stage), not from an agent-named path, so the path-based bypass argument does not extend to them. The residual leak surface — a pipeline stage surfacing a secret in its output — is mitigated by vibeguard output redaction, not by path denies.
 
 **Permission calibration by knowledge tier.** How bash allow-lists and `task:` allows should be audited depends on the knowledge category of the entry — see [Instruction Knowledge Tiers](../framework/instruction-knowledge-tiers.md):
 - **Ambient-knowledge** (Tier 1): bash allow-list entries for ambient utilities (`echo`, `wc`, `jq`, `sort`, `diff`) should NOT be audited against body prescription. These are part of the bash capability; the agent knows they exist and will reach for them as the situation demands. An `echo` entry is not an over-grant even when no body instruction names `echo`.
 - **Framework-facts** (Tier 3): `task:` allows MUST match body-authorized delegations (see §e). A `task:` allow for a subagent the body never delegates to is an over-grant — the agent cannot discover the subagent from training, so the body's silence is authoritative. This is the one place where prescription-matching is the correct audit lens.
+
+### Bash Working-Directory Discipline (Bare Relative Paths from Session CWD)
+
+EDAC agents operate in the project working directory by default. Bash commands should use **bare relative paths resolved from the session CWD** — not absolute paths, not the bash tool's `workdir` parameter, not `cd /abs && <cmd>` chaining, and not tool-specific directory flags (`git -C`, `npm --prefix`, etc.).
+
+**The rule:**
+- Use bare relative paths: `bun run validate`, `git status`, `ls scripts/install/` (where `ls` is permitted per the allow-list conventions above — though `glob` is the harness-preferred discovery tool).
+- Do NOT set the `workdir` parameter on the bash tool — the harness already resolves commands in the session CWD; setting `workdir` is redundant and obscures the CWD assumption.
+- Do NOT prepend `cd /abs/path && <cmd>` — absolute-path chaining adds shell-quoting hazard without benefit when the CWD is already the project root.
+- Do NOT use directory-flag forms (`git -C /abs`, `npm --prefix /abs`) — they fight the harness's CWD model for the same reason.
+
+**Structural gate for paths outside the project:** the `external_directory` permission key (see `opencode.jsonc`) governs filesystem access outside the project root. The default is `*`: `ask`, with two allow entries: `/tmp/opencode/**` and `~/.config/opencode/context/**`. Any bash command (or `read`/`edit`/`glob`) targeting a path outside the project triggers the `ask` gate — this is the structural enforcement for out-of-project access, not a prose rule the agent must remember.
+
+**Exception — ContextScout:** bash is fully denied for ContextScout (`"*": "deny"`), so the working-directory rule is vacuous for it. ContextScout's `read`/`glob` targets `~/.config/opencode/context/**` (per its `context_root` and `global_fallback` rules) — it is the designated consumer of the `external_directory` allow entry for the global context directory. No other EDAC agent has this profile.
+
+*Why bare relative paths:* all EDAC agents except ContextScout operate in the project working directory; the harness auto-allows the CWD; `external_directory` is the structural gate for everything else. Layering absolute-path discipline (prepending `cd /abs &&`, setting `workdir`, or using `git -C`-style flags) duplicates the harness mechanism and adds shell-quoting hazard without closing a real failure mode — the `external_directory` `ask` gate already catches out-of-project access. The discipline is "trust the CWD; let `external_directory` gate the rest."
 
 ## (d) Security Patterns
 
