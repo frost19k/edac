@@ -57,10 +57,13 @@ The granular permission block exists because every `"allow"` entry is one fewer 
 
 ## 6. Constraints: Positive Framing with Safety-Critical NEVERs
 
-The `<constraints>` section should be predominantly positive directives, reserving "NEVER" for genuinely safety-critical boundaries. This principle is backed by two empirical findings (cited in [Anti-Fabrication Mechanisms](anti-fabrication.md)):
+The `<constraints>` section should be predominantly positive directives, reserving "NEVER" for genuinely safety-critical boundaries. This principle is backed by three empirical findings (cited in [Anti-Fabrication Mechanisms](anti-fabrication.md)):
 
-- **Deontological framing outperforms preference framing**: *"Your obligation is to X"* outperforms *"prefer to X"* by 27–64% in closing compliance gaps (Koorndijk 2025). Categorical duties create stronger behavioural anchors than advisory preferences.
+- **Deontological framing outperforms preference framing for mandatory compliance**: *"Your obligation is to X"* outperforms *"prefer to X"* by 27–64% in closing compliance gaps (Koorndijk 2025). Categorical duties create stronger behavioural anchors than advisory preferences.
 - **Negative instructions backfire**: "don't say X" inserts the forbidden concept into context and can *increase* the forbidden output; positive/allow-list framing beats negative framing.
+- **Modal verbs over-read as obligations (Deontological Keyword Bias, ACL 2025)**: LLMs judge *"over 90% of commonsense scenarios as obligations when modal expressions are present"* (`must`, `should`, `ought to`, `have to`). The model flattens "should" toward "must" — so `"you should X"` is read as an obligation, not a soft suggestion, even when the semantics are non-obligatory.
+
+**The tension and its resolution.** Deontological framing is correct for *mandatory* compliance (framework-facts the agent must follow — see [Instruction Knowledge Tiers](instruction-knowledge-tiers.md) Tier 3). But it is in tension with *preference-guidance* (Tier 2), where the instruction must stay overridable. The resolution: **deontological framing for Tier 3, "Prefer X unless Y" for Tier 2.** A preference stays soft only when the model is told what may override it (`"Prefer X unless Y"`) — not by choosing a milder modal verb, which the DKB finding shows the model will over-read as obligation. The wiki previously presented deontological framing as uniformly preferable; it never recognised that *preference that stays soft* is the harder problem.
 
 **Positive (reframe these):**
 - "Load required context before any write/edit operation."
@@ -72,7 +75,7 @@ The `<constraints>` section should be predominantly positive directives, reservi
 - Credential exposure: "NEVER surface command output that may contain credentials, keys, tokens, or secrets."
 - Destructive operations: "NEVER execute commands that would destroy the system."
 
-*Why:* positive framing gives the model a trajectory; "be concise" moves toward brevity with purpose, whereas "don't be verbose" abandons it in an infinite field of possible behaviours. The deontological finding extends this: framing the duty as an obligation ("your duty is to X") closes compliance gaps that preference framing ("prefer to X") leaves open.
+*Why:* positive framing gives the model a trajectory; "be concise" moves toward brevity with purpose, whereas "don't be verbose" abandons it in an infinite field of possible behaviours. The deontological finding extends this: framing the duty as an obligation ("your duty is to X") closes compliance gaps that preference framing ("prefer to X") leaves open — for mandatory compliance. For overridable preferences, the DKB finding inverts this: modal verbs collapse the preference into an obligation, so state the override condition explicitly instead.
 
 ## 7. Execution Path Classification with Scope Boundary
 
@@ -129,15 +132,19 @@ Every subagent listed in "Available Subagents" must be referenced in at least on
 
 Context files can be outdated. Never apply recommendations blindly; verify against current requirements, user-workflow impact, and operational scope before modifying structural elements.
 
-## 14. Don't Restate Injected Schema
+## 14. Don't Restate What the Model Already Knows
 
-The harness injects the full tool schema (tool names, descriptions, parameters) and the `task` subagent taxonomy into every session's context, along with the runtime message metadata. A prompt file must not duplicate this content.
+Two distinct cases share the same anti-pattern: instructing the agent what it already knows. The source of the knowledge differs, but the fix is the same — don't duplicate it.
+
+**(a) Schema-injected tools.** The harness injects the full tool schema (tool names, descriptions, parameters) and the `task` subagent taxonomy into every session's context, along with the runtime message metadata. A prompt file must not duplicate this content.
 
 - Teach *how to use* a tool or subagent, not *what it is* — the schema already supplies existence and parameters.
 - Never hardcode the `task` subagent-type enum; reference the `task` tool schema instead. A hardcoded list drifts the moment the harness adds or removes a type, and silently contradicts the live schema.
 - Don't name or explain the runtime message metadata; it is already present in context.
 
-*Why:* in a context-constrained loop, duplicated schema is pure token overhead; worse, a stale hardcoded list becomes a false declaration the agent may trust over the running harness — the exact intent-vs-reality trap the agent is meant to avoid.
+**(b) Ambient-knowledge utilities.** The semantics of ambient shell utilities (`wc`, `jq`, `sort`, `diff`, `echo`, `curl`) are training knowledge — no provider describes `wc` in a tool schema, and a model that invokes `bash` composes these correctly without per-command instruction. Don't instruct the agent what these commands do; don't audit bash allow-lists against body prescription for ambient utilities. The agent knows they exist and will reach for them as the situation demands. (The *triggering* — whether the model reaches for bash at all — is prompt-steered, not training-driven; see [Instruction Knowledge Tiers](instruction-knowledge-tiers.md) Tier 1 for the semantics-vs-triggering split.)
+
+*Why:* in a context-constrained loop, duplicated knowledge is pure token overhead; worse, a stale hardcoded list becomes a false declaration the agent may trust over the running harness — the exact intent-vs-reality trap the agent is meant to avoid. The two cases share the same failure mode (instructing what's already known) but different sources (schema injection vs training); both are covered by the [Instruction Knowledge Tiers](instruction-knowledge-tiers.md) distinction.
 
 ## 15. Temporal Scope: Define the Units
 
@@ -244,4 +251,5 @@ permission:
 - [../harness/agent-frontmatter.md](../harness/agent-frontmatter.md) — valid YAML frontmatter keys.
 - [../harness/permission-model.md](../harness/permission-model.md) — consolidated permission allow/deny/ask model (principles #4, #5).
 - [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — the Minimal vs Comprehensive model that operationalizes principles #11 and #14 for globally-provisioned tools.
+- [Instruction Knowledge Tiers](instruction-knowledge-tiers.md) — the three knowledge categories (ambient-knowledge / preference-guidance / framework-facts) that govern when to instruct, how to frame, and how to audit permissions. Corrects Principle 14 (ambient-knowledge case) and resolves the Principle 6 tension between deontological and preference framing.
 - [../framework/versioning.md](../framework/versioning.md) — agent prompt/permission changes trigger repo and per-agent component version bumps.

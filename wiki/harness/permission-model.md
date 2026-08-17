@@ -272,6 +272,10 @@ Bash `allow` entries should contain only commands with no harness equivalent. Co
 
 *Why:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. Keeping bash to commands without harness equivalents maintains the permission layer's integrity.
 
+**Permission calibration by knowledge tier.** How bash allow-lists and `task:` allows should be audited depends on the knowledge category of the entry — see [Instruction Knowledge Tiers](../framework/instruction-knowledge-tiers.md):
+- **Ambient-knowledge** (Tier 1): bash allow-list entries for ambient utilities (`echo`, `wc`, `jq`, `sort`, `diff`) should NOT be audited against body prescription. These are part of the bash capability; the agent knows they exist and will reach for them as the situation demands. An `echo` entry is not an over-grant even when no body instruction names `echo`.
+- **Framework-facts** (Tier 3): `task:` allows MUST match body-authorized delegations (see §e). A `task:` allow for a subagent the body never delegates to is an over-grant — the agent cannot discover the subagent from training, so the body's silence is authoritative. This is the one place where prescription-matching is the correct audit lens.
+
 ## (d) Security Patterns
 
 ### Canonical sensitive-file deny block (Always Deny Sensitive Files)
@@ -412,4 +416,5 @@ permission:
 - [Subagent Structure](../harness/subagent-structure.md) — subagent taxonomy and delegation.
 - [Global Config Template](../harness/global-config.md) — the `opencode.jsonc` template that defines the permission floor (global-only keys).
 - [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) — how agent body text handles globally-provisioned tools (MCPs, plugins) without per-agent permission entries.
+- [Instruction Knowledge Tiers](../framework/instruction-knowledge-tiers.md) — the three knowledge categories (ambient-knowledge / preference-guidance / framework-facts) that govern permission calibration: ambient utilities not audited against body prescription (Tier 1), `task:` allows must match body-authorized delegations (Tier 3).
 - [OpenCode Permission Model (research)](../research/opencode-permission-model.md) — the authority that verified the 14-key list against `opencode.ai/docs`.
