@@ -34,8 +34,6 @@ permission:
     "**/*.api": "deny"
     "**/creds*": "deny"
     "**/credentials*": "deny"
-    "node_modules/**": "deny"
-    ".git/**": "deny"
   grep:
     "*": "deny"
   glob:
