@@ -9,6 +9,7 @@ permission:
     "npx ts-node *task-cli*": "allow"
     "mkdir -p .tmp/tasks*": "allow"
     "mv .tmp/tasks*": "allow"
+    "echo *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"

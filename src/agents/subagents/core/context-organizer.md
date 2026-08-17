@@ -12,6 +12,7 @@ permission:
     "diff *": "allow"
     "rm *": "ask"
     "rm -rf /*": "deny"
+    "echo *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"

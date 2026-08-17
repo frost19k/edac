@@ -16,6 +16,11 @@ permission:
     "bun test *": "allow"
     "go test *": "allow"
     "cargo test *": "allow"
+    # Pipe/filter tools (read-only)
+    "echo *": "allow"
+    "grep *": "allow"
+    "head *": "allow"
+    "tail *": "allow"
     "git diff *": "allow"
     "git log *": "allow"
     "rm -rf coverage*": "allow"

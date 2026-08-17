@@ -8,6 +8,7 @@ permission:
     "*": "deny"
     "npx ts-node *task-cli*": "allow"
     "bash .opencode/skills/task-management/router.sh *": "allow"
+    "echo *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"

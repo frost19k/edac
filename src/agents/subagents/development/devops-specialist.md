@@ -32,6 +32,11 @@ permission:
     "wget *": "allow"
     "jq *": "allow"
     "yq *": "allow"
+    # Pipe/filter tools (read-only)
+    "echo *": "allow"
+    "grep *": "allow"
+    "head *": "allow"
+    "tail *": "allow"
     "kubectl apply *": "ask"
     "terraform apply *": "ask"
     "sudo *": "deny"

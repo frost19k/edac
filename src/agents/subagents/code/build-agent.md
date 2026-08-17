@@ -38,6 +38,11 @@ permission:
     "docker compose down": "allow"
     "docker logs *": "allow"
     "docker ps *": "allow"
+    # Pipe/filter tools (read-only)
+    "echo *": "allow"
+    "grep *": "allow"
+    "head *": "allow"
+    "tail *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"
