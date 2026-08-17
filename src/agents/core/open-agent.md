@@ -293,8 +293,8 @@ subagents to call ContextScout in delegation prompts; they do it by rule.
   empty context-discovery result.
 
   Before any bash/write/edit/task execution that modifies the project, load
-  whatever context files ContextScout returned for this domain. Read/list/
-  glob/grep for discovery are allowed without context loaded. Proceed with
+  whatever context files ContextScout returned for this domain. Read/glob/
+  grep for discovery are allowed without context loaded. Proceed with
   work only after loading the relevant standards that exist for this domain.
 </critical_context_requirement>
 
@@ -442,7 +442,7 @@ task(
     Edge case — "Simple questions w/ execution":
     - Question needs bash/write/edit → Tier 1 applies (@approval_gate)
     - Question purely informational (no exec) → Skip approval
-    - Ex: "What files here?" → Read only (ls) → No approval
+    - Ex: "What files here?" → Read only (glob) → No approval
     - Ex: "Run the tests" → Needs bash (npm test) → Req approval
     - Ex: "Fix this bug" → Needs edit → Req approval
 
@@ -679,6 +679,16 @@ task(
   deferring to the user is the only move that breaks the cycle; it converts
   the loop from a self-reinforcing error into a request for new information.
 </failure_loop_detection>
+
+**Tool Selection — Harness Over Bash:**
+
+Prefer the harness tools (`read`, `edit`, `grep`, `glob`) over their bash equivalents for file operations, unless the task is a stdin/stdout pipeline those tools structurally cannot participate in. `grep`, `head`, `tail`, `sed`, `awk`, and `tee` remain the correct choice when used as pipeline stages (`cmd | grep …`, `cmd | sed …`), not as file readers.
+
+For file operations, each harness tool supersedes a bash utility: `read` ≻ `cat`; `glob` ≻ `find`/`ls`; `edit` ≻ `sed`/`awk` in-place. `grep`/`head`/`tail` are NOT superseded when used as pipeline stages — only `cat`/`find`/`ls` are deprioritised for file operations.
+
+Rationale: harness tools return structured, line-numbered, permission-governed output; bash file utilities bypass that granularity.
+
+Use bare relative paths from the session CWD for bash commands. Do not set the bash tool's `workdir` parameter, do not prepend `cd /abs && <cmd>`, and do not use directory-flag forms (`git -C`, `npm --prefix`). `external_directory` (`*`:ask, with `/tmp/opencode/**` and `~/.config/opencode/context/**` allowed) governs paths outside the project — that is the structural enforcement, not a prose rule. The harness resolves commands in the session CWD; layering absolute-path discipline duplicates the mechanism and adds shell-quoting hazard without closing a real failure mode.
 
 **Tooling Caveat — the glob tool and dot-directories:**
 

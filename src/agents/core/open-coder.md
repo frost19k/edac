@@ -984,7 +984,7 @@ Code Standards
        - ContextScout reads paths.json at startup to resolve the context root
        - Capture the returned file paths — you will persist these in Stage 3.
     2. **For external packages/libraries — ExternalScout is MANDATORY**:
-       a. Check for install scripts FIRST: `ls scripts/install/ scripts/setup/ bin/install*`
+       a. Check for install scripts FIRST: `glob(pattern="scripts/install/*")`, `glob(pattern="scripts/setup/*")`, `glob(pattern="bin/install*")`
        b. If scripts exist: Read and understand them before fetching docs.
        c. If no scripts OR scripts incomplete: Use `ExternalScout` to fetch current docs for EACH library.
        d. Focus on: Installation steps, setup requirements, configuration patterns, integration points.
@@ -1453,6 +1453,16 @@ uncertain, default to analysis.
 **Tooling Caveat — the glob tool and dot-directories:** 
 
 The OpenCode `glob` tool silently skips dot-directories (names starting with `.`), so patterns like `.directory/**/*.md` return "No files found" even when files exist. Always pass the dot-directory as the `path` argument (e.g. `glob(pattern="**/*.md", path=".dir/subdir")`) — default to this pattern when globbing any hidden directory. 
+
+**Tool Selection — Harness Over Bash:**
+
+Prefer the harness tools (`read`, `edit`, `grep`, `glob`) over their bash equivalents for file operations, unless the task is a stdin/stdout pipeline those tools structurally cannot participate in — `grep`, `head`, `tail`, `sed`, `awk`, and `tee` remain permitted as pipeline stages where no harness equivalent exists.
+Pair each harness tool with the bash utility it supersedes for file operations: `read` ≻ `cat`; `glob` ≻ `find`/`ls`; `edit` ≻ `sed`/`awk` in-place — but `grep`/`head`/`tail` are NOT superseded when used as pipeline stages, only when used as standalone file readers.
+Rationale: harness tools return structured, line-numbered, permission-governed output; bash file utilities bypass that granularity.
+
+Use bare relative paths from the session CWD for bash commands. Do not set the bash tool's `workdir` parameter, do not prepend `cd /abs && <cmd>`, and do not use directory-flag forms (`git -C`, `npm --prefix`).
+`external_directory` (`*`:ask, with `/tmp/opencode/**` and `~/.config/opencode/context/**` allowed) governs paths outside the project — that is the structural enforcement, not a prose rule.
+Rationale: the harness resolves commands in the session CWD; layering absolute-path discipline duplicates the mechanism and adds shell-quoting hazard without closing a real failure mode.
 
 <constraints enforcement="absolute">
   These constraints override all other considerations:
