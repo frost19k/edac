@@ -9,7 +9,6 @@ permission:
   read:
     "*": "allow"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"

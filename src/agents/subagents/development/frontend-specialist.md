@@ -9,7 +9,6 @@ permission:
   read:
     "*": "allow"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"
@@ -25,7 +24,6 @@ permission:
     "**/*.js": "deny"
     "**/*.py": "deny"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"

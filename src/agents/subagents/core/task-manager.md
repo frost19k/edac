@@ -7,8 +7,8 @@ permission:
   bash:
     "*": "deny"
     "npx ts-node *task-cli*": "allow"
-    "mkdir -p .tmp/tasks *": "allow"
-    "mv .tmp/tasks *": "allow"
+    "mkdir -p .tmp/tasks*": "allow"
+    "mv .tmp/tasks*": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"

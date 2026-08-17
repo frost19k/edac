@@ -36,10 +36,11 @@ permission:
     "terraform apply *": "ask"
     "sudo *": "deny"
     "rm -rf /*": "deny"
+    "> /dev/*": "deny"
+    "chmod 777 *": "deny"
   read:
     "*": "allow"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"
@@ -50,7 +51,6 @@ permission:
   edit:
     "*": "allow"
     "**/*.env": "deny"
-    "**/*env.example": "allow"
     "**/*.key": "deny"
     "**/*.secret": "deny"
     "**/*.pem": "deny"
