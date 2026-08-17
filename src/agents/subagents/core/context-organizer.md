@@ -16,6 +16,7 @@ permission:
     "**/creds*": "deny"
   edit:
     "*": "deny"
+    ".opencode/context/**": "allow"
     "**/*.env": "deny"
     "**/*.key": "deny"
     "**/*.secret": "deny"
@@ -24,7 +25,6 @@ permission:
     "**/credentials*": "deny"
     "**/*.api": "deny"
     "**/creds*": "deny"
-    ".opencode/context/**": "allow"
   grep:
     "*": "allow"
     # Tier A — format-specific prefixes
