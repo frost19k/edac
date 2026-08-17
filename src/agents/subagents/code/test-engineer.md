@@ -21,6 +21,7 @@ permission:
     "grep *": "allow"
     "head *": "allow"
     "tail *": "allow"
+    "ls *": "allow"
     "git diff *": "allow"
     "git log *": "allow"
     "rm -rf coverage*": "allow"

@@ -38,6 +38,7 @@ permission:
     "grep *": "allow"
     "head *": "allow"
     "tail *": "allow"
+    "ls *": "allow"
     "sort *": "allow"
     "uniq *": "allow"
     "cut *": "allow"

@@ -37,6 +37,7 @@ permission:
     "grep *": "allow"
     "head *": "allow"
     "tail *": "allow"
+    "ls *": "allow"
     "kubectl apply *": "ask"
     "terraform apply *": "ask"
     "sudo *": "deny"

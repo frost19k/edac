@@ -43,6 +43,7 @@ permission:
     "grep *": "allow"
     "head *": "allow"
     "tail *": "allow"
+    "ls *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"
