@@ -156,6 +156,16 @@ resolve_component_path() {
   jq_exec ".components.${key}[]? | select(.id == \"${id}\" or (.aliases // [] | index(\"${id}\"))) | .path" "$REGISTRY"
 }
 
+# Resolve a component's `files` array, one entry per line (raw).
+# Empty output means no `files` declared, or `files` is null — caller falls
+# back to the single `path`. Used by install_components and dry_run to honour
+# multi-file components (e.g. task-management ships SKILL.md + router.sh + scripts/).
+resolve_component_files() {
+  local type="$1" id="$2"
+  local key; key=$(get_registry_key "$type")
+  jq_exec ".components.${key}[]? | select(.id == \"${id}\" or (.aliases // [] | index(\"${id}\"))) | (.files // [])[]" "$REGISTRY"
+}
+
 expand_context_wildcard() {
   local pattern prefix
   pattern="$1"
@@ -254,13 +264,38 @@ dry_run() {
 
     total=$((total + 1))
     if [[ -n "$path" && "$path" != "null" ]]; then
-      local full="$SRC_ROOT/$path"
       with_path=$((with_path + 1))
-      if [[ -f "$full" || -d "$full" ]]; then
+
+      # Resolve the files array; use it only when it diverges from path.
+      # Otherwise check just `path` — unchanged behaviour for the 32 single-file components.
+      local files_arr=()
+      while IFS= read -r f; do
+        [[ -n "$f" ]] && files_arr+=("$f")
+      done < <(resolve_component_files "$ctype" "$cid")
+
+      local check_files=()
+      if [[ ${#files_arr[@]} -gt 1 ]] || \
+         ([[ ${#files_arr[@]} -eq 1 ]] && [[ "${files_arr[0]}" != "$path" ]]); then
+        check_files=("${files_arr[@]}")
+      else
+        check_files=("$path")
+      fi
+
+      local all_present=true missing_files=()
+      for f in "${check_files[@]}"; do
+        if [[ ! -f "$SRC_ROOT/$f" && ! -d "$SRC_ROOT/$f" ]]; then
+          all_present=false
+          missing_files+=("$f")
+        fi
+      done
+
+      if [[ "$all_present" == true ]]; then
         echo -e "  ${ctype}:${cid}    ${GREEN}✓${NC}"
       else
-        echo -e "  ${ctype}:${cid}    ${RED}✗ MISSING: $path${NC}"
-        missing+=("${ctype}:${cid}  $path")
+        echo -e "  ${ctype}:${cid}    ${RED}✗ MISSING: ${missing_files[*]}${NC}"
+        for mf in "${missing_files[@]}"; do
+          missing+=("${ctype}:${cid}  $mf")
+        done
       fi
     else
       echo -e "  ${ctype}:${cid}    ${YELLOW}? (no path in registry)${NC}"
@@ -472,6 +507,59 @@ install_components() {
           continue
           ;;
       esac
+    fi
+
+    # ── Multi-file component (files array diverges from path) ──
+    # When a component declares a `files` array with entries beyond its `path`,
+    # iterate and install each entry. Components without `files`, or with a
+    # single-entry `files` equal to `path`, fall through to the single-copy
+    # fast path below — preserving unchanged behaviour for the other 32 components.
+    local files_arr=()
+    while IFS= read -r f; do
+      [[ -n "$f" ]] && files_arr+=("$f")
+    done < <(resolve_component_files "$type" "$id")
+
+    if [[ ${#files_arr[@]} -gt 1 ]] || \
+       ([[ ${#files_arr[@]} -eq 1 ]] && [[ "${files_arr[0]}" != "$path" ]]); then
+      for f in "${files_arr[@]}"; do
+        local fdest; fdest=$(get_install_path "$f")
+        local fsrc="$SRC_ROOT/$f"
+        local fexisted=false
+        [[ -f "$fdest" ]] && fexisted=true
+
+        if [[ "$fexisted" == true && "$OVERWRITE" == false ]]; then
+          info "Skipped: ${type}:${id} ($f)"
+          skipped=$((skipped + 1))
+          continue
+        fi
+
+        mkdir -p "$(dirname "$fdest")"
+
+        if cp "$fsrc" "$fdest"; then
+          # Path transform: rewrite .opencode/context/ refs to absolute
+          # install-dir paths for global install only (mirrors single-copy branch).
+          if [[ "$INSTALL_DIR" != ".opencode" && "$INSTALL_DIR" != *"/.opencode" ]]; then
+            local expanded="${INSTALL_DIR/#\~/$HOME}"
+            local escaped="${expanded//[&\\/]/\\&}"
+            local delim="#"
+            [[ "$escaped" == *"$delim"* ]] && delim="@"
+            sed -i.bak -e "s${delim}@\\.opencode/context/${delim}@${expanded}/context/${delim}g" \
+                       -e "s${delim}\\.opencode/context${delim}${expanded}/context${delim}g" "$fdest"
+            rm -f "${fdest}.bak"
+          fi
+
+          if [[ "$fexisted" == true ]]; then
+            ok "Updated: ${type}:${id} ($f)"
+          else
+            ok "Installed: ${type}:${id} ($f)"
+          fi
+          installed=$((installed + 1))
+        else
+          err "Failed: ${type}:${id} ($f)"
+          failed=$((failed + 1))
+        fi
+      done
+      continue
     fi
 
     local dest; dest=$(get_install_path "$path")
