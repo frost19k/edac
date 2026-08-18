@@ -135,18 +135,16 @@ function extractFactsFromText(text: string): string[] {
 
 // ─── System Prompt ────────────────────────────────────────────
 
-const MEMORY_SYSTEM_PROMPT = `## Holographic Memory Available
-You have access to holographic memory (fact_store + fact_feedback tools). Use it to:
-- Store important facts: fact_store({ action: "add", content: "...", category: "project" })
-- Search facts: fact_store({ action: "search", query: "..." })
-- Find facts about entities: fact_store({ action: "probe", entity: "Alice" })
-- Find connected facts: fact_store({ action: "related", entity: "backend" })
-- Compositional queries: fact_store({ action: "reason", entities: ["peppi", "backend"] })
-- Find contradictions: fact_store({ action: "contradict" })
-- Record feedback: fact_feedback({ action: "helpful", fact_id: 7 })
+const MEMORY_SYSTEM_PROMPT = `## Holographic Memory
+Persistent cross-session memory via fact_store + fact_feedback tools. Memory survives across sessions — transient info degrades retrieval, so store only what a future session would need and cannot recover from history.
 
-Categories: user_pref, project, tool, general
-Trust scoring: helpful (+0.05), unhelpful (-0.10, 2× penalty)`
+Store: user preferences, project decisions, tool behaviour, platform facts, durable feedback.
+Skip: current task progress, intermediate reasoning, session-scoped state.
+
+Durability test: would a future session need this? If not, don't store it.
+
+Categories — user_pref: preferences · project: decisions/state · tool: behaviour · general: misc.
+Use specific entity names and tags; each fact should stand alone without conversation context.`
 
 // ─── Plugin Entry Point ──────────────────────────────────────
 
