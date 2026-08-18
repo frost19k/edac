@@ -51,7 +51,7 @@ Use the 14-key list above; do not reintroduce `todoread`, `codesearch`, or `list
 
 **Key notes:**
 
-- `external_directory` is a valid key (default `"ask"`), but OAC/EDAC agents do not set it — they rely on OpenCode's default external-directory behaviour.
+- `external_directory` is a valid key (default `"ask"`). EDAC agents rely on the global `external_directory` block in `opencode.jsonc` (see [Global Config](../harness/global-config.md)) and do not redeclare it per-agent — with one exception: ContextScout declares a restrictive override (see §c "Bash Working-Directory Discipline — Exception").
 - There is **no `write` key.** The `edit` key covers both modifying existing files and creating new files. A `write:` entry in a `permission:` block is silently ignored by OpenCode — use `edit` instead.
 - `question` is valid only on primary agents (those that interact with the user directly); subagents omit it from their frontmatter.
 
@@ -308,7 +308,17 @@ EDAC agents operate in the project working directory by default. Bash commands s
 
 **Structural gate for paths outside the project:** the `external_directory` permission key (see `opencode.jsonc`) governs filesystem access outside the project root. The default is `*`: `ask`, with two allow entries: `/tmp/opencode/**` and `~/.config/opencode/context/**`. Any bash command (or `read`/`edit`/`glob`) targeting a path outside the project triggers the `ask` gate — this is the structural enforcement for out-of-project access, not a prose rule the agent must remember.
 
-**Exception — ContextScout:** bash is fully denied for ContextScout (`"*": "deny"`), so the working-directory rule is vacuous for it. ContextScout's `read`/`glob` targets `~/.config/opencode/context/**` (per its `context_root` and `global_fallback` rules) — it is the designated consumer of the `external_directory` allow entry for the global context directory. No other EDAC agent has this profile.
+**Exception — ContextScout (per-agent `external_directory` override):** bash is fully denied for ContextScout (`"*": "deny"`), so the working-directory rule is vacuous for it. ContextScout's `read`/`glob` targets `~/.config/opencode/context/**` (per its `context_root` and `global_fallback` rules), but it also tends to reach for paths outside that subtree when probing for context. Under the global `external_directory` block (`*: ask`, `~/.config/opencode/context/**: allow`), an out-of-scope read triggers an `ask` prompt — but ContextScout is a level-2 subagent (nested via `subagent_depth: 2` in `opencode.jsonc`), and level-2 subagent permission prompts do not surface to the user. The `ask` therefore stalls execution with no resolution path.
+
+To remove the stall, ContextScout declares a per-agent `external_directory` override that auto-denies out-of-scope reads while preserving the context-subtree carve-out:
+
+```yaml
+external_directory:
+  "~/.config/opencode/**": "deny"
+  "~/.config/opencode/context/**": "allow"
+```
+
+This is a restrictive override per §b "Global-only vs per-agent keys" — it narrows the global `ask` (which would prompt) to a `deny` (which blocks silently), eliminating the unsurfaced-prompt stall. The broad deny / narrow allow ordering follows last-match-wins. No other EDAC agent has this profile: level-1 subagents and primary agents surface their `ask` prompts to the user, so the global block is sufficient for them.
 
 *Why bare relative paths:* all EDAC agents except ContextScout operate in the project working directory; the harness auto-allows the CWD; `external_directory` is the structural gate for everything else. Layering absolute-path discipline (prepending `cd /abs &&`, setting `workdir`, or using `git -C`-style flags) duplicates the harness mechanism and adds shell-quoting hazard without closing a real failure mode — the `external_directory` `ask` gate already catches out-of-project access. The discipline is "trust the CWD; let `external_directory` gate the rest."
 
