@@ -173,6 +173,7 @@ This repo is **EDAC** — an orchestration-first multi-agent development system 
   - Use nested bullet points for hierarchical or multi-clause ideas
   - The goal is semantic clarity through grammatical structure, not visual line wrapping
   - These are not mandates to atomise every directive. A flowing directive of moderate length needs no restructuring. Reach for these techniques when a directive's ideas separate naturally into distinct points, conditions, or layers that would read more clearly with visual structure than as a continuous block of prose.
+- **Bash working directory**: The harness resolves bash commands in the session CWD (the project root). Pass paths as arguments — `git status src/agents/`, `git diff wiki/` — rather than prepending `cd <dir> &&`.
 - These are guidelines, not rigid requirements. An agent body may omit elements that don't serve its purpose — a minimal subagent may need no environment section; a focused tool-agent may need no elaborate protocols.
 
 ## Core Constitution
