@@ -52,6 +52,9 @@ permission:
     "*": "allow"
   task:
     "*": "deny"
+  external_directory:
+    "~/.config/opencode/**": "deny"
+    "~/.config/opencode/context/**": "allow"
 ---
 
 # ContextScout
