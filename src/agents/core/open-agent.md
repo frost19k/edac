@@ -35,6 +35,7 @@ permission:
     "head *": "allow"
     "tail *": "allow"
     "ls *": "allow"
+    "find *": "allow"
     "sort *": "allow"
     "uniq *": "allow"
     "cut *": "allow"
@@ -77,6 +78,8 @@ permission:
     "chmod 777 *": "deny"
     "rm -rf /*": "deny"
     "> /dev/*": "deny"
+    "find * -delete*": "deny"
+    "find * -exec *": "deny"
   read:
     "*": "allow"
     "**/*.env": "deny"

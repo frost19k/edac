@@ -12,6 +12,8 @@ permission:
     "rm -rf /*": "deny"
     "> /dev/*": "deny"
     "chmod 777 *": "deny"
+    "find * -delete*": "deny"
+    "find * -exec *": "deny"
     # Type checking
     "tsc *": "allow"
     "mypy *": "allow"
@@ -24,6 +26,7 @@ permission:
     "pnpm build *": "allow"
     "bun run build *": "allow"
     "python -m build *": "allow"
+    "python3 -m build *": "allow"
     # Dependency installation
     "npm install *": "allow"
     "bun install *": "allow"
@@ -44,6 +47,7 @@ permission:
     "head *": "allow"
     "tail *": "allow"
     "ls *": "allow"
+    "find *": "allow"
   read:
     "*": "allow"
     "**/*.env": "deny"

@@ -272,25 +272,25 @@ Bash `allow` entries should exclude commands that duplicate harness tools for **
 
 **File-operation duplicates to exclude from bash allow-lists** (no pipeline use case; pure file reads/writes the harness tools cover with permission granularity):
 - `cat` → use `read`
-- `find` → use `glob`
 
 **Pipe-capable duplicates permitted in bash allow-lists** (participate in stdin/stdout pipelines harness tools structurally cannot; vibeguard redaction layer mitigates the credential-leak surface this re-opens):
 - `grep`, `head`, `tail` — read streams in pipelines (`cmd | grep …`, `cmd | head -n`)
 - `sed`, `awk` — transform streams in pipelines (`cmd | sed …`, `cmd | awk …`)
 - `tee` — branch a pipeline while preserving stdout
 - `ls` — pipe-capable and serves metadata use cases `glob` cannot: `ls | wc -l` (count), `ls -t | head -5` (most-recent), `ls -la | grep '.log'` (filter detailed listings), `ls -la` (permissions/sizes/dates). `glob` returns paths only; it cannot sort by time, display metadata, or compose into a counting pipeline.
+- `find` — pipe-capable (`find . -name '*.ts' | xargs grep …`) and serves metadata filters `glob` cannot express (`-newer ref.ts`, `-size +1M`, `-type f`, `-perm`). `glob` returns paths by name pattern only; it cannot filter by metadata. **Destructive modes denied:** `find * -delete*` and `find * -exec *` are `deny` on all agents that allow `find` — `-exec` is arbitrary command execution, `-delete` is a mutating operation; both are gated as dangerous alongside `sudo *` and `rm -rf /*`.
 
-*Why the split:* a blanket "exclude all harness-tool duplicates" rule (the prior convention) would deny `grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls` even though their pipeline and metadata roles have no harness equivalent — forcing the agent either to skip the pipeline or to re-implement stream processing through repeated `read`+`edit` calls. The file-operation duplicates (`cat`/`find`) have no such pipeline role: `cat` reads a file (use `read`), `find` enumerates paths (use `glob`). Source of truth: commit `85ee669` re-added the pipe-capable set to OpenCoder and OpenAgent with this rationale after a prior cleanup had removed them; `ls` was subsequently reclassified from file-op duplicate to pipe-capable on the same basis (pipeline participation + metadata use cases `glob` cannot serve).
+*Why the split:* a blanket "exclude all harness-tool duplicates" rule (the prior convention) would deny `grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls`/`find` even though their pipeline and metadata roles have no harness equivalent — forcing the agent either to skip the pipeline or to re-implement stream processing through repeated `read`+`edit` calls. The file-operation duplicate `cat` has no such pipeline role: `cat` reads a file (use `read`). Source of truth: commit `85ee669` re-added the pipe-capable set to OpenCoder and OpenAgent with this rationale after a prior cleanup had removed them; `ls` was subsequently reclassified from file-op duplicate to pipe-capable on the same basis (pipeline participation + metadata use cases `glob` cannot serve); `find` followed on the same basis (pipeline via `| xargs`, metadata filters `-newer`/`-size`/`-type`/`-perm`), with destructive modes (`-delete`/`-exec`) denied.
 
 **Valid bash allow-list categories:**
 - Domain-specific commands (git, docker, bun, npm, terraform, kubectl)
-- Pipe-capable harness duplicates (grep, head, tail, sed, awk, tee, ls) — see above
+- Pipe-capable harness duplicates (grep, head, tail, sed, awk, tee, ls, find) — see above
 - Text-processing pipeline utilities that operate on stdin/stdout (sort, uniq, cut, tr, jq, yq, diff, base64)
 - System-info commands (pwd, which, whoami, uname, date, env)
 - Network fetch (curl, wget)
 - Filesystem mutations without a harness equivalent (mkdir, touch, cp, mv, rm)
 
-*Why file-operation exclusion holds:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. The pipe-capable set does not bypass file permission in this way: they read from stdin (a prior pipeline stage) or enumerate the CWD, not from an agent-named path, so the path-based bypass argument does not extend to them. The residual leak surface — a pipeline stage surfacing a secret in its output — is mitigated by vibeguard output redaction, not by path denies.
+*Why file-operation exclusion holds:* the harness tools provide structured, permission-governed access to file operations. Allowing the same operations through bash bypasses the permission model's granularity — a `cat *.env` allow entry would read sensitive files that `read:` denies. The pipe-capable set does not bypass file permission in this way: they read from stdin (a prior pipeline stage) or enumerate the CWD, not from an agent-named path, so the path-based bypass argument does not extend to them. `find`'s destructive modes (`-delete`/`-exec`) are denied separately, so the allow entry covers only the read-only search and pipeline roles. The residual leak surface — a pipeline stage surfacing a secret in its output — is mitigated by vibeguard output redaction, not by path denies.
 
 **Permission calibration by knowledge tier.** How bash allow-lists and `task:` allows should be audited depends on the knowledge category of the entry — see [Instruction Knowledge Tiers](../framework/instruction-knowledge-tiers.md):
 - **Ambient-knowledge** (Tier 1): bash allow-list entries for ambient utilities (`echo`, `wc`, `jq`, `sort`, `diff`) should NOT be audited against body prescription. These are part of the bash capability; the agent knows they exist and will reach for them as the situation demands. An `echo` entry is not an over-grant even when no body instruction names `echo`.
@@ -441,7 +441,7 @@ permission:
 - [ ] Shorthand-only keys (`webfetch`, `websearch`, `question`, `todowrite`, `doom_loop`) declared as action strings, not pattern objects — see §b "Granular vs shorthand keys".
 - [ ] Sensitive files denied under `read` and `edit` (path globs) for ALL agents; `grep` restricted by search-term denies (see §d "Canonical grep search-term deny block") — `grep` CANNOT be scoped by file path. Omit only for a tool denied wholesale via `"*": "deny"`.
 - [ ] Dangerous commands denied (`sudo *`, `rm -rf /*`, `> /dev/*`, `chmod 777 *`); destructive operations set to `ask` (`rm -rf *`, `git push --force*`, `docker system prune*`, `npm publish*`).
-- [ ] Bash allow-lists contain no harness-tool duplicates (`cat`/`head`/`tail` = `read`; `grep`/`rg` = `grep`; `find`/`ls` = `glob`; `sed`/`awk`/`tee`/`patch` = `edit`/`write`) — see §c "Bash Allow-List Conventions".
+- [ ] Bash allow-lists exclude file-operation duplicates (`cat` = `read`) — see §c "Bash Allow-List Conventions". Pipe-capable duplicates (`grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls`/`find`) are permitted; `find` destructive modes (`find * -delete*`, `find * -exec *`) are denied.
 - [ ] Write-enabled agents declare explicit `read`, `grep`, `glob` permissions rather than relying on defaults.
 - [ ] `task:` permissions appropriate for agent type and use **Display Names**, not filenames.
 - [ ] Only valid actions used (`"allow"`, `"ask"`, `"deny"`).
