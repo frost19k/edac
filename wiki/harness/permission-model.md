@@ -90,6 +90,19 @@ webfetch:
   "*": "allow"
 ```
 
+### Wildcard Matching Semantics (bash and other granular keys)
+
+Permission patterns for granular keys (`bash`, `read`, `edit`, `glob`, `grep`, `task`, etc.) use simple wildcard matching, verified against `packages/opencode/src/util/wildcard.ts` (`match()` and `all()`):
+
+- **`*`** matches zero-or-more of any character; **`?`** matches exactly one; all other characters match literally.
+- **Full-string anchored.** The pattern must match the entire input (`^pattern$`). `"git status *"` does not match `xgit status foo`. This is why every command pattern carries a trailing ` *` rather than relying on substring match.
+- **Trailing ` *` matches the bare command too.** A pattern ending in ` *` (space + asterisk) is rewritten so the trailing part is optional: `"ls *"` matches both `ls` and `ls -la`; `"python *"` matches both `python` and `python -c foo`. A separate no-args entry is unnecessary.
+- **`"cmd *"` vs `"cmd*"` — the space is a poka-yoke.** The space delimits command from arguments and triggers the optional-argument handling. Without it, `*` absorbs the boundary: `"python*"` matches `python`, `python3`, and `pythonista`. Always use `"cmd *"` (with space) for a single command binary.
+- **One entry per distinct binary.** `"python *"` does not match `python3 script.py` (distinct command). Declare a separate entry per binary the agent may invoke (`"python *"` + `"python3 *"`, `"pip *"` + `"pip3 *"`).
+- **Evaluation is sort-by-length, last-match-wins.** The matcher sorts patterns by length ascending (alphabetical tiebreak) and returns the last match. The catch-all `"*"` (length 1) always sorts first, so "declare catch-all first" produces correct behavior — but the mechanism is length-sorted, not source-order. Avoid relying on declaration order for tiebreaks between equal-length patterns.
+
+*Why this matters:* an agent allow-listing only `"python *"` and reaching for `python3` will be blocked — not because the space is wrong, but because `python3` is a different binary. The fix is a second entry, not a spaceless wildcard (which would overmatch). See [../research/opencode-permission-model.md](../research/opencode-permission-model.md) for the source-verified detail.
+
 ## (c) Agent-Type Patterns
 
 The four posture archetypes below are adapted from the OAC sources. All example frontmatter uses `temperature: 0.2-0.3` (EDAC convention, Decision D3) and only verified keys.

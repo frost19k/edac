@@ -16,3 +16,5 @@ Bullet format (recommended):
 Example (this line is a comment — it is NOT processed):
   - framework/permission-model.md:17: lists 14 keys → fix: should be 15 (canonical set)
 -->
+
+- harness/permission-model.md:431: validation checklist item lists `cat`/`head`/`tail`/`grep`/`sed`/`awk`/`tee`/`patch`/`ls`/`find` as harness-tool duplicates to exclude from bash allow-lists → fix: stale — contradicts §c "Bash Allow-List Conventions" which permits the pipe-capable set (`grep`/`head`/`tail`/`sed`/`awk`/`tee`/`ls`) and excludes only `cat`/`find` (file-op duplicates). `patch` is not discussed in §c at all. Rewrite checklist item to match §c: exclude only `cat` and `find`-for-path-enumeration; list the permitted pipe-capable set. (Noted during wildcard-semantics wiki edit; deferred to the agent-defs round.)
