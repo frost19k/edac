@@ -301,7 +301,7 @@ Bash `allow` entries should exclude commands that duplicate harness tools for **
 EDAC agents operate in the project working directory by default. Bash commands should use **bare relative paths resolved from the session CWD** — not absolute paths, not the bash tool's `workdir` parameter, not `cd /abs && <cmd>` chaining, and not tool-specific directory flags (`git -C`, `npm --prefix`, etc.).
 
 **The rule:**
-- Use bare relative paths: `bun run validate`, `git status`, `ls scripts/install/` (where `ls` is permitted per the allow-list conventions above).
+- Use bare relative paths: `bun run validate`, `git status`, `ls scripts/` (where `ls` is permitted per the allow-list conventions above).
 - Do NOT set the `workdir` parameter on the bash tool — the harness already resolves commands in the session CWD; setting `workdir` is redundant and obscures the CWD assumption.
 - Do NOT prepend `cd /abs/path && <cmd>` — absolute-path chaining adds shell-quoting hazard without benefit when the CWD is already the project root.
 - Do NOT use directory-flag forms (`git -C /abs`, `npm --prefix /abs`) — they fight the harness's CWD model for the same reason.

@@ -3,7 +3,7 @@ title: Plugin Provisioning
 type: concept
 tags: [plugins, dcp, vibeguard, holographic-memory, pty, install, awareness-tiers]
 created: 2026-08-14
-updated: 2026-08-16
+updated: 2026-08-18
 sources: []
 status: stable
 ---
@@ -38,7 +38,16 @@ Redacts secrets in command output before they reach the model. Operates globally
 
 ### Holographic-memory — cross-session fact persistence
 
-Persistent cross-session memory using Holographic Reduced Representations (HRR). Registers two tools — the memory store and memory feedback — that agents call deliberately to store, search, and reason about facts. Unlike the auto-managed plugins, this one requires agent awareness: the agent must decide when a fact is worth persisting. The awareness tier varies by agent role — see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) for the full matrix (holo-mem column). The plugin is built from source at install time; its config (`holographic_memory.json`) and skill (`holographic-memory/SKILL.md`) are registered as standalone EDAC components at canonical `src/` locations, not nested inside the plugin directory.
+Persistent cross-session memory using Holographic Reduced Representations (HRR). Registers two tools — the memory store and memory feedback — that agents call deliberately to store, search, and reason about facts. Unlike the auto-managed plugins, this one requires agent awareness: the agent must decide when a fact is worth persisting.
+
+**Injected awareness.** The plugin injects a baseline system prompt (`MEMORY_SYSTEM_PROMPT`) into every agent's system context via the `experimental.chat.system.transform` hook — this is the awareness layer that all agents receive, including non-EDAC agents on the same harness. The prompt teaches *when to store* (a durability test: "would a future session need this?"), not *what the API is* (the tool descriptions handle that). It includes a Store/Skip boundary (durable facts vs. transient session info), category descriptions, and entity/tag guidance for HRR-compatible fact structuring. Agent body text builds on this baseline — see [Tool Awareness Tiers](../framework/tool-awareness-tiers.md) for the per-agent tier matrix (holo-mem column).
+
+**Pruning.** The plugin implements a three-tier pruning strategy:
+1. **Soft decay** — `temporal_decay_half_life` (default 30 days) applies an exponential score multiplier (`0.5^(age/halfLife)`) to retrieval scores. Dormancy-gated: `updated_at` refreshes on retrieval, update, and feedback, so actively-used facts never decay.
+2. **Hard prune** — `pruneStaleFacts` deletes facts meeting all three criteria: trust below `min_trust_threshold`, zero retrievals, and 90+ days dormant (3 half-lives). Called opportunistically (10% chance on each `add`); errors are non-fatal.
+3. **Agent guidance** — the injected prompt's durability test prevents transient info from entering the store; `fact_feedback: unhelpful` sinks low-quality facts via the -0.10/2× trust asymmetry.
+
+The plugin is built from source at install time; its config (`holographic_memory.json`) and skill (`holographic-memory/SKILL.md`) are registered as standalone EDAC components at canonical `src/` locations, not nested inside the plugin directory.
 
 ### PTY — long-running process management
 
@@ -81,8 +90,8 @@ Installed copy-or-skip as a registered config component at `src/holographic_memo
 | `default_trust` | `0.5` | Initial trust score for new facts |
 | `hrr_dim` | `1024` | HRR vector dimensionality |
 | `hrr_weight` | `0.3` | HRR similarity weight in hybrid retrieval |
-| `temporal_decay_half_life` | `0` | Temporal decay (0 = disabled) |
-| `min_trust_threshold` | `0.3` | Minimum trust for retrieval |
+| `temporal_decay_half_life` | `30` | Temporal decay half-life in days (0 = disabled); dormancy-gated via `updated_at` |
+| `min_trust_threshold` | `0.3` | Minimum trust for retrieval and hard-prune floor |
 
 ## Install — Build-at-Install
 

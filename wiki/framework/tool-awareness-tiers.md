@@ -3,7 +3,7 @@ title: Tool Awareness Tiers
 type: concept
 tags: [tool-awareness, mcp, plugins, agent-design, two-tier-model]
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-18
 sources: []
 status: stable
 ---
@@ -13,6 +13,8 @@ status: stable
 EDAC provisions MCP servers and plugins **globally** via [Global Config](../harness/global-config.md) — every agent has access by default, with no per-agent permission entries. The question is how agent body text handles this access: does the tool merely exist as an option, or does it change how the agent operates?
 
 > **Position in the knowledge framework.** This page is the *tool-awareness specialisation* of the general [Instruction Knowledge Tiers](instruction-knowledge-tiers.md) distinction. The general frame distinguishes three knowledge categories (ambient-knowledge / preference-guidance / framework-facts) that govern when to instruct, how to frame, and how to audit permissions. This page covers the tool-awareness specialisation: how body text handles globally-provisioned tools on the *integration-depth* axis (Minimal vs Comprehensive). The two axes are orthogonal — integration depth (this page) and knowledge category (the general frame) answer different questions and compose rather than nest.
+
+> **Plugin-injected baseline.** For holographic-memory, the plugin injects a baseline system prompt (`MEMORY_SYSTEM_PROMPT`) into every agent's system context via `experimental.chat.system.transform` — this is the awareness floor that all agents receive, including non-EDAC agents on the same harness. The body-text tiers (below) build on top of this baseline. See [Plugin Provisioning](../harness/plugin-provisioning.md) § Holographic-memory.
 
 The answer is tiered. The distinction is structural, not quantitative:
 
