@@ -136,15 +136,18 @@ function extractFactsFromText(text: string): string[] {
 // ─── System Prompt ────────────────────────────────────────────
 
 const MEMORY_SYSTEM_PROMPT = `## Holographic Memory
-Persistent cross-session memory via fact_store + fact_feedback tools. Memory survives across sessions — transient info degrades retrieval, so store only what a future session would need and cannot recover from history.
+Provides persistent cross-session memory via fact_store and fact_feedback tools.
 
-Store: user preferences, project decisions, tool behaviour, platform facts, durable feedback.
+Transient info degrades retrieval, so store only durable facts that a future session would need and which you cannot recover from persistent sources (repo, docs, configs, commits).
+
+Store: user preferences, project decisions/conventions, tool behaviour, durable feedback.
 Skip: current task progress, intermediate reasoning, session-scoped state.
+Use compress for transient context; fact_store is for durable facts only.
 
-Durability test: would a future session need this? If not, don't store it.
+Store only if a future session would need it; otherwise, omit.
 
-Categories — user_pref: preferences · project: decisions/state · tool: behaviour · general: misc.
-Use specific entity names and tags; each fact should stand alone without conversation context.
+Categories — user_pref: facts/preferences · project: decisions/conventions · tool: behaviour · general: misc.
+Use specific entity names and tags; each fact must stand alone.
 For advanced fact-structuring and retrieval guidance, load the holographic-memory skill.`
 
 // ─── Plugin Entry Point ──────────────────────────────────────
