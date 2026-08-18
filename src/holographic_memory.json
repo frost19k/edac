@@ -4,6 +4,6 @@
   "default_trust": 0.5,
   "hrr_dim": 1024,
   "hrr_weight": 0.3,
-  "temporal_decay_half_life": 0,
+  "temporal_decay_half_life": 30,
   "min_trust_threshold": 0.3
 }

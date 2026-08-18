@@ -506,6 +506,34 @@ export class HolographicStore {
     ).run(...factIds)
   }
 
+  /**
+   * Hard-prune stale facts that are unlikely to be useful.
+   *
+   * A fact is considered stale only when ALL three criteria are met:
+   * 1. Low trust — its trust score is below `minTrustThreshold`.
+   * 2. Zero retrievals — it has never been retrieved (`retrieval_count = 0`).
+   * 3. Long dormancy — it was last updated more than 90 days ago.
+   *
+   * The 90-day threshold corresponds to three half-lives of the default 30-day
+   * temporal decay half-life, ensuring a fact has had ample time to demonstrate
+   * value before removal. Each criterion alone is insufficient; together they
+   * identify facts that are both untrusted and unused.
+   *
+   * @param minTrustThreshold — minimum trust score a fact must have to avoid pruning
+   * @returns number of facts deleted
+   */
+  pruneStaleFacts(minTrustThreshold: number): number {
+    this.db.query(
+      `DELETE FROM facts
+       WHERE trust_score < ?
+         AND retrieval_count = 0
+         AND updated_at < datetime('now', '-90 days')`
+    ).run(minTrustThreshold)
+
+    const row = this.db.query('SELECT changes() as count').get() as { count: number }
+    return row.count
+  }
+
   /** Close the database connection */
   close(): void {
     this.db.close()

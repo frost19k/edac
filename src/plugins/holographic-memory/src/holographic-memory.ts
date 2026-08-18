@@ -194,6 +194,17 @@ Actions:
               case 'add': {
                 if (!content) return 'Error: content is required for add'
                 const result = await store.addFact(content, args.category, args.tags)
+
+                // Opportunistic stale-fact pruning: amortize cleanup across writes.
+                // 10% chance per successful add; failures are non-fatal and silent.
+                if (Math.random() < 0.1) {
+                  try {
+                    store.pruneStaleFacts(getConfig().min_trust_threshold)
+                  } catch {
+                    // Ignore pruning errors so they never break the add path.
+                  }
+                }
+
                 return JSON.stringify(result)
               }
 
