@@ -57,7 +57,7 @@ longer uses.
 | `src/context/` | Context files by domain: `web/`, `core/`, `intl/`, `dev/`, plus `navigation.md` |
 | `src/skills/` | Skills: `task-management/`, `holographic-memory/` |
 | `src/tools/` | Tooling: `env/` |
-| `src/plugins/holographic-memory/` | Plugin build contract only: `src/` (6 .ts sources), `dist/` (gitignored, built at install), `package.json`, `tsconfig.json`, `scripts/build.cjs`. Config and skill are standalone components at canonical `src/` locations. |
+| `src/plugins/holographic-memory/` | Plugin build contract only: `src/` (TypeScript sources bundled per `scripts/build.cjs` `FILES` array; co-located `*.test.ts` are not part of the build), `dist/` (gitignored, built at install), `package.json`, `tsconfig.json`, `scripts/build.cjs`. Config and skill are standalone components at canonical `src/` locations. |
 | `src/opencode.jsonc` | Global config template — merged with existing config on install. |
 | `src/dcp.jsonc` | DCP/compress plugin config — copy-or-skip on install. |
 | `src/vibeguard.config.json` | Vibeguard secret-redaction config — merged on install. |
