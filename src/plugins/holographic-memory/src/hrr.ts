@@ -4,11 +4,21 @@
 
 const TWO_PI = 2 * Math.PI
 
+/** Cache for deterministic atom vectors keyed by `${word}:${dim}` */
+const atomCache = new Map<string, Float64Array>()
+
 /**
  * Deterministic phase vector from SHA-256.
  * Each word produces the same vector across processes, machines, and runtimes.
+ * Results are cached and cloned on return to keep callers' mutations safe.
  */
 export async function encodeAtom(word: string, dim: number = 1024): Promise<Float64Array> {
+  const key = `${word}:${dim}`
+  const cached = atomCache.get(key)
+  if (cached) {
+    return cached.slice()
+  }
+
   const valuesPerBlock = 16 // 32 bytes = 16 uint16 values per SHA-256 digest
   const blocksNeeded = Math.ceil(dim / valuesPerBlock)
 
@@ -29,7 +39,8 @@ export async function encodeAtom(word: string, dim: number = 1024): Promise<Floa
     }
   }
 
-  return phases
+  atomCache.set(key, phases)
+  return phases.slice()
 }
 
 /**

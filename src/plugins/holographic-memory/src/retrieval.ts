@@ -14,6 +14,9 @@ const DEFAULT_HRR_WEIGHT = 0.3
 /** Maximum facts for contradiction detection (O(n²) guard) */
 const CONTRADICTION_MAX_FACTS = 500
 
+/** Ceiling on how many facts to decode for non-FTS retrieval strategies */
+const CANDIDATE_FETCH_CAP = 500
+
 /**
  * FactRetriever — 5 retrieval strategies for holographic memory.
  * Each strategy serves different query patterns.
@@ -107,8 +110,10 @@ export class FactRetriever {
   async probe(
     entity: string,
     category?: string,
-    limit: number = 10
+    limit: number = 10,
+    minTrust?: number
   ): Promise<ScoredFact[]> {
+    const trust = minTrust ?? this.minTrust
     const roleEntity = await hrr.encodeAtom('__hrr_role_entity__', this.dim)
     const entityVec = await hrr.encodeAtom(normalizeEntityName(entity), this.dim)
     const probeKey = hrr.bind(entityVec, roleEntity)
@@ -119,14 +124,14 @@ export class FactRetriever {
       if (bank && bank.vector) {
         const bankVec = hrr.bytesToPhases(new Uint8Array(bank.vector))
         const extracted = hrr.unbind(bankVec, probeKey)
-        return this.scoreFactsByVector(extracted, category, limit)
+        return this.scoreFactsByVector(extracted, category, limit, trust)
       }
     }
 
     // Fallback: score each fact individually
     const facts = category
-      ? this.store.listFacts(category, this.minTrust, 500)
-      : this.store.listFacts(undefined, this.minTrust, 500)
+      ? this.store.listFacts(category, trust, CANDIDATE_FETCH_CAP)
+      : this.store.listFacts(undefined, trust, CANDIDATE_FETCH_CAP)
 
     const roleContent = await hrr.encodeAtom('__hrr_role_content__', this.dim)
     const scored: ScoredFact[] = []
@@ -161,15 +166,17 @@ export class FactRetriever {
   async related(
     entity: string,
     category?: string,
-    limit: number = 10
+    limit: number = 10,
+    minTrust?: number
   ): Promise<ScoredFact[]> {
     const entityVec = await hrr.encodeAtom(normalizeEntityName(entity), this.dim)
     const roleEntity = await hrr.encodeAtom('__hrr_role_entity__', this.dim)
     const roleContent = await hrr.encodeAtom('__hrr_role_content__', this.dim)
 
+    const trust = minTrust ?? this.minTrust
     const facts = category
-      ? this.store.listFacts(category, this.minTrust, 500)
-      : this.store.listFacts(undefined, this.minTrust, 500)
+      ? this.store.listFacts(category, trust, CANDIDATE_FETCH_CAP)
+      : this.store.listFacts(undefined, trust, CANDIDATE_FETCH_CAP)
 
     const scored: ScoredFact[] = []
 
@@ -199,7 +206,8 @@ export class FactRetriever {
   async reason(
     entities: string[],
     category?: string,
-    limit: number = 10
+    limit: number = 10,
+    minTrust?: number
   ): Promise<ScoredFact[]> {
     const roleEntity = await hrr.encodeAtom('__hrr_role_entity__', this.dim)
     const roleContent = await hrr.encodeAtom('__hrr_role_content__', this.dim)
@@ -211,9 +219,10 @@ export class FactRetriever {
       probeKeys.push(hrr.bind(entityVec, roleEntity))
     }
 
+    const trust = minTrust ?? this.minTrust
     const facts = category
-      ? this.store.listFacts(category, this.minTrust, 500)
-      : this.store.listFacts(undefined, this.minTrust, 500)
+      ? this.store.listFacts(category, trust, CANDIDATE_FETCH_CAP)
+      : this.store.listFacts(undefined, trust, CANDIDATE_FETCH_CAP)
 
     const scored: ScoredFact[] = []
 
@@ -246,20 +255,23 @@ export class FactRetriever {
   async contradict(
     category?: string,
     threshold: number = 0.3,
-    limit: number = 10
+    limit: number = 10,
+    minTrust?: number
   ): Promise<ContradictionResult[]> {
-    const facts = this.store.listFacts(category, 0, CONTRADICTION_MAX_FACTS)
+    const trust = minTrust ?? this.minTrust
+    const facts = this.store.listFacts(category, trust, CONTRADICTION_MAX_FACTS)
 
-    // Pre-compute entity sets and vectors
-    const factData = await Promise.all(
-      facts
-        .filter(f => f.hrr_vector)
-        .map(async f => ({
-          fact: f,
-          entities: new Set(this.store.getFactEntityNames(f.fact_id)),
-          vector: hrr.bytesToPhases(new Uint8Array(f.hrr_vector!)),
-        }))
+    // Pre-compute entity sets and vectors in one batch query
+    const factsWithVectors = facts.filter(f => f.hrr_vector)
+    const entityNamesByFact = this.store.getFactEntityNamesBatch(
+      factsWithVectors.map(f => f.fact_id)
     )
+
+    const factData = factsWithVectors.map(f => ({
+      fact: f,
+      entities: new Set(entityNamesByFact.get(f.fact_id) ?? []),
+      vector: hrr.bytesToPhases(new Uint8Array(f.hrr_vector!)),
+    }))
 
     const contradictions: ContradictionResult[] = []
 
@@ -305,9 +317,10 @@ export class FactRetriever {
   private async scoreFactsByVector(
     referenceVec: Float64Array,
     category: string,
-    limit: number
+    limit: number,
+    trust: number = this.minTrust
   ): Promise<ScoredFact[]> {
-    const facts = this.store.listFacts(category, this.minTrust, 500)
+    const facts = this.store.listFacts(category, trust, CANDIDATE_FETCH_CAP)
     const scored: ScoredFact[] = []
 
     for (const fact of facts) {

@@ -31,6 +31,7 @@ export class HolographicStore {
   private db: Database
   private dim: number
   private defaultTrust: number
+  private dirtyBanks: Set<string> = new Set()
 
   constructor(config: HolographicConfig) {
     // Ensure directory exists
@@ -144,21 +145,31 @@ export class HolographicStore {
     const hrrVector = await hrr.encodeFact(content, entityNames, this.dim)
     const vectorBytes = hrr.phasesToBytes(hrrVector)
 
-    // Insert fact
-    const result = this.db.query(
-      `INSERT INTO facts (content, category, tags, trust_score, hrr_vector)
-       VALUES (?, ?, ?, ?, ?)`
-    ).run(content, category, tags, this.defaultTrust, vectorBytes)
-
-    const factId = Number(result.lastInsertRowid)
+    // Insert fact (guard against concurrent UNIQUE violation race)
+    let factId: number
+    try {
+      const result = this.db.query(
+        `INSERT INTO facts (content, category, tags, trust_score, hrr_vector)
+         VALUES (?, ?, ?, ?, ?)`
+      ).run(content, category, tags, this.defaultTrust, vectorBytes)
+      factId = Number(result.lastInsertRowid)
+    } catch {
+      const existing = this.db.query(
+        'SELECT fact_id FROM facts WHERE content = ?'
+      ).get(content) as { fact_id: number } | undefined
+      if (existing) {
+        return { fact_id: existing.fact_id, status: 'exists' }
+      }
+      throw new Error('Failed to insert fact')
+    }
 
     // Link entities
     for (const entity of extractedEntities) {
       await this.linkEntity(factId, entity.name, entity.type)
     }
 
-    // Rebuild category memory bank
-    await this.rebuildBank(category)
+    // Mark bank dirty; it will be rebuilt lazily on next read
+    this.markBankDirty(category)
 
     return { fact_id: factId, status: 'added' }
   }
@@ -235,8 +246,8 @@ export class HolographicStore {
       }
     }
 
-    // Rebuild category bank
-    await this.rebuildBank(fact.category)
+    // Mark bank dirty; it will be rebuilt lazily on next read
+    this.markBankDirty(fact.category)
 
     return this.getFact(factId)
   }
@@ -247,7 +258,7 @@ export class HolographicStore {
     if (!fact) return false
 
     this.db.query('DELETE FROM facts WHERE fact_id = ?').run(factId)
-    await this.rebuildBank(fact.category)
+    this.markBankDirty(fact.category)
     return true
   }
 
@@ -318,7 +329,7 @@ export class HolographicStore {
   // ─── Memory Banks ────────────────────────────────────────────
 
   /** Rebuild the superposed HRR vector for a category */
-  async rebuildBank(category: string): Promise<void> {
+  rebuildBank(category: string): void {
     const bankName = `cat:${category}`
     const rows = this.db.query(
       'SELECT hrr_vector FROM facts WHERE category = ? AND hrr_vector IS NOT NULL'
@@ -344,8 +355,22 @@ export class HolographicStore {
     ).run(bankName, vectorBytes, this.dim, rows.length)
   }
 
-  /** Get memory bank vector for a category */
+  /** Mark a category bank as dirty so it is rebuilt lazily on next read */
+  private markBankDirty(category: string): void {
+    this.dirtyBanks.add(category)
+  }
+
+  /** Rebuild the bank if it has been marked dirty */
+  private ensureBankFresh(category: string): void {
+    if (this.dirtyBanks.has(category)) {
+      this.rebuildBank(category)
+      this.dirtyBanks.delete(category)
+    }
+  }
+
+  /** Get memory bank vector for a category (rebuilds first if dirty) */
   getBank(category: string): MemoryBank | null {
+    this.ensureBankFresh(category)
     const bankName = `cat:${category}`
     const row = this.db.query(
       'SELECT * FROM memory_banks WHERE bank_name = ?'
@@ -368,6 +393,35 @@ export class HolographicStore {
   getFactEntityNames(factId: number): string[] {
     const entities = this.getFactEntities(factId)
     return entities.map(e => e.name.toLowerCase())
+  }
+
+  /** Get lowercased entity names for multiple facts in a single query */
+  getFactEntityNamesBatch(factIds: number[]): Map<number, string[]> {
+    const grouped = new Map<number, string[]>()
+    if (factIds.length === 0) return grouped
+
+    const placeholders = factIds.map(() => '?').join(', ')
+    const rows = this.db.query(
+      `SELECT fe.fact_id, e.name
+       FROM fact_entities fe
+       JOIN entities e ON e.entity_id = fe.entity_id
+       WHERE fe.fact_id IN (${placeholders})`
+    ).all(...factIds) as { fact_id: number; name: string }[]
+
+    for (const row of rows) {
+      const names = grouped.get(row.fact_id) ?? []
+      names.push(row.name.toLowerCase())
+      grouped.set(row.fact_id, names)
+    }
+
+    // Ensure every requested fact has an entry (empty array if no entities)
+    for (const factId of factIds) {
+      if (!grouped.has(factId)) {
+        grouped.set(factId, [])
+      }
+    }
+
+    return grouped
   }
 
   /** Get all facts linked to an entity */

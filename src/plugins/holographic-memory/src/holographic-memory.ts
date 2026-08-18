@@ -8,7 +8,15 @@ import { join } from 'path'
 import { homedir } from 'os'
 import { HolographicStore } from './store'
 import { FactRetriever } from './retrieval'
+import { toPublicFact, toScoredPublicFact } from './serialize'
 import type { HolographicConfig } from './types'
+
+// ─── Safety Limits ────────────────────────────────────────────
+
+/** Maximum results returned by read actions (prevents tool-output bloat) */
+const MAX_LIMIT = 200
+/** Maximum fact content length stored or returned (prevents DB and payload bloat) */
+const MAX_CONTENT_LENGTH = 8192
 
 // ─── Configuration ────────────────────────────────────────────
 
@@ -177,68 +185,76 @@ Actions:
         },
 
         async execute(args) {
-          const store = getStore()
-          const retriever = getRetriever()
+          try {
+            const store = getStore()
+            const retriever = getRetriever()
 
-          switch (args.action) {
-            case 'add': {
-              if (!args.content) return 'Error: content is required for add'
-              const result = await store.addFact(args.content, args.category, args.tags)
-              return JSON.stringify(result)
+            const limit = args.limit == null ? undefined : Math.min(args.limit, MAX_LIMIT)
+            const content = args.content ? args.content.slice(0, MAX_CONTENT_LENGTH) : undefined
+
+            switch (args.action) {
+              case 'add': {
+                if (!content) return 'Error: content is required for add'
+                const result = await store.addFact(content, args.category, args.tags)
+                return JSON.stringify(result)
+              }
+
+              case 'search': {
+                if (!args.query) return 'Error: query is required for search'
+                const results = await retriever.search(args.query, args.category, args.min_trust, limit)
+                return JSON.stringify({ results: results.map(toScoredPublicFact), count: results.length })
+              }
+
+              case 'probe': {
+                if (!args.entity) return 'Error: entity is required for probe'
+                const results = await retriever.probe(args.entity, args.category, limit, args.min_trust)
+                return JSON.stringify({ results: results.map(toScoredPublicFact), count: results.length })
+              }
+
+              case 'related': {
+                if (!args.entity) return 'Error: entity is required for related'
+                const results = await retriever.related(args.entity, args.category, limit, args.min_trust)
+                return JSON.stringify({ results: results.map(toScoredPublicFact), count: results.length })
+              }
+
+              case 'reason': {
+                if (!args.entities || args.entities.length === 0) return 'Error: entities array is required for reason'
+                const results = await retriever.reason(args.entities, args.category, limit, args.min_trust)
+                return JSON.stringify({ results: results.map(toScoredPublicFact), count: results.length })
+              }
+
+              case 'contradict': {
+                const results = await retriever.contradict(args.category, args.threshold, limit, args.min_trust)
+                return JSON.stringify({ results, count: results.length })
+              }
+
+              case 'update': {
+                if (!args.fact_id) return 'Error: fact_id is required for update'
+                const result = await store.updateFact(args.fact_id, {
+                  content,
+                  trust_delta: args.trust_delta,
+                  tags: args.tags,
+                })
+                return result ? JSON.stringify(toPublicFact(result)) : 'Error: fact not found'
+              }
+
+              case 'remove': {
+                if (!args.fact_id) return 'Error: fact_id is required for remove'
+                const success = await store.removeFact(args.fact_id)
+                return success ? JSON.stringify({ fact_id: args.fact_id, status: 'removed' }) : 'Error: fact not found'
+              }
+
+              case 'list': {
+                const results = store.listFacts(args.category, args.min_trust, limit)
+                return JSON.stringify({ results: results.map(toPublicFact), count: results.length })
+              }
+
+              default:
+                return `Error: unknown action "${args.action}"`
             }
-
-            case 'search': {
-              if (!args.query) return 'Error: query is required for search'
-              const results = await retriever.search(args.query, args.category, args.min_trust, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            case 'probe': {
-              if (!args.entity) return 'Error: entity is required for probe'
-              const results = await retriever.probe(args.entity, args.category, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            case 'related': {
-              if (!args.entity) return 'Error: entity is required for related'
-              const results = await retriever.related(args.entity, args.category, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            case 'reason': {
-              if (!args.entities || args.entities.length === 0) return 'Error: entities array is required for reason'
-              const results = await retriever.reason(args.entities, args.category, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            case 'contradict': {
-              const results = await retriever.contradict(args.category, args.threshold, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            case 'update': {
-              if (!args.fact_id) return 'Error: fact_id is required for update'
-              const result = await store.updateFact(args.fact_id, {
-                content: args.content,
-                trust_delta: args.trust_delta,
-                tags: args.tags,
-              })
-              return result ? JSON.stringify(result) : 'Error: fact not found'
-            }
-
-            case 'remove': {
-              if (!args.fact_id) return 'Error: fact_id is required for remove'
-              const success = await store.removeFact(args.fact_id)
-              return success ? JSON.stringify({ fact_id: args.fact_id, status: 'removed' }) : 'Error: fact not found'
-            }
-
-            case 'list': {
-              const results = store.listFacts(args.category, args.min_trust, args.limit)
-              return JSON.stringify({ results, count: results.length })
-            }
-
-            default:
-              return `Error: unknown action "${args.action}"`
+          } catch {
+            // Sanitize: never leak db_path, SQL text, or stack traces across the tool boundary
+            return 'Error: memory operation failed'
           }
         },
       }),
