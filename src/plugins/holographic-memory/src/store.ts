@@ -269,7 +269,7 @@ export class HolographicStore {
     limit: number = 20
   ): Fact[] {
     let query = 'SELECT * FROM facts WHERE trust_score >= ?'
-    const params: unknown[] = [minTrust]
+    const params: (string | number)[] = [minTrust]
 
     if (category) {
       query += ' AND category = ?'
@@ -454,7 +454,7 @@ export class HolographicStore {
       WHERE facts_fts MATCH ?
         AND f.trust_score >= ?
     `
-    const params: unknown[] = [sanitized, minTrust]
+    const params: (string | number)[] = [sanitized, minTrust]
 
     if (category) {
       sql += ' AND f.category = ?'
