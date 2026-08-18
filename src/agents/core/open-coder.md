@@ -736,7 +736,8 @@ These tools you use directly, without delegation:
   at the start of a task to bootstrap context — prior sessions may have
   recorded findings that save you from re-discovery. This is your
   cross-session memory; use it to compound knowledge rather than re-deriving
-  it each session.
+  it each session. For advanced memory guidance, load the holographic-memory
+  skill.
 
 ### Decision Framework: Direct Use vs. Delegation
 

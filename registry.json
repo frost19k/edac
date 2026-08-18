@@ -2327,7 +2327,7 @@
         "name": "Holographic Memory",
         "type": "skill",
         "path": "skills/holographic-memory/SKILL.md",
-        "description": "Persistent cross-session memory system using Holographic Reduced Representations (HRR). Provides fact_store and fact_feedback tools for structured recall with entity-based probing, compositional reasoning, contradiction detection, and trust scoring.",
+        "description": "Advanced fact-structuring and retrieval-strategy guidance for holographic memory — load when writing durable facts or selecting retrieval actions",
         "tags": [
           "memory",
           "persistence",

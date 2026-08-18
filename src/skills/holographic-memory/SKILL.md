@@ -1,89 +1,48 @@
 ---
 name: holographic-memory
-description: Persistent cross-session memory system using Holographic Reduced Representations (HRR). Provides the memory store and memory feedback tools for structured recall with entity-based probing, compositional reasoning, contradiction detection, and trust scoring.
+description: Advanced fact-structuring and retrieval-strategy guidance for holographic memory — load when writing durable facts or selecting retrieval actions
 ---
 
-# Holographic Memory — Agent Skill
+# Holographic Memory — Fact-Structuring & Retrieval Guidance
 
-You have access to **holographic memory**, a persistent cross-session memory system using Holographic Reduced Representations (HRR). This gives you deep structured recall beyond keyword search.
+The baseline memory prompt gives the durability test and category list. This skill gives the *why* behind those rules: holographic memory binds facts as role–filler pairs in a vector space, and retrieval works only when facts are structured to be bound and recovered. Structure facts well and retrieval is precise; structure them poorly and they become unrecoverable noise.
 
-## When to Use Memory
+## Write-Side Hygiene
 
-- **Store facts**: User preferences, project decisions, architecture choices, tool configs
-- **Recall context**: "What did the user prefer for X?" → `probe` or `search`
-- **Find connections**: "What's related to X?" → `related`
-- **Compositional reasoning**: "Facts about BOTH X and Y" → `reason`
-- **Memory hygiene**: "Are there contradictions?" → `contradict`
-- **Feedback**: Mark facts as helpful/unhelpful to improve trust scores
+Every fact you store is bound to its entities and category by HRR binding, then recovered later by unbinding. Four properties determine whether a fact is recoverable.
 
-## Tools
+**Explicit, stable entity names.** HRR binds a fact to its entities; retrieval unbinds by entity. A fact with no nameable entity cannot be bound and cannot be retrieved by `probe` or `reason`. An entity named inconsistently across facts ("the auth service" vs "AuthService" vs "auth") defeats cleanup — the nearest-neighbour lookup that denoises unbinding needs a stable vocabulary to match against. Use one canonical name per entity and reuse it.
 
-### Memory Store — 9 Actions
+**Low fan-out per entity.** When many facts bind to a single generic entity, crosstalk interference grows with the bundle size and compositional retrieval (`reason`) degrades sharply — multi-hop joins through high-fan-out hubs fail at chance even when single-fact retrieval works. Prefer specific entities ("JWT refresh-token rotation") over generic hubs ("the backend") so facts don't all superpose around the same vector.
 
-| Action | Use When | Example |
-|--------|----------|---------|
-| `add` | Store new fact | `{ action: "add", content: "User prefers dark mode", category: "user_pref" }` |
-| `search` | Keyword lookup | `{ action: "search", query: "editor config" }` |
-| `probe` | Find facts ABOUT entity | `{ action: "probe", entity: "Alice" }` |
-| `related` | Find facts CONNECTED to entity | `{ action: "related", entity: "backend" }` |
-| `reason` | Facts about ALL entities | `{ action: "reason", entities: ["peppi", "backend"] }` |
-| `contradict` | Find conflicting facts | `{ action: "contradict" }` |
-| `update` | Modify existing fact | `{ action: "update", fact_id: 42, content: "Updated text" }` |
-| `remove` | Delete a fact | `{ action: "remove", fact_id: 42 }` |
-| `list` | Browse by category | `{ action: "list", category: "project" }` |
+**Self-contained facts.** Retrieval returns individual facts in isolation, not the conversation that produced them. A fact that depends on surrounding context ("she decided to use that") is meaningless when surfaced alone. Write each fact to stand on its own: name the entity, state the decision or property, carry enough context to be acted on without the session it came from.
 
-### Memory Feedback — 2 Actions
+**Consistent categories and tags.** Categories are the roles in role–filler binding; tags sharpen Jaccard matching. Consistent categories let retrieval unbind the right role; drifting categories ("decisions" vs "project") split related facts across buckets and weaken recall.
 
-| Action | Effect |
-|--------|--------|
-| `helpful` | trust += 0.05 (small reward) |
-| `unhelpful` | trust -= 0.10 (2× penalty — bad facts sink faster) |
+### Good vs. poor fact structure
 
-## Categories
-
-- `user_pref` — User preferences, communication style
-- `project` — Project facts, decisions, architecture
-- `tool` — Tool configurations, workflows
-- `general` — Everything else (default)
-
-## Retrieval Strategies
-
-1. **search** — Hybrid: FTS5 (40%) + Jaccard (30%) + HRR (30%) × trust × decay
-2. **probe** — Entity-specific algebraic recall (NOT keyword search)
-3. **related** — Structural adjacency through shared context
-4. **reason** — Compositional AND (vector-space JOIN)
-5. **contradict** — Memory hygiene (high entity overlap + low content similarity)
-
-## Trust Scoring
-
-- Asymmetric: +0.05 helpful, -0.10 unhelpful (2× penalty)
-- A fact needs ~20 helpful ratings to reach max trust (0.5 → 1.0)
-- A fact needs only ~5 unhelpful ratings to sink to zero (0.5 → 0.0)
-- Bad facts sink faster than good facts rise
-
-## Best Practices
-
-1. **Store proactively**: When user states a preference or decision, store it immediately
-2. **Use categories**: Helps with retrieval precision
-3. **Add tags**: Comma-separated, improves Jaccard matching
-4. **Probe before search**: For entity-specific queries, `probe` is more precise than `search`
-5. **Use `reason` for multi-entity**: When you need facts about MULTIPLE entities simultaneously
-6. **Run `contradict` periodically**: Keep memory clean by detecting conflicting facts
-7. **Record feedback**: When you use a fact and it helps (or doesn't), record it
-
-## Example Workflow
-
+Good — named entity, project category, self-contained:
 ```
-# User says: "I prefer vim keybindings in VS Code"
-# Store a fact via holographic memory:
-fact_store({ action: "add", content: "User prefers vim keybindings in VS Code", category: "user_pref", tags: "editor,vim,vscode" })
-
-# Later, need to recall editor preferences
-# Search facts via holographic memory:
-fact_store({ action: "search", query: "editor keybindings" })
-# OR probe for a specific entity:
-fact_store({ action: "probe", entity: "vim" })
-
-# Used the fact and it was helpful — record feedback via holographic memory:
-fact_feedback({ action: "helpful", fact_id: 7 })
+fact_store({ action: "add", content: "OpenCoder delegates all coding to CoderAgent by default; self-execution is the exception requiring justification", category: "project", tags: "opencoder,delegation,coderagent" })
 ```
+This fact binds to stable entities (OpenCoder, CoderAgent), carries its category role, and stands alone — a future session retrieving it by `probe({ entity: "OpenCoder" })` gets a usable fact, not a fragment.
+
+Poor — vague entity, no category, context-dependent:
+```
+fact_store({ action: "add", content: "decided to use that for the new thing", category: "general" })
+```
+This fact has no nameable entity, no category role, and cannot be understood without the session that produced it. It is unrecoverable by `probe` or `reason` and meaningless when retrieved alone.
+
+## Retrieval-Selection Guide
+
+Choose the action by query shape, not by habit.
+
+| You have… | Use | Because |
+|---|---|---|
+| A keyword or phrase | `search` | Hybrid FTS5 + Jaccard + HRR; best for topical lookup |
+| An entity name | `probe` | Algebraic recall of every fact bound to that entity |
+| An entity and want its neighbourhood | `related` | Structural adjacency through shared context |
+| Multiple entities that must all appear | `reason` | Compositional AND — a vector-space JOIN across entities |
+| A suspicion of conflicting facts | `contradict` | High entity overlap + low content similarity surfaces contradictions |
+
+`probe` is more precise than `search` for entity-specific queries because it unbinds by entity rather than matching keywords. `reason` is the only action that composes across entities, but it degrades under high fan-out (see Write-Side Hygiene) — when a `reason` query returns noise, the cause is usually write-side: too many facts bound to one of the entities.

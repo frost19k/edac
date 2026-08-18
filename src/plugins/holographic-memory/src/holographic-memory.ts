@@ -144,7 +144,8 @@ Skip: current task progress, intermediate reasoning, session-scoped state.
 Durability test: would a future session need this? If not, don't store it.
 
 Categories — user_pref: preferences · project: decisions/state · tool: behaviour · general: misc.
-Use specific entity names and tags; each fact should stand alone without conversation context.`
+Use specific entity names and tags; each fact should stand alone without conversation context.
+For advanced fact-structuring and retrieval guidance, load the holographic-memory skill.`
 
 // ─── Plugin Entry Point ──────────────────────────────────────
 
