@@ -14,10 +14,10 @@ permission:
     "mkdir -p *": "allow"
   read:
     "*": "deny"
-    ".tmp/external-context/**": "allow"
+    ".tmp/**": "allow"
   edit:
     "*": "deny"
-    ".tmp/external-context/**": "allow"
+    ".tmp/**": "allow"
   grep:
     "*": "allow"
     # Tier A — format-specific prefixes
